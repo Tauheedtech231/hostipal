@@ -1,225 +1,1484 @@
 "use client";
 
-import Link from "next/link";
-import Image from "next/image";
-import { useState } from "react";
-import { usePathname } from "next/navigation";
-import { useAuth } from "../context/AuthContext";
+import React, { useState, useEffect, useRef, FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
+import { Search, Menu, X, ChevronRight, Mail, MapPin, Clock, Phone, User, Home, Stethoscope, Users, GalleryVertical, Calendar, Heart, ExternalLink, ChevronLeft, MessageCircle } from "lucide-react";
+/* eslint-disable */
 
-export default function Navbar() {
+export const Navbar: React.FC = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const pathname = usePathname();
-  const { user, isAuthenticated, logout } = useAuth();
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [showSearchModal, setShowSearchModal] = useState(false);
+  const [showContactSlider, setShowContactSlider] = useState(false);
+  const [activeSearchTab, setActiveSearchTab] = useState<string>("all");
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [showTopContactBar, setShowTopContactBar] = useState(true);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const contactSliderRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const topContactBarRef = useRef<HTMLDivElement>(null);
 
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-
-  // Default links
-  const defaultLinks = [
-    { href: "/", label: "Home" },
-    { href: "/applicant_portal", label: "Applicant Portal" },
+  const navItems = [
+    { 
+      name: "Home", 
+      href: "/",
+      icon: <Home className="h-5 w-5" />,
+      description: "Welcome to SHMC"
+    },
+    { 
+      name: "About Us", 
+      href: "/portfolio/about",
+      icon: <User className="h-5 w-5" />,
+      description: "Our Story & Mission"
+    },
+    {
+      name: "Services",
+      icon: <Stethoscope className="h-5 w-5" />,
+      description: "Medical Services & Care",
+      featured: true,
+      subItems: [
+        { 
+          name: "Pediatrics", 
+          href: "/services/pediatrics", 
+          icon: "👶",
+          tag: "Child Health Care"
+        },
+        { 
+          name: "Gynecology", 
+          href: "/services/gynecology", 
+          icon: "🤰",
+          tag: "Women's Health Care"
+        },
+        { 
+          name: "Physiotherapy", 
+          href: "/services/physiotherapy", 
+          icon: "🏋️",
+          tag: "Physical Rehabilitation"
+        },
+        { 
+          name: "Emergency Care", 
+          href: "/services/emergency", 
+          icon: "🚨",
+          tag: "24/7 Emergency"
+        },
+        { 
+          name: "Dermatology", 
+          href: "/services/dermatology", 
+          icon: "🔬",
+          tag: "Skin Treatment"
+        },
+        { 
+          name: "Infectious Disease & Critical Care", 
+          href: "/services/critical-care", 
+          icon: "🦠",
+          tag: "Life-Threatening Illness"
+        },
+        { 
+          name: "Diabetes & Endocrinology", 
+          href: "/services/endocrinology", 
+          icon: "🩺",
+          tag: "Hormonal & Diabetes Care"
+        },
+        { 
+          name: "Internal Medicine", 
+          href: "/services/internal-medicine", 
+          icon: "💊",
+          tag: "Non-Surgical Treatment"
+        },
+        { 
+          name: "Gastroenterology", 
+          href: "/services/gastroenterology", 
+          icon: "🧬",
+          tag: "Digestive System"
+        },
+        { 
+          name: "Clinical Hematology", 
+          href: "/services/hematology", 
+          icon: "🩸",
+          tag: "Blood Disorders"
+        },
+        { 
+          name: "Anesthesia", 
+          href: "/services/anesthesia", 
+          icon: "😴",
+          tag: "Painless Procedures"
+        },
+        { 
+          name: "Psychiatry", 
+          href: "/services/psychiatry", 
+          icon: "🧠",
+          tag: "Mental Health"
+        },
+      ],
+    },
+    { 
+      name: "Doctors", 
+      href: "/doctors",
+      icon: <Users className="h-5 w-5" />,
+      description: "Expert Medical Team"
+    },
+    { 
+      name: "Carrers", 
+      href: "/portfolio/careers",
+      icon: <GalleryVertical className="h-5 w-5" />,
+      description: "Hospital & Facilities"
+    },
+    { 
+      name: "Contact", 
+      href: "/portfolio/contact",
+      icon: <Phone className="h-5 w-5" />,
+      description: "Get in Touch with Us",
+      cta: true
+    },
   ];
 
-  // Extra applicant portal links
-  const applicantLinks = [
-    { href: "/applicant_portal", label: "Dashboard" },
-    { href: "/applicant_portal/my_application", label: "My Applications" },
-    { href: "/applicant_portal/fee_mange", label: "Fee Payment" },
-    { href: "/applicant_portal/notification_page", label: "Notifications" },
-    { href: "/applicant_portal/result_page", label: "Results" },
+  const hospitalContact = {
+    phone: "0303 6828260",
+    whatsapp: "0303 6828260",
+    email: "romanasher@hotmail.com",
+    address: "Sohawa Stop, Circular Road, Daska, Pakistan",
+    coordinates: "32.340264325439,74.350928656081",
+    googleMapsUrl: "https://www.google.com/maps/dir/?api=1&destination=32.340264325439,74.350928656081",
+    hours: {
+      emergency: "24/7 Emergency",
+      saturday: "9:00 AM - 10:00 PM",
+      sunday: "9:00 AM - 8:00 PM"
+    }
+  };
+
+  const searchTabs = [
+    { id: "all", name: "All", icon: "🔍" },
+    { id: "home", name: "Home", icon: "🏠" },
+    { id: "services", name: "Services", icon: "🩺" },
+    { id: "doctors", name: "Doctors", icon: "👨‍⚕️" },
+    { id: "about", name: "About", icon: "🏥" },
   ];
 
-  // Decide navLinks based on current path
-  const navLinks = pathname.startsWith("/applicant_portal")
-    ? [...defaultLinks, ...applicantLinks]
-    : defaultLinks;
+  const searchData = {
+    home: [
+      { title: "Home Page", url: "/", category: "Home", icon: "🏠", description: "Welcome to SHMC" },
+      { title: "Emergency Services", url: "/services/emergency", category: "Home", icon: "🚨", description: "24/7 Emergency Care" },
+      { title: "Patient Portal", url: "/portal", category: "Home", icon: "📱", description: "Access Your Health Records" },
+      { title: "Visiting Hours", url: "/visiting", category: "Home", icon: "🕒", description: "Plan Your Visit" },
+    ],
+    services: [
+      { title: "Pediatrics", url: "/services/pediatrics", category: "Services", icon: "👶", description: "Child Health Care" },
+      { title: "Gynecology", url: "/services/gynecology", category: "Services", icon: "🤰", description: "Women's Health Care" },
+      { title: "Emergency Care", url: "/services/emergency", category: "Services", icon: "🚨", description: "24/7 Emergency Treatment" },
+      { title: "Physiotherapy", url: "/services/physiotherapy", category: "Services", icon: "🏋️", description: "Physical Rehabilitation" },
+      { title: "Dermatology", url: "/services/dermatology", category: "Services", icon: "🔬", description: "Skin Treatment" },
+      { title: "Psychiatry", url: "/services/psychiatry", category: "Services", icon: "🧠", description: "Mental Health Care" },
+    ],
+    doctors: [
+      { title: "Dr. Roman Asher", url: "/doctors/roman-asher", category: "Doctors", icon: "👨‍⚕️", description: "Cardiologist" },
+      { title: "Dr. Sarah Khan", url: "/doctors/sarah-khan", category: "Doctors", icon: "👩‍⚕️", description: "Pediatrician" },
+      { title: "Dr. Ali Raza", url: "/doctors/ali-raza", category: "Doctors", icon: "👨‍⚕️", description: "Surgeon" },
+      { title: "Dr. Fatima Ahmed", url: "/doctors/fatima-ahmed", category: "Doctors", icon: "👩‍⚕️", description: "Gynecologist" },
+    ],
+    about: [
+      { title: "About SHMC", url: "/about", category: "About", icon: "🏥", description: "Our Hospital Story" },
+      { title: "Mission & Vision", url: "/about/mission", category: "About", icon: "🎯", description: "Our Healthcare Mission" },
+      { title: "Facilities", url: "/about/facilities", category: "About", icon: "🏢", description: "Hospital Infrastructure" },
+      { title: "Testimonials", url: "/about/testimonials", category: "About", icon: "💬", description: "Patient Stories" },
+    ]
+  };
+
+  const getAllSearchData = () => {
+    return [
+      ...searchData.home,
+      ...searchData.services,
+      ...searchData.doctors,
+      ...searchData.about
+    ];
+  };
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      if (currentScrollY < 100) {
+        setIsScrolled(false);
+        setShowTopContactBar(true);
+      } else if (currentScrollY > lastScrollY && currentScrollY > 200) {
+        setIsScrolled(true);
+        setShowTopContactBar(false);
+      } else if (currentScrollY < lastScrollY) {
+        setIsScrolled(false);
+        if (currentScrollY < 100) {
+          setShowTopContactBar(true);
+        }
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+    
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const contactSlider = contactSliderRef.current;
+      const locationButton = document.querySelector('.location-button');
+      
+      if (contactSlider && 
+          !contactSlider.contains(event.target as Node) && 
+          !locationButton?.contains(event.target as Node)) {
+        setShowContactSlider(false);
+      }
+      
+      const menu = document.querySelector('.menu-container');
+      const menuButton = document.querySelector('.menu-button');
+      const searchModal = document.querySelector('.search-modal-container');
+      const searchButton = document.querySelector('.search-button');
+      
+      if (menu && !menu.contains(event.target as Node) && !menuButton?.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+        setActiveDropdown(null);
+      }
+      
+      if (searchModal && !searchModal.contains(event.target as Node) && !searchButton?.contains(event.target as Node)) {
+        setShowSearchModal(false);
+        setSearchQuery("");
+        setSearchResults([]);
+      }
+    };
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    if (isMenuOpen || showSearchModal || showContactSlider) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isMenuOpen, showSearchModal, showContactSlider]);
+
+  useEffect(() => {
+    if (showSearchModal && searchInputRef.current) {
+      setTimeout(() => {
+        searchInputRef.current?.focus();
+      }, 100);
+    }
+  }, [showSearchModal]);
+
+  const handleSearch = (e: FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim() && searchResults.length > 0) {
+      window.location.href = searchResults[0].url;
+      setShowSearchModal(false);
+      setSearchQuery("");
+    }
+  };
+
+  const handleSearchClick = (url: string) => {
+    window.location.href = url;
+    setShowSearchModal(false);
+    setSearchQuery("");
+    setSearchResults([]);
+  };
+
+  const handleSearchInputChange = (value: string) => {
+    setSearchQuery(value);
+    if (value.trim()) {
+      let results: any[] = [];
+      
+      switch(activeSearchTab) {
+        case 'all':
+          results = getAllSearchData();
+          break;
+        case 'home':
+          results = searchData.home;
+          break;
+        case 'services':
+          results = searchData.services;
+          break;
+        case 'doctors':
+          results = searchData.doctors;
+          break;
+        case 'about':
+          results = searchData.about;
+          break;
+      }
+      
+      const filteredResults = results.filter(item =>
+        item.title.toLowerCase().includes(value.toLowerCase()) ||
+        item.description.toLowerCase().includes(value.toLowerCase())
+      );
+      setSearchResults(filteredResults.slice(0, 8));
+    } else {
+      setSearchResults([]);
+    }
+  };
+
+  const getFeaturedItems = () => {
+    switch(activeSearchTab) {
+      case 'home':
+        return searchData.home.slice(0, 4);
+      case 'services':
+        return searchData.services.slice(0, 4);
+      case 'doctors':
+        return searchData.doctors.slice(0, 4);
+      case 'about':
+        return searchData.about.slice(0, 4);
+      default:
+        return [
+          searchData.home[0],
+          searchData.services[0],
+          searchData.doctors[0],
+          searchData.about[0]
+        ];
+    }
+  };
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur-md bg-white/80 dark:bg-[#0d1117]/70 shadow-md transition-all border-b border-gray-200/20 dark:border-gray-700/30">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
-          {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2 group">
-            <div className="h-10 w-10 relative">
-              <Image
-                src="https://cdn-icons-png.flaticon.com/512/2907/2907250.png"
-                alt="Online School Logo"
-                width={40}
-                height={40}
-                priority
-              />
-            </div>
-            <span className="text-xl font-semibold text-gray-900 dark:text-white transition-colors duration-300 group-hover:text-blue-600">
-              School
-            </span>
-          </Link>
-
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex space-x-8">
-            {navLinks.map((link, idx) => {
-              const isActive = pathname === link.href;
-              // Use label+href+idx as key to guarantee uniqueness
-              const key = `${link.label}-${link.href}-${idx}`;
-              return (
-                <Link
-                  key={key}
-                  href={link.href}
-                  className={`relative text-sm font-medium transition-colors duration-300 ${
-                    isActive
-                      ? "text-blue-600"
-                      : "text-gray-600 dark:text-gray-300 hover:text-blue-600"
-                  }`}
-                >
-                  {link.label}
-                  <span
-                    className={`absolute left-0 -bottom-1 h-0.5 bg-blue-600 transition-all duration-500 ease-out ${
-                      isActive ? "w-full" : "w-0 group-hover:w-full"
-                    }`}
-                  />
-                </Link>
-              );
-            })}
-          </nav>
-
-          {/* Desktop Auth Buttons */}
-          <div className="hidden md:flex items-center space-x-4">
-            {isAuthenticated && user ? (
-              <button
-                onClick={logout}
-                className="bg-gradient-to-r from-red-500 to-pink-500 text-white px-4 py-2 rounded-md text-sm font-medium shadow-md hover:from-red-600 hover:to-pink-600 transition-transform transform hover:scale-105"
-              >
-                Logout
-              </button>
-            ) : (
-              <>
-                <Link
-                  href="/auth/login"
-                  className="text-gray-600 dark:text-gray-300 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-transform transform hover:scale-105"
-                >
-                  Sign In
-                </Link>
-                <Link
-                  href="/auth/sign_up"
-                  className="bg-gradient-to-r from-blue-600 to-blue-500 text-white px-4 py-2 rounded-md text-sm font-medium shadow-md hover:from-blue-700 hover:to-blue-600 transition-transform transform hover:scale-105"
-                >
-                  Sign Up
-                </Link>
-              </>
-            )}
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="md:hidden">
-            <button
-              onClick={toggleMenu}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none transition"
-              aria-expanded={isMenuOpen}
-            >
-              {!isMenuOpen ? (
-                <svg
-                  className="h-6 w-6"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              ) : (
-                <svg
-                  className="h-6 w-6"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              )}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Menu */}
+    <>
+      {/* Top Contact Info Bar with Continuously Moving Curve */}
       <AnimatePresence>
-        {isMenuOpen && (
+        {showTopContactBar && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.4, ease: "easeInOut" }}
-            className="md:hidden bg-white dark:bg-[#0d1117] shadow-inner overflow-hidden"
+            ref={topContactBarRef}
+            initial={{ y: -50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -50, opacity: 0 }}
+            className="fixed top-0 left-0 right-0 z-40 bg-gradient-to-r from-[#064E3B] via-[#0B6E5E] to-[#064E3B] text-white shadow-md overflow-hidden"
           >
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={{
-                hidden: { opacity: 0, y: -10 },
-                visible: { opacity: 1, y: 0, transition: { staggerChildren: 0.1 } },
-              }}
-              className="pt-3 pb-6 space-y-2 px-4 sm:px-6"
-            >
-              {navLinks.map((link) => {
-                const isActive = pathname === link.href;
-                return (
-                  <motion.div
-                    key={link.href}
-                    variants={{ hidden: { opacity: 0, y: -10 }, visible: { opacity: 1, y: 0 } }}
-                  >
-                    <Link
-                      href={link.href}
-                      onClick={() => setIsMenuOpen(false)}
-                      className={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-300 ${
-                        isActive
-                          ? "text-blue-600"
-                          : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-blue-600"
-                      }`}
-                    >
-                      {link.label}
-                    </Link>
-                  </motion.div>
-                );
-              })}
+            {/* Continuous Wave Animation Background */}
+            <div className="absolute inset-0 overflow-hidden opacity-20">
+              <motion.div 
+                className="absolute -top-10 -left-20 w-[200%] h-32"
+                animate={{ 
+                  x: ["0%", "-100%"],
+                }}
+                transition={{ 
+                  duration: 20,
+                  repeat: Infinity,
+                  ease: "linear"
+                }}
+              >
+                <svg viewBox="0 0 1200 120" className="w-full h-full">
+                  <path 
+                    d="M0,120 C150,60 300,180 450,60 C600,-60 750,120 900,60 C1050,0 1200,120 1200,120 L0,120 Z" 
+                    fill="#1FB6A6" 
+                    fillOpacity="0.3"
+                  />
+                </svg>
+              </motion.div>
+              
+              <motion.div 
+                className="absolute -top-5 -left-40 w-[200%] h-40"
+                animate={{ 
+                  x: ["0%", "-100%"],
+                }}
+                transition={{ 
+                  duration: 25,
+                  repeat: Infinity,
+                  ease: "linear"
+                }}
+              >
+                <svg viewBox="0 0 1200 120" className="w-full h-full">
+                  <path 
+                    d="M0,120 C200,0 400,120 600,0 C800,-120 1000,120 1200,0 L1200,120 L0,120 Z" 
+                    fill="#1FB6A6" 
+                    fillOpacity="0.2"
+                  />
+                </svg>
+              </motion.div>
+            </div>
 
-              {isAuthenticated && user ? (
-                <motion.div variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}>
-                  <button
-                    onClick={() => {
-                      logout();
-                      setIsMenuOpen(false);
+            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex flex-col md:flex-row items-center justify-between py-2 md:py-1">
+                {/* Animated Curve Design */}
+                <div className="absolute -bottom-4 left-0 right-0 h-8">
+                  <motion.div 
+                    className="relative w-full h-full"
+                    animate={{ 
+                      x: ["0%", "100%", "0%"],
                     }}
-                    className="block w-full text-left px-4 py-3 rounded-lg text-base font-medium bg-gradient-to-r from-red-500 to-pink-500 text-white shadow-md hover:from-red-600 hover:to-pink-600 transition-transform transform hover:scale-105"
+                    transition={{ 
+                      duration: 15,
+                      repeat: Infinity,
+                      ease: "linear"
+                    }}
                   >
-                    Logout
-                  </button>
-                </motion.div>
-              ) : (
-                <>
-                  <motion.div variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}>
-                    <Link
-                      href="/auth/login"
-                      onClick={() => setIsMenuOpen(false)}
-                      className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-blue-600 transition"
-                    >
-                      Sign In
-                    </Link>
+                    <svg viewBox="0 0 1200 60" className="w-full h-full">
+                      <path 
+                        d="M0,60 C150,30 300,90 450,30 C600,-30 750,90 900,30 C1050,-30 1200,90 1200,60 L0,60 Z" 
+                        fill="white" 
+                        fillOpacity="0.1"
+                      />
+                    </svg>
                   </motion.div>
-                  <motion.div variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}>
-                    <Link
-                      href="/auth/sign_up"
-                      onClick={() => setIsMenuOpen(false)}
-                      className="block px-3 py-2 rounded-md text-base font-medium bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-md hover:from-blue-700 hover:to-blue-600 transition-transform transform hover:scale-105"
+                </div>
+
+                {/* Contact Info */}
+                <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 text-xs md:text-sm mb-2 md:mb-0">
+                  <a 
+                    href={`tel:${hospitalContact.phone.replace(/\s/g, '')}`}
+                    className="flex items-center gap-2 hover:text-[#1FB6A6] transition-colors group"
+                  >
+                    <motion.div 
+                      whileHover={{ scale: 1.1 }}
+                      className="p-1 bg-white/10 rounded-full group-hover:bg-white/20 transition-colors"
                     >
-                      Sign Up
-                    </Link>
-                  </motion.div>
-                </>
-              )}
-            </motion.div>
+                      <Phone className="h-3 w-3 md:h-4 md:w-4" />
+                    </motion.div>
+                    <span className="font-medium">{hospitalContact.phone}</span>
+                  </a>
+                  
+                  <div className="hidden md:block h-4 w-px bg-white/30"></div>
+                  
+                  <a 
+                    href={`mailto:${hospitalContact.email}`}
+                    className="hidden md:flex items-center gap-2 hover:text-[#1FB6A6] transition-colors group"
+                  >
+                    <motion.div 
+                      whileHover={{ scale: 1.1 }}
+                      className="p-1 bg-white/10 rounded-full group-hover:bg-white/20 transition-colors"
+                    >
+                      <Mail className="h-3 w-3 md:h-4 md:w-4" />
+                    </motion.div>
+                    <span className="font-medium truncate max-w-[200px]">{hospitalContact.email}</span>
+                  </a>
+                  
+                  <div className="hidden md:block h-4 w-px bg-white/30"></div>
+                  
+                  <div className="hidden lg:flex items-center gap-2">
+                    <motion.div 
+                      animate={{ rotate: [0, 360] }}
+                      transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                      className="p-1 bg-white/10 rounded-full"
+                    >
+                      <Clock className="h-3 w-3 md:h-4 md:w-4" />
+                    </motion.div>
+                    <span className="font-medium">24/7 Emergency</span>
+                  </div>
+                </div>
+
+                {/* Call to Action Buttons */}
+                <div className="flex items-center gap-2">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setShowContactSlider(true)}
+                    className="flex items-center gap-2 px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-full text-xs font-medium transition-colors group"
+                  >
+                    <MapPin className="h-3 w-3 group-hover:scale-110 transition-transform" />
+                    <span>Location</span>
+                  </motion.button>
+                  
+                  <Link
+                    href="/appointment"
+                    className="flex items-center gap-2 px-3 py-1.5 bg-white text-[#064E3B] hover:bg-[#F0F0F0] rounded-full text-xs font-bold transition-colors"
+                  >
+                    <Calendar className="h-3 w-3" />
+                    <span>Book Now</span>
+                  </Link>
+                </div>
+              </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+
+      {/* Main Navbar */}
+      <motion.header
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ type: "spring", stiffness: 100, damping: 20 }}
+        className={`fixed ${showTopContactBar ? 'top-8 md:top-10' : 'top-0'} left-0 right-0 z-50 transition-all duration-500 ${
+          isScrolled 
+            ? "bg-white/95 backdrop-blur-xl shadow-lg py-3 border-b border-gray-200" 
+            : "bg-white py-4 border-b border-gray-200"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between">
+            <Link 
+              href="/" 
+              className="flex items-center gap-3 group"
+            >
+              <div className="relative">
+                <Image
+                 src="https://siddiqhospital.com/wp-content/uploads/2023/12/logo-300x300.png"
+                  alt="SHMC Hospital Logo"
+                  width={50}
+                  height={50}
+                  className="object-cover rounded-full"
+                />
+              </div>
+              <div className="hidden md:flex flex-col">
+                <span className="font-bold text-xl text-[#064E3B] leading-tight">
+                  SHMC
+                </span>
+                <span className="text-sm text-[#1E293B] font-medium">
+                  Siddique Heart Medical Complex
+                </span>
+              </div>
+              <div className="md:hidden flex flex-col">
+                <span className="font-bold text-lg text-[#064E3B]">
+                  SHMC
+                </span>
+              </div>
+            </Link>
+
+            <div className="hidden lg:flex items-center gap-3">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setShowContactSlider(true)}
+                className="location-button flex items-center gap-2 px-4 py-2.5 bg-[#F5F5F5] border border-gray-200 rounded-full hover:shadow-md hover:border-[#1FB6A6] transition-all duration-300 group"
+              >
+                <div className="p-1.5 bg-gradient-to-br from-[#064E3B]/10 to-[#1FB6A6]/10 rounded-full group-hover:from-[#064E3B]/20 group-hover:to-[#1FB6A6]/20">
+                  <MapPin className="h-4 w-4 text-[#064E3B] group-hover:text-[#1FB6A6]" />
+                </div>
+                <span className="text-sm font-medium text-[#1E293B] group-hover:text-[#064E3B]">
+                  Our Location
+                </span>
+              </motion.button>
+
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setShowSearchModal(true)}
+                className="search-button flex items-center gap-2 px-4 py-2.5 bg-[#F5F5F5] border border-gray-200 rounded-full hover:shadow-md hover:border-[#1FB6A6] transition-all duration-300 group"
+              >
+                <Search className="h-4 w-4 text-[#064E3B] group-hover:text-[#1FB6A6]" />
+                <span className="text-sm font-medium text-[#1E293B] group-hover:text-[#064E3B]">
+                  Search
+                </span>
+              </motion.button>
+
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setIsMenuOpen(true)}
+                className="menu-button flex items-center gap-2 px-5 py-2.5 bg-[#064E3B] text-white rounded-full font-semibold shadow-lg hover:shadow-xl hover:shadow-[#064E3B]/20 hover:bg-[#064E3B]/90 transition-all duration-300"
+              >
+                <Menu className="h-4.5 w-4.5" />
+                <span>Menu</span>
+              </motion.button>
+            </div>
+
+            <div className="flex items-center gap-2 lg:hidden">
+              {/* Mobile Location Button */}
+              <motion.button
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setShowContactSlider(true)}
+                className="location-button p-3 bg-[#F5F5F5] border border-gray-200 rounded-full hover:shadow-sm hover:border-[#1FB6A6] transition-all duration-300"
+              >
+                <MapPin className="h-5 w-5 text-[#064E3B]" />
+              </motion.button>
+              
+              <motion.button
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setShowSearchModal(true)}
+                className="search-button p-3 bg-[#F5F5F5] border border-gray-200 rounded-full hover:shadow-sm hover:border-[#1FB6A6] transition-all duration-300"
+              >
+                <Search className="h-5 w-5 text-[#064E3B]" />
+              </motion.button>
+              
+              <motion.button
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setIsMenuOpen(true)}
+                className="menu-button p-3 bg-[#064E3B] text-white rounded-full hover:shadow-lg hover:bg-[#064E3B]/90 transition-all duration-300"
+              >
+                <Menu className="h-5 w-5" />
+              </motion.button>
+            </div>
+          </div>
+        </div>
+
+        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#1FB6A6] to-transparent opacity-30 rounded-full">
+          <motion.div 
+            className="h-full bg-gradient-to-r from-[#064E3B] via-[#1FB6A6] to-[#064E3B] rounded-full"
+            animate={{ 
+              scaleX: [0, 1, 0],
+              translateX: ["-100%", "100%", "-100%"]
+            }}
+            transition={{ 
+              duration: 2.5,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+          />
+        </div>
+      </motion.header>
+
+      {/* Spacer for fixed navbar */}
+      <div className={`transition-all duration-300 ${showTopContactBar ? 'h-28 md:h-32' : 'h-16 lg:h-20'} ${isScrolled ? 'lg:h-16' : ''}`} />
+
+      {/* Enhanced Contact Slider - Slides from Left and Centers */}
+      <AnimatePresence>
+        {showContactSlider && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowContactSlider(false)}
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
+            />
+
+            <motion.div
+              ref={contactSliderRef}
+              initial={{ 
+                x: "-100%",
+                opacity: 0,
+                scale: 0.9
+              }}
+              animate={{ 
+                x: 0,
+                opacity: 1,
+                scale: 1
+              }}
+              exit={{ 
+                x: "-100%",
+                opacity: 0,
+                scale: 0.9
+              }}
+              transition={{ 
+                type: "spring",
+                damping: 20,
+                stiffness: 150,
+                mass: 0.8
+              }}
+              className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-2xl px-4"
+            >
+              <motion.div 
+                initial={{ rotateY: -15 }}
+                animate={{ rotateY: 0 }}
+                transition={{ delay: 0.1 }}
+                className="bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden"
+              >
+                {/* Header with gradient */}
+                <div className="relative bg-gradient-to-r from-[#064E3B] via-[#0B6E5E] to-[#064E3B] p-6">
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#1FB6A6] via-white to-[#1FB6A6] opacity-50"></div>
+                  
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <motion.div
+                        animate={{ 
+                          scale: [1, 1.1, 1],
+                          rotate: [0, 5, -5, 0]
+                        }}
+                        transition={{ 
+                          duration: 2,
+                          repeat: Infinity,
+                          repeatType: "reverse"
+                        }}
+                        className="p-2 bg-white/20 rounded-full"
+                      >
+                        <MapPin className="h-6 w-6 text-white" />
+                      </motion.div>
+                      <div>
+                        <h2 className="font-bold text-white text-xl">Contact & Location</h2>
+                        <p className="text-sm text-white/80">Siddique Heart Medical Complex</p>
+                      </div>
+                    </div>
+                    
+                    <motion.button
+                      whileHover={{ rotate: 90, scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={() => setShowContactSlider(false)}
+                      className="p-2 hover:bg-white/20 rounded-full transition-colors"
+                    >
+                      <X className="h-5 w-5 text-white hover:text-[#1FB6A6]" />
+                    </motion.button>
+                  </div>
+                </div>
+
+                <div className="p-6 space-y-6 max-h-[70vh] overflow-y-auto">
+                  {/* Quick Contact Cards */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <motion.a
+                      whileHover={{ y: -5, scale: 1.02 }}
+                      href={`tel:${hospitalContact.phone.replace(/\s/g, '')}`}
+                      className="col-span-1 md:col-span-2 p-4 bg-gradient-to-br from-[#064E3B]/10 to-[#1FB6A6]/10 rounded-xl border border-[#064E3B]/20 hover:border-[#064E3B]/40 hover:shadow-lg transition-all duration-300 group"
+                    >
+                      <div className="flex items-center gap-3">
+                        <motion.div
+                          animate={{ rotate: [0, 10, 0] }}
+                          transition={{ duration: 2, repeat: Infinity }}
+                          className="p-2 bg-[#064E3B] rounded-full"
+                        >
+                          <Phone className="h-5 w-5 text-white" />
+                        </motion.div>
+                        <div>
+                          <div className="font-bold text-[#064E3B]">Emergency Call</div>
+                          <div className="text-lg font-bold text-[#1E293B]">{hospitalContact.phone}</div>
+                          <div className="text-xs text-[#1E293B]/60 mt-1">Tap to call instantly</div>
+                        </div>
+                      </div>
+                    </motion.a>
+
+                    <motion.a
+                      whileHover={{ y: -5, scale: 1.02 }}
+                      href={`mailto:${hospitalContact.email}`}
+                      className="p-4 bg-gradient-to-br from-[#064E3B]/5 to-[#F5F5F5] rounded-xl border border-[#064E3B]/20 hover:border-[#064E3B]/40 hover:shadow-lg transition-all duration-300"
+                    >
+                      <div className="flex items-center gap-2">
+                        <div className="p-1.5 bg-[#064E3B]/10 rounded-full">
+                          <Mail className="h-4 w-4 text-[#064E3B]" />
+                        </div>
+                        <div className="text-sm font-medium text-[#064E3B]">Email</div>
+                      </div>
+                      <div className="text-sm text-[#1E293B] truncate mt-2">{hospitalContact.email}</div>
+                    </motion.a>
+
+                    <motion.a
+                      whileHover={{ y: -5, scale: 1.02 }}
+                      href={`https://wa.me/${hospitalContact.whatsapp.replace(/\s/g, '')}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-4 bg-gradient-to-br from-[#25D366]/10 to-[#F5F5F5] rounded-xl border border-[#25D366]/20 hover:border-[#25D366]/40 hover:shadow-lg transition-all duration-300"
+                    >
+                      <div className="flex items-center gap-2">
+                        <div className="p-1.5 bg-[#25D366]/20 rounded-full">
+                          <MessageCircle className="h-4 w-4 text-[#25D366]" />
+                        </div>
+                        <div className="text-sm font-medium text-[#064E3B]">WhatsApp</div>
+                      </div>
+                      <div className="text-sm text-[#1E293B] truncate mt-2">{hospitalContact.whatsapp}</div>
+                    </motion.a>
+                  </div>
+
+                  {/* Address Section */}
+                  <div className="space-y-4">
+                    <div className="flex items-start gap-3">
+                      <motion.div
+                        animate={{ 
+                          scale: [1, 1.1, 1],
+                        }}
+                        transition={{ 
+                          duration: 3,
+                          repeat: Infinity
+                        }}
+                        className="p-2 bg-[#064E3B]/20 rounded-full flex-shrink-0"
+                      >
+                        <MapPin className="h-5 w-5 text-[#064E3B]" />
+                      </motion.div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-[#064E3B] mb-1">Hospital Address</h4>
+                        <p className="text-[#1E293B] text-sm leading-relaxed">
+                          Sohawa Stop, Circular Road<br />
+                          Daska, Pakistan
+                        </p>
+                        <motion.a
+                          whileHover={{ scale: 1.05 }}
+                          href={hospitalContact.googleMapsUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 mt-3 px-4 py-2 bg-[#064E3B] text-white rounded-full font-medium hover:shadow-lg hover:bg-[#064E3B]/90 transition-all duration-300"
+                        >
+                          <ExternalLink className="h-4 w-4" />
+                          Open in Google Maps
+                        </motion.a>
+                      </div>
+                    </div>
+
+                    {/* Map Preview */}
+                    <motion.div 
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.2 }}
+                      className="relative h-48 rounded-xl overflow-hidden border-2 border-[#064E3B]/30 shadow-lg"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#064E3B]/10 to-[#1FB6A6]/10 flex items-center justify-center">
+                        <div className="text-center p-4">
+                          <motion.div
+                            animate={{ 
+                              y: [0, -5, 0],
+                            }}
+                            transition={{ 
+                              duration: 2,
+                              repeat: Infinity
+                            }}
+                          >
+                            <MapPin className="h-10 w-10 text-[#064E3B] mx-auto mb-3" />
+                          </motion.div>
+                          <div className="text-[#064E3B] font-bold text-lg">SHMC Location</div>
+                          <div className="text-sm text-[#1E293B] mt-1">Daska, Pakistan</div>
+                          <div className="text-xs text-[#1E293B]/60 mt-2">Lat: 32.340264, Long: 74.350928</div>
+                        </div>
+                      </div>
+                      
+                      {/* Animated pulse effect */}
+                      <motion.div 
+                        className="absolute inset-0 border-4 border-[#064E3B]/20 rounded-xl"
+                        animate={{ 
+                          scale: [1, 1.1, 1],
+                          opacity: [0.5, 0, 0.5]
+                        }}
+                        transition={{ 
+                          duration: 2,
+                          repeat: Infinity
+                        }}
+                      />
+                    </motion.div>
+                  </div>
+
+                  {/* Working Hours */}
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="bg-gradient-to-br from-[#064E3B]/5 to-[#F5F5F5] rounded-xl border border-[#064E3B]/20 p-5"
+                  >
+                    <div className="flex items-center gap-3 mb-4">
+                      <motion.div
+                        animate={{ rotate: [0, 360] }}
+                        transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                        className="p-2 bg-[#064E3B]/20 rounded-full"
+                      >
+                        <Clock className="h-5 w-5 text-[#064E3B]" />
+                      </motion.div>
+                      <h4 className="font-semibold text-[#064E3B]">Working Hours</h4>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center p-3 bg-white/50 rounded-lg">
+                        <span className="text-sm font-medium text-[#1E293B]">Emergency</span>
+                        <motion.span 
+                          animate={{ scale: [1, 1.05, 1] }}
+                          transition={{ duration: 2, repeat: Infinity }}
+                          className="px-3 py-1 bg-red-500/10 text-red-600 text-sm font-bold rounded-full"
+                        >
+                          24/7 Service
+                        </motion.span>
+                      </div>
+                      <div className="flex justify-between items-center p-3 bg-white/50 rounded-lg">
+                        <span className="text-sm font-medium text-[#1E293B]">Saturday</span>
+                        <span className="text-sm font-medium text-[#064E3B]">9:00 AM - 10:00 PM</span>
+                      </div>
+                      <div className="flex justify-between items-center p-3 bg-white/50 rounded-lg">
+                        <span className="text-sm font-medium text-[#1E293B]">Sunday</span>
+                        <span className="text-sm font-medium text-[#064E3B]">9:00 AM - 8:00 PM</span>
+                      </div>
+                    </div>
+                  </motion.div>
+                  
+                  {/* Action Buttons */}
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                    className="grid grid-cols-1 md:grid-cols-2 gap-3"
+                  >
+                    <Link
+                      href="/appointment"
+                      onClick={() => setShowContactSlider(false)}
+                      className="inline-flex items-center justify-center gap-2 w-full px-4 py-3.5 bg-gradient-to-r from-[#064E3B] to-[#0B6E5E] text-white rounded-xl font-bold hover:shadow-xl hover:shadow-[#064E3B]/30 hover:scale-[1.02] transition-all duration-300"
+                    >
+                      <Calendar className="h-5 w-5" />
+                      Book Appointment Now
+                    </Link>
+                    
+                    <Link
+                      href="/contact"
+                      onClick={() => setShowContactSlider(false)}
+                      className="inline-flex items-center justify-center gap-2 w-full px-4 py-3.5 bg-white text-[#064E3B] rounded-xl font-bold border-2 border-[#064E3B] hover:bg-[#064E3B]/5 hover:border-[#0B6E5E] hover:text-[#0B6E5E] hover:shadow-lg transition-all duration-300"
+                    >
+                      <Phone className="h-5 w-5" />
+                      More Contact Options
+                    </Link>
+                  </motion.div>
+                </div>
+              </motion.div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Search Modal Component */}
+      <AnimatePresence>
+        {showSearchModal && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => {
+                setShowSearchModal(false);
+                setSearchQuery("");
+                setSearchResults([]);
+              }}
+              className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50"
+            />
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: -20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: -20 }}
+              transition={{ 
+                type: "spring",
+                damping: 25,
+                stiffness: 300
+              }}
+              className="search-modal-container fixed top-20 left-1/2 transform -translate-x-1/2 w-full max-w-2xl z-50 px-4"
+            >
+              <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden">
+                <div className="p-4 border-b border-gray-200">
+                  <div className="relative">
+                    <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                      <Search className="h-5 w-5 text-[#064E3B]" />
+                    </div>
+                    <form onSubmit={handleSearch}>
+                      <input
+                        ref={searchInputRef}
+                        type="text"
+                        placeholder="Search for doctors, services, appointments..."
+                        value={searchQuery}
+                        onChange={(e) => handleSearchInputChange(e.target.value)}
+                        className="w-full pl-12 pr-12 py-4 bg-[#F5F5F5] rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#064E3B]/30 focus:border-[#064E3B] text-[#1E293B] placeholder-gray-500 text-base"
+                        autoFocus
+                      />
+                    </form>
+                    {searchQuery && (
+                      <button
+                        onClick={() => {
+                          setSearchQuery("");
+                          setSearchResults([]);
+                        }}
+                        className="absolute right-4 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
+                      >
+                        <X className="h-4 w-4 text-[#1E293B] hover:text-[#064E3B]" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                <div className="border-b border-gray-200">
+                  <div className="flex overflow-x-auto px-4 py-2 space-x-1">
+                    {searchTabs.map((tab) => (
+                      <button
+                        key={tab.id}
+                        onClick={() => setActiveSearchTab(tab.id)}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-200 ${
+                          activeSearchTab === tab.id
+                            ? 'bg-[#064E3B] text-white'
+                            : 'text-[#1E293B] hover:bg-[#F5F5F5]'
+                        }`}
+                      >
+                        <span>{tab.icon}</span>
+                        {tab.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="max-h-96 overflow-y-auto">
+                  <AnimatePresence mode="wait">
+                    {searchResults.length > 0 ? (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="p-4"
+                      >
+                        <div className="mb-4">
+                          <h3 className="text-sm font-semibold text-[#064E3B] uppercase tracking-wider">
+                            {activeSearchTab === 'all' ? 'All Results' : `${searchTabs.find(t => t.id === activeSearchTab)?.name} Results`}
+                          </h3>
+                          <p className="text-xs text-[#1E293B] mt-1">
+                            {searchResults.length} results found
+                          </p>
+                        </div>
+                        
+                        <div className="space-y-3">
+                          {searchResults.map((result, index) => (
+                            <motion.button
+                              key={index}
+                              initial={{ opacity: 0, x: -10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: index * 0.05 }}
+                              onClick={() => handleSearchClick(result.url)}
+                              className="w-full text-left p-4 bg-[#F5F5F5] hover:bg-[#064E3B]/5 rounded-xl transition-all duration-200 group/result border border-transparent hover:border-[#064E3B]/20"
+                            >
+                              <div className="flex items-start gap-4">
+                                <div className="p-2 bg-white rounded-full group-hover/result:bg-[#064E3B]/10 transition-colors flex-shrink-0 shadow-sm">
+                                  <span className="text-xl">{result.icon}</span>
+                                </div>
+                                <div className="flex-1">
+                                  <div className="flex items-center justify-between">
+                                    <h3 className="font-semibold text-[#064E3B] group-hover/result:text-[#1FB6A6] text-base">
+                                      {result.title}
+                                    </h3>
+                                    <ChevronRight className="h-4 w-4 text-gray-400 group-hover/result:text-[#064E3B] transform group-hover/result:translate-x-1 transition-transform" />
+                                  </div>
+                                  <p className="text-sm text-[#1E293B] mt-1">
+                                    {result.description}
+                                  </p>
+                                </div>
+                              </div>
+                            </motion.button>
+                          ))}
+                        </div>
+                      </motion.div>
+                    ) : searchQuery ? (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="p-8 text-center"
+                      >
+                        <div className="inline-flex p-4 bg-[#F5F5F5] rounded-full mb-4">
+                          <Search className="h-8 w-8 text-[#064E3B]" />
+                        </div>
+                        <h3 className="font-medium text-[#064E3B] mb-2 text-base">
+                          No results found for "{searchQuery}"
+                        </h3>
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="p-6"
+                      >
+                        <div className="mb-6">
+                          <h4 className="font-medium text-[#064E3B] mb-4 text-base">
+                            Featured in {searchTabs.find(t => t.id === activeSearchTab)?.name}
+                          </h4>
+                          <div className="grid grid-cols-2 gap-3">
+                            {getFeaturedItems().map((item, index) => (
+                              <motion.button
+                                key={index}
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                onClick={() => handleSearchClick(item.url)}
+                                className="p-3 bg-[#F5F5F5] hover:bg-[#064E3B]/10 rounded-xl border border-gray-200 hover:border-[#064E3B]/30 transition-all duration-200 text-left"
+                              >
+                                <div className="flex items-center gap-2 mb-2">
+                                  <span className="text-lg">{item.icon}</span>
+                                  <span className="font-medium text-[#064E3B] text-base">
+                                    {item.title}
+                                  </span>
+                                </div>
+                                <div className="text-xs text-[#1E293B]">
+                                  {item.description}
+                                </div>
+                              </motion.button>
+                            ))}
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <h4 className="font-medium text-[#064E3B] mb-4 text-base">
+                            Popular Searches
+                          </h4>
+                          <div className="flex flex-wrap gap-2">
+                            {["Emergency", "Appointment", "Pediatrics", "Doctor", "Gynecology", "Physiotherapy"].map(
+                              (term, index) => (
+                                <motion.button
+                                  key={index}
+                                  whileHover={{ scale: 1.05 }}
+                                  whileTap={{ scale: 0.95 }}
+                                  onClick={() => {
+                                    setSearchQuery(term);
+                                    handleSearchInputChange(term);
+                                  }}
+                                  className="px-3 py-1.5 bg-[#F5F5F5] hover:bg-[#064E3B]/10 text-[#064E3B] rounded-full text-sm font-medium border border-gray-200 hover:border-[#064E3B]/30 transition-all duration-200"
+                                >
+                                  {term}
+                                </motion.button>
+                              )
+                            )}
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Desktop Menu */}
+      <AnimatePresence>
+        {isMenuOpen && !isMobile && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMenuOpen(false)}
+              className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50"
+            />
+
+            <motion.div
+              ref={menuRef}
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ 
+                type: "tween",
+                duration: 0.3,
+                ease: "easeOut"
+              }}
+              className="menu-container fixed top-0 right-0 h-full w-96 z-50 bg-white shadow-2xl border-l border-gray-200 overflow-y-auto"
+            >
+              <div className="sticky top-0 bg-white border-b border-gray-200 z-10">
+                <div className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <Image
+                        src="https://siddiqhospital.com/wp-content/uploads/2023/12/logo-300x300.png"
+                        alt="SHMC Logo"
+                        width={50}
+                        height={50}
+                        className="object-cover rounded-full"
+                      />
+                      <div>
+                        <h2 className="font-bold text-[#064E3B] text-xl">SHMC</h2>
+                        <p className="text-sm text-[#1E293B]">Siddique Heart Medical Complex</p>
+                      </div>
+                    </div>
+                    
+                    <button
+                      onClick={() => setIsMenuOpen(false)}
+                      className="p-2 hover:bg-[#F5F5F5] rounded-full transition-colors"
+                    >
+                      <X className="h-6 w-6 text-[#1E293B] hover:text-[#064E3B]" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-6 space-y-6">
+                <div className="space-y-4">
+                  <h3 className="text-sm font-semibold text-[#1E293B] uppercase tracking-wider px-2">
+                    Navigation
+                  </h3>
+                  
+                  <div className="space-y-2">
+                    {navItems.map((item, idx) => (
+                      <div key={idx}>
+                        {item.subItems ? (
+                          <div className="space-y-2">
+                            <button
+                              onClick={() => setActiveDropdown(activeDropdown === item.name ? null : item.name)}
+                              className="w-full flex items-center gap-3 p-3 rounded-xl bg-[#F5F5F5] hover:bg-[#064E3B]/5 transition-colors"
+                            >
+                              <div className="p-2 bg-[#064E3B]/10 rounded-lg">
+                                <div className="text-[#064E3B]">
+                                  {item.icon}
+                                </div>
+                              </div>
+                              <div className="flex-1 text-left">
+                                <h3 className="font-semibold text-[#064E3B]">
+                                  {item.name}
+                                </h3>
+                                <p className="text-xs text-[#1E293B]">{item.description}</p>
+                              </div>
+                              <ChevronRight className={`h-4 w-4 text-gray-400 transform transition-transform ${
+                                activeDropdown === item.name ? "rotate-90" : ""
+                              }`} />
+                            </button>
+                            
+                            <AnimatePresence>
+                              {activeDropdown === item.name && (
+                                <motion.div
+                                  initial={{ height: 0, opacity: 0 }}
+                                  animate={{ height: "auto", opacity: 1 }}
+                                  exit={{ height: 0, opacity: 0 }}
+                                  className="ml-12 overflow-hidden"
+                                >
+                                  <div className="py-2 space-y-1">
+                                    {item.subItems.map((sub, i) => (
+                                      <Link
+                                        key={i}
+                                        href={sub.href}
+                                        onClick={() => setIsMenuOpen(false)}
+                                        className="flex items-center gap-3 p-2 rounded-lg hover:bg-[#F5F5F5] transition-colors group"
+                                      >
+                                        <span className="text-lg">{sub.icon}</span>
+                                        <div>
+                                          <div className="font-medium text-[#1E293B] group-hover:text-[#064E3B]">
+                                            {sub.name}
+                                          </div>
+                                          <div className="text-xs text-gray-500">{sub.tag}</div>
+                                        </div>
+                                      </Link>
+                                    ))}
+                                  </div>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </div>
+                        ) : (
+                          <Link
+                            href={item.href}
+                            onClick={() => setIsMenuOpen(false)}
+                            className={`flex items-center gap-3 p-3 rounded-xl transition-all duration-200 ${
+                              item.cta
+                                ? 'bg-gradient-to-r from-[#064E3B] to-[#064E3B]/90 hover:shadow-lg hover:shadow-[#064E3B]/20'
+                                : 'hover:bg-[#F5F5F5]'
+                            }`}
+                          >
+                            <div className={`p-2 rounded-lg ${
+                              item.cta
+                                ? 'bg-white/20'
+                                : 'bg-[#064E3B]/10'
+                            }`}>
+                              <div className={item.cta ? 'text-white' : 'text-[#064E3B]'}>
+                                {item.icon}
+                              </div>
+                            </div>
+                            <div className="flex-1">
+                              <h3 className={`font-semibold ${
+                                item.cta ? 'text-white' : 'text-[#064E3B]'
+                              }`}>
+                                {item.name}
+                              </h3>
+                              <p className={`text-xs ${
+                                item.cta ? 'text-white/80' : 'text-[#1E293B]'
+                              }`}>
+                                {item.description}
+                              </p>
+                            </div>
+                            <ChevronRight className={`h-4 w-4 ${
+                              item.cta ? 'text-white' : 'text-gray-400'
+                            }`} />
+                          </Link>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="p-4 bg-gradient-to-br from-[#064E3B]/5 to-[#F5F5F5] rounded-xl border border-[#064E3B]/20">
+                  <h4 className="font-bold text-[#064E3B] mb-3">Need Assistance?</h4>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-[#064E3B]/10 rounded-full">
+                        <Phone className="h-4 w-4 text-[#064E3B]" />
+                      </div>
+                      <div>
+                        <div className="text-xs text-[#1E293B]">Emergency & Appointments</div>
+                        <div className="text-[#064E3B] font-medium">{hospitalContact.phone}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <Link
+                    href="/appointment"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="flex items-center justify-center gap-2 w-full px-4 py-3.5 bg-gradient-to-r from-[#064E3B] to-[#064E3B]/90 text-white rounded-xl font-bold hover:shadow-xl hover:shadow-[#064E3B]/20 hover:bg-[#064E3B] transition-all duration-300"
+                  >
+                    <Calendar className="h-5 w-5" />
+                    Book Appointment
+                  </Link>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isMenuOpen && isMobile && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => {
+                setIsMenuOpen(false);
+                setActiveDropdown(null);
+              }}
+              className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40"
+            />
+
+            <motion.div
+              ref={menuRef}
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ 
+                type: "tween",
+                duration: 0.3,
+                ease: "easeOut"
+              }}
+              className="menu-container fixed bottom-0 left-0 right-0 max-h-[85vh] bg-white rounded-t-3xl shadow-2xl z-40 overflow-y-auto border-t border-gray-200"
+            >
+              <div className="sticky top-0 bg-white border-b border-gray-200 z-10 p-4">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <Image
+                      src="https://siddiqhospital.com/wp-content/uploads/2023/12/logo-300x300.png"
+                      alt="SHMC Logo"
+                      width={40}
+                      height={40}
+                      className="object-cover rounded-full"
+                    />
+                    <div>
+                      <div className="font-bold text-[#064E3B] text-base">SHMC</div>
+                      <div className="text-xs text-[#1E293B]">Siddique Heart Medical Complex</div>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setIsMenuOpen(false)}
+                    className="p-2 hover:bg-[#F5F5F5] rounded-full transition-colors"
+                  >
+                    <X className="h-5 w-5 text-[#1E293B] hover:text-[#064E3B]" />
+                  </button>
+                </div>
+              </div>
+
+              <div className="p-4">
+                <nav className="space-y-2">
+                  {navItems.map((item, idx) => (
+                    <div key={idx} className="mb-2">
+                      {item.subItems ? (
+                        <>
+                          <button
+                            onClick={() =>
+                              setActiveDropdown(
+                                activeDropdown === item.name ? null : item.name
+                              )
+                            }
+                            className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-[#F5F5F5] transition-colors"
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className={`p-2 rounded-lg ${
+                                item.featured 
+                                  ? 'bg-gradient-to-br from-[#064E3B]/20 to-[#1FB6A6]/20' 
+                                  : 'bg-[#F5F5F5]'
+                              }`}>
+                                <div className="text-[#064E3B]">
+                                  {item.icon}
+                                </div>
+                              </div>
+                              <div className="text-left">
+                                <div className="font-semibold text-[#064E3B]">{item.name}</div>
+                                <div className="text-xs text-[#1E293B]">{item.description}</div>
+                              </div>
+                            </div>
+                            <ChevronRight
+                              className={`h-4 w-4 text-gray-400 transform transition-transform ${
+                                activeDropdown === item.name ? "rotate-90" : ""
+                              }`}
+                            />
+                          </button>
+
+                          <AnimatePresence>
+                            {activeDropdown === item.name && (
+                              <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: "auto", opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                className="ml-14 overflow-hidden"
+                              >
+                                <div className="py-2 space-y-1">
+                                  {item.subItems.map((sub, i) => (
+                                    <Link
+                                      key={i}
+                                      href={sub.href}
+                                      onClick={() => setIsMenuOpen(false)}
+                                      className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-[#F5F5F5] transition-colors"
+                                    >
+                                      <span className="text-xl">{sub.icon}</span>
+                                      <div>
+                                        <div className="text-[#064E3B] font-medium">{sub.name}</div>
+                                        <div className="text-xs text-gray-500">{sub.tag}</div>
+                                      </div>
+                                    </Link>
+                                  ))}
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </>
+                      ) : (
+                        <Link
+                          href={item.href}
+                          onClick={() => setIsMenuOpen(false)}
+                          className={`w-full flex items-center gap-3 p-3 rounded-xl transition-colors ${
+                            item.cta 
+                              ? 'bg-gradient-to-r from-[#064E3B] to-[#064E3B]/90'
+                              : 'hover:bg-[#F5F5F5]'
+                          }`}
+                        >
+                          <div className={`p-2 rounded-lg ${
+                            item.cta 
+                              ? 'bg-white/20' 
+                              : 'bg-[#064E3B]/10'
+                          }`}>
+                            <div className={item.cta ? 'text-white' : 'text-[#064E3B]'}>
+                              {item.icon}
+                            </div>
+                          </div>
+                          <div className="text-left">
+                            <div className={`font-semibold ${
+                              item.cta ? 'text-white' : 'text-[#064E3B]'
+                            }`}>{item.name}</div>
+                            <div className={`text-xs ${
+                              item.cta ? 'text-white/80' : 'text-[#1E293B]'
+                            }`}>{item.description}</div>
+                          </div>
+                        </Link>
+                      )}
+                    </div>
+                  ))}
+                </nav>
+
+                <div className="mt-6 space-y-4">
+                  <div className="p-4 bg-gradient-to-br from-[#064E3B]/5 to-[#F5F5F5] rounded-xl border border-[#064E3B]/20">
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 bg-[#064E3B]/10 rounded-full">
+                          <Phone className="h-4 w-4 text-[#064E3B]" />
+                        </div>
+                        <div>
+                          <div className="text-xs text-[#1E293B]">Emergency & Appointments</div>
+                          <div className="text-[#064E3B] font-medium">{hospitalContact.phone}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <Link
+                    href="/appointment"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="block w-full px-4 py-3.5 bg-gradient-to-r from-[#064E3B] to-[#064E3B]/90 text-white rounded-xl font-bold text-center hover:shadow-lg hover:shadow-[#064E3B]/20 transition-all duration-300"
+                  >
+                    <div className="flex items-center justify-center gap-2">
+                      <Calendar className="h-5 w-5" />
+                      Book Appointment
+                    </div>
+                  </Link>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   );
-}
+};
