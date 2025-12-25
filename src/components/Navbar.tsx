@@ -4,13 +4,12 @@ import React, { useState, useEffect, useRef, FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { Search, Menu, X, ChevronRight, Mail, MapPin, Clock, Phone, User, Home, Stethoscope, Users, GalleryVertical, Calendar, Heart, ExternalLink, ChevronLeft, MessageCircle } from "lucide-react";
+import { Search, Menu, X, ChevronRight, Mail, MapPin, Clock, Phone, User, Home, Stethoscope, Users, GalleryVertical, Calendar, ExternalLink, MessageCircle } from "lucide-react";
 /* eslint-disable */
 
 export const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
@@ -39,89 +38,15 @@ export const Navbar: React.FC = () => {
     },
     {
       name: "Services",
+      href: "/portfolio/services",
       icon: <Stethoscope className="h-5 w-5" />,
       description: "Medical Services & Care",
-      featured: true,
-      subItems: [
-        { 
-          name: "Pediatrics", 
-          href: "/services/pediatrics", 
-          icon: "👶",
-          tag: "Child Health Care"
-        },
-        { 
-          name: "Gynecology", 
-          href: "/services/gynecology", 
-          icon: "🤰",
-          tag: "Women's Health Care"
-        },
-        { 
-          name: "Physiotherapy", 
-          href: "/services/physiotherapy", 
-          icon: "🏋️",
-          tag: "Physical Rehabilitation"
-        },
-        { 
-          name: "Emergency Care", 
-          href: "/services/emergency", 
-          icon: "🚨",
-          tag: "24/7 Emergency"
-        },
-        { 
-          name: "Dermatology", 
-          href: "/services/dermatology", 
-          icon: "🔬",
-          tag: "Skin Treatment"
-        },
-        { 
-          name: "Infectious Disease & Critical Care", 
-          href: "/services/critical-care", 
-          icon: "🦠",
-          tag: "Life-Threatening Illness"
-        },
-        { 
-          name: "Diabetes & Endocrinology", 
-          href: "/services/endocrinology", 
-          icon: "🩺",
-          tag: "Hormonal & Diabetes Care"
-        },
-        { 
-          name: "Internal Medicine", 
-          href: "/services/internal-medicine", 
-          icon: "💊",
-          tag: "Non-Surgical Treatment"
-        },
-        { 
-          name: "Gastroenterology", 
-          href: "/services/gastroenterology", 
-          icon: "🧬",
-          tag: "Digestive System"
-        },
-        { 
-          name: "Clinical Hematology", 
-          href: "/services/hematology", 
-          icon: "🩸",
-          tag: "Blood Disorders"
-        },
-        { 
-          name: "Anesthesia", 
-          href: "/services/anesthesia", 
-          icon: "😴",
-          tag: "Painless Procedures"
-        },
-        { 
-          name: "Psychiatry", 
-          href: "/services/psychiatry", 
-          icon: "🧠",
-          tag: "Mental Health"
-        },
-      ],
     },
     { 
-      name: "Doctors", 
-      href: "/doctors",
+      name: "Testimonials", 
+      href: "/portfolio/testimonials",
       icon: <Users className="h-5 w-5" />,
-      description: "Expert Medical Team"
+      description: "Reviews from Patients"
     },
     { 
       name: "Carrers", 
@@ -155,9 +80,9 @@ export const Navbar: React.FC = () => {
   const searchTabs = [
     { id: "all", name: "All", icon: "🔍" },
     { id: "home", name: "Home", icon: "🏠" },
-    { id: "services", name: "Services", icon: "🩺" },
-    { id: "doctors", name: "Doctors", icon: "👨‍⚕️" },
     { id: "about", name: "About", icon: "🏥" },
+    { id: "contact", name: "Contact", icon: "📞" },
+    { id: "team", name: "Team", icon: "👨‍⚕️" },
   ];
 
   const searchData = {
@@ -167,34 +92,32 @@ export const Navbar: React.FC = () => {
       { title: "Patient Portal", url: "/portal", category: "Home", icon: "📱", description: "Access Your Health Records" },
       { title: "Visiting Hours", url: "/visiting", category: "Home", icon: "🕒", description: "Plan Your Visit" },
     ],
-    services: [
-      { title: "Pediatrics", url: "/services/pediatrics", category: "Services", icon: "👶", description: "Child Health Care" },
-      { title: "Gynecology", url: "/services/gynecology", category: "Services", icon: "🤰", description: "Women's Health Care" },
-      { title: "Emergency Care", url: "/services/emergency", category: "Services", icon: "🚨", description: "24/7 Emergency Treatment" },
-      { title: "Physiotherapy", url: "/services/physiotherapy", category: "Services", icon: "🏋️", description: "Physical Rehabilitation" },
-      { title: "Dermatology", url: "/services/dermatology", category: "Services", icon: "🔬", description: "Skin Treatment" },
-      { title: "Psychiatry", url: "/services/psychiatry", category: "Services", icon: "🧠", description: "Mental Health Care" },
-    ],
-    doctors: [
-      { title: "Dr. Roman Asher", url: "/doctors/roman-asher", category: "Doctors", icon: "👨‍⚕️", description: "Cardiologist" },
-      { title: "Dr. Sarah Khan", url: "/doctors/sarah-khan", category: "Doctors", icon: "👩‍⚕️", description: "Pediatrician" },
-      { title: "Dr. Ali Raza", url: "/doctors/ali-raza", category: "Doctors", icon: "👨‍⚕️", description: "Surgeon" },
-      { title: "Dr. Fatima Ahmed", url: "/doctors/fatima-ahmed", category: "Doctors", icon: "👩‍⚕️", description: "Gynecologist" },
-    ],
     about: [
       { title: "About SHMC", url: "/about", category: "About", icon: "🏥", description: "Our Hospital Story" },
       { title: "Mission & Vision", url: "/about/mission", category: "About", icon: "🎯", description: "Our Healthcare Mission" },
       { title: "Facilities", url: "/about/facilities", category: "About", icon: "🏢", description: "Hospital Infrastructure" },
       { title: "Testimonials", url: "/about/testimonials", category: "About", icon: "💬", description: "Patient Stories" },
+    ],
+    contact: [
+      { title: "Contact Us", url: "/portfolio/contact", category: "Contact", icon: "📞", description: "Get in Touch" },
+      { title: "Book Appointment", url: "/appointment", category: "Contact", icon: "📅", description: "Schedule a Visit" },
+      { title: "Emergency Contact", url: "/emergency", category: "Contact", icon: "🚨", description: "24/7 Emergency Line" },
+      { title: "Feedback", url: "/feedback", category: "Contact", icon: "💬", description: "Share Your Experience" },
+    ],
+    team: [
+      { title: "Medical Team", url: "/doctors", category: "Team", icon: "👨‍⚕️", description: "Expert Doctors" },
+      { title: "Dr. Roman Asher", url: "/doctors/roman-asher", category: "Team", icon: "👨‍⚕️", description: "Cardiologist" },
+      { title: "Dr. Sarah Khan", url: "/doctors/sarah-khan", category: "Team", icon: "👩‍⚕️", description: "Pediatrician" },
+      { title: "Dr. Ali Raza", url: "/doctors/ali-raza", category: "Team", icon: "👨‍⚕️", description: "Surgeon" },
     ]
   };
 
   const getAllSearchData = () => {
     return [
       ...searchData.home,
-      ...searchData.services,
-      ...searchData.doctors,
-      ...searchData.about
+      ...searchData.about,
+      ...searchData.contact,
+      ...searchData.team
     ];
   };
 
@@ -250,7 +173,6 @@ export const Navbar: React.FC = () => {
       
       if (menu && !menu.contains(event.target as Node) && !menuButton?.contains(event.target as Node)) {
         setIsMenuOpen(false);
-        setActiveDropdown(null);
       }
       
       if (searchModal && !searchModal.contains(event.target as Node) && !searchButton?.contains(event.target as Node)) {
@@ -311,14 +233,14 @@ export const Navbar: React.FC = () => {
         case 'home':
           results = searchData.home;
           break;
-        case 'services':
-          results = searchData.services;
-          break;
-        case 'doctors':
-          results = searchData.doctors;
-          break;
         case 'about':
           results = searchData.about;
+          break;
+        case 'contact':
+          results = searchData.contact;
+          break;
+        case 'team':
+          results = searchData.team;
           break;
       }
       
@@ -336,25 +258,25 @@ export const Navbar: React.FC = () => {
     switch(activeSearchTab) {
       case 'home':
         return searchData.home.slice(0, 4);
-      case 'services':
-        return searchData.services.slice(0, 4);
-      case 'doctors':
-        return searchData.doctors.slice(0, 4);
       case 'about':
         return searchData.about.slice(0, 4);
+      case 'contact':
+        return searchData.contact.slice(0, 4);
+      case 'team':
+        return searchData.team.slice(0, 4);
       default:
         return [
           searchData.home[0],
-          searchData.services[0],
-          searchData.doctors[0],
-          searchData.about[0]
+          searchData.about[0],
+          searchData.contact[0],
+          searchData.team[0]
         ];
     }
   };
 
   return (
     <>
-      {/* Top Contact Info Bar with Continuously Moving Curve */}
+      {/* Top Contact Info Bar */}
       <AnimatePresence>
         {showTopContactBar && (
           <motion.div
@@ -364,7 +286,6 @@ export const Navbar: React.FC = () => {
             exit={{ y: -50, opacity: 0 }}
             className="fixed top-0 left-0 right-0 z-40 bg-gradient-to-r from-[#064E3B] via-[#0B6E5E] to-[#064E3B] text-white shadow-md overflow-hidden"
           >
-            {/* Continuous Wave Animation Background */}
             <div className="absolute inset-0 overflow-hidden opacity-20">
               <motion.div 
                 className="absolute -top-10 -left-20 w-[200%] h-32"
@@ -385,54 +306,10 @@ export const Navbar: React.FC = () => {
                   />
                 </svg>
               </motion.div>
-              
-              <motion.div 
-                className="absolute -top-5 -left-40 w-[200%] h-40"
-                animate={{ 
-                  x: ["0%", "-100%"],
-                }}
-                transition={{ 
-                  duration: 25,
-                  repeat: Infinity,
-                  ease: "linear"
-                }}
-              >
-                <svg viewBox="0 0 1200 120" className="w-full h-full">
-                  <path 
-                    d="M0,120 C200,0 400,120 600,0 C800,-120 1000,120 1200,0 L1200,120 L0,120 Z" 
-                    fill="#1FB6A6" 
-                    fillOpacity="0.2"
-                  />
-                </svg>
-              </motion.div>
             </div>
 
             <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex flex-col md:flex-row items-center justify-between py-2 md:py-1">
-                {/* Animated Curve Design */}
-                <div className="absolute -bottom-4 left-0 right-0 h-8">
-                  <motion.div 
-                    className="relative w-full h-full"
-                    animate={{ 
-                      x: ["0%", "100%", "0%"],
-                    }}
-                    transition={{ 
-                      duration: 15,
-                      repeat: Infinity,
-                      ease: "linear"
-                    }}
-                  >
-                    <svg viewBox="0 0 1200 60" className="w-full h-full">
-                      <path 
-                        d="M0,60 C150,30 300,90 450,30 C600,-30 750,90 900,30 C1050,-30 1200,90 1200,60 L0,60 Z" 
-                        fill="white" 
-                        fillOpacity="0.1"
-                      />
-                    </svg>
-                  </motion.div>
-                </div>
-
-                {/* Contact Info */}
                 <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 text-xs md:text-sm mb-2 md:mb-0">
                   <a 
                     href={`tel:${hospitalContact.phone.replace(/\s/g, '')}`}
@@ -476,20 +353,9 @@ export const Navbar: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Call to Action Buttons */}
-                <div className="flex items-center gap-2">
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => setShowContactSlider(true)}
-                    className="flex items-center gap-2 px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-full text-xs font-medium transition-colors group"
-                  >
-                    <MapPin className="h-3 w-3 group-hover:scale-110 transition-transform" />
-                    <span>Location</span>
-                  </motion.button>
-                  
+                <div className="flex items-center">
                   <Link
-                    href="/appointment"
+                    href="/portfolio/contact"
                     className="flex items-center gap-2 px-3 py-1.5 bg-white text-[#064E3B] hover:bg-[#F0F0F0] rounded-full text-xs font-bold transition-colors"
                   >
                     <Calendar className="h-3 w-3" />
@@ -523,24 +389,12 @@ export const Navbar: React.FC = () => {
                 <Image
                  src="https://siddiqhospital.com/wp-content/uploads/2023/12/logo-300x300.png"
                   alt="SHMC Hospital Logo"
-                  width={50}
-                  height={50}
+                  width={80}
+                  height={80}
                   className="object-cover rounded-full"
                 />
               </div>
-              <div className="hidden md:flex flex-col">
-                <span className="font-bold text-xl text-[#064E3B] leading-tight">
-                  SHMC
-                </span>
-                <span className="text-sm text-[#1E293B] font-medium">
-                  Siddique Heart Medical Complex
-                </span>
-              </div>
-              <div className="md:hidden flex flex-col">
-                <span className="font-bold text-lg text-[#064E3B]">
-                  SHMC
-                </span>
-              </div>
+              
             </Link>
 
             <div className="hidden lg:flex items-center gap-3">
@@ -582,7 +436,6 @@ export const Navbar: React.FC = () => {
             </div>
 
             <div className="flex items-center gap-2 lg:hidden">
-              {/* Mobile Location Button */}
               <motion.button
                 whileTap={{ scale: 0.9 }}
                 onClick={() => setShowContactSlider(true)}
@@ -629,7 +482,7 @@ export const Navbar: React.FC = () => {
       {/* Spacer for fixed navbar */}
       <div className={`transition-all duration-300 ${showTopContactBar ? 'h-28 md:h-32' : 'h-16 lg:h-20'} ${isScrolled ? 'lg:h-16' : ''}`} />
 
-      {/* Enhanced Contact Slider - Slides from Left and Centers */}
+      {/* Enhanced Contact Slider */}
       <AnimatePresence>
         {showContactSlider && (
           <>
@@ -672,7 +525,6 @@ export const Navbar: React.FC = () => {
                 transition={{ delay: 0.1 }}
                 className="bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden"
               >
-                {/* Header with gradient */}
                 <div className="relative bg-gradient-to-r from-[#064E3B] via-[#0B6E5E] to-[#064E3B] p-6">
                   <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#1FB6A6] via-white to-[#1FB6A6] opacity-50"></div>
                   
@@ -710,7 +562,6 @@ export const Navbar: React.FC = () => {
                 </div>
 
                 <div className="p-6 space-y-6 max-h-[70vh] overflow-y-auto">
-                  {/* Quick Contact Cards */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <motion.a
                       whileHover={{ y: -5, scale: 1.02 }}
@@ -764,7 +615,6 @@ export const Navbar: React.FC = () => {
                     </motion.a>
                   </div>
 
-                  {/* Address Section */}
                   <div className="space-y-4">
                     <div className="flex items-start gap-3">
                       <motion.div
@@ -798,7 +648,6 @@ export const Navbar: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Map Preview */}
                     <motion.div 
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
@@ -824,7 +673,6 @@ export const Navbar: React.FC = () => {
                         </div>
                       </div>
                       
-                      {/* Animated pulse effect */}
                       <motion.div 
                         className="absolute inset-0 border-4 border-[#064E3B]/20 rounded-xl"
                         animate={{ 
@@ -839,7 +687,6 @@ export const Navbar: React.FC = () => {
                     </motion.div>
                   </div>
 
-                  {/* Working Hours */}
                   <motion.div 
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -878,7 +725,6 @@ export const Navbar: React.FC = () => {
                     </div>
                   </motion.div>
                   
-                  {/* Action Buttons */}
                   <motion.div 
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -886,7 +732,7 @@ export const Navbar: React.FC = () => {
                     className="grid grid-cols-1 md:grid-cols-2 gap-3"
                   >
                     <Link
-                      href="/appointment"
+                      href="/portfolio/contact"
                       onClick={() => setShowContactSlider(false)}
                       className="inline-flex items-center justify-center gap-2 w-full px-4 py-3.5 bg-gradient-to-r from-[#064E3B] to-[#0B6E5E] text-white rounded-xl font-bold hover:shadow-xl hover:shadow-[#064E3B]/30 hover:scale-[1.02] transition-all duration-300"
                     >
@@ -895,7 +741,7 @@ export const Navbar: React.FC = () => {
                     </Link>
                     
                     <Link
-                      href="/contact"
+                      href="/portfolio/contact"
                       onClick={() => setShowContactSlider(false)}
                       className="inline-flex items-center justify-center gap-2 w-full px-4 py-3.5 bg-white text-[#064E3B] rounded-xl font-bold border-2 border-[#064E3B] hover:bg-[#064E3B]/5 hover:border-[#0B6E5E] hover:text-[#0B6E5E] hover:shadow-lg transition-all duration-300"
                     >
@@ -910,7 +756,7 @@ export const Navbar: React.FC = () => {
         )}
       </AnimatePresence>
 
-      {/* Search Modal Component */}
+      {/* Search Modal - Only Search Input */}
       <AnimatePresence>
         {showSearchModal && (
           <>
@@ -938,7 +784,8 @@ export const Navbar: React.FC = () => {
               className="search-modal-container fixed top-20 left-1/2 transform -translate-x-1/2 w-full max-w-2xl z-50 px-4"
             >
               <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden">
-                <div className="p-4 border-b border-gray-200">
+                {/* Search Input Only */}
+                <div className="p-6 border-b border-gray-200">
                   <div className="relative">
                     <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
                       <Search className="h-5 w-5 text-[#064E3B]" />
@@ -947,7 +794,7 @@ export const Navbar: React.FC = () => {
                       <input
                         ref={searchInputRef}
                         type="text"
-                        placeholder="Search for doctors, services, appointments..."
+                        placeholder="Search for Home, About, Contact, or Team..."
                         value={searchQuery}
                         onChange={(e) => handleSearchInputChange(e.target.value)}
                         className="w-full pl-12 pr-12 py-4 bg-[#F5F5F5] rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#064E3B]/30 focus:border-[#064E3B] text-[#1E293B] placeholder-gray-500 text-base"
@@ -968,25 +815,7 @@ export const Navbar: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="border-b border-gray-200">
-                  <div className="flex overflow-x-auto px-4 py-2 space-x-1">
-                    {searchTabs.map((tab) => (
-                      <button
-                        key={tab.id}
-                        onClick={() => setActiveSearchTab(tab.id)}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-200 ${
-                          activeSearchTab === tab.id
-                            ? 'bg-[#064E3B] text-white'
-                            : 'text-[#1E293B] hover:bg-[#F5F5F5]'
-                        }`}
-                      >
-                        <span>{tab.icon}</span>
-                        {tab.name}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
+                {/* Search Results */}
                 <div className="max-h-96 overflow-y-auto">
                   <AnimatePresence mode="wait">
                     {searchResults.length > 0 ? (
@@ -998,7 +827,7 @@ export const Navbar: React.FC = () => {
                       >
                         <div className="mb-4">
                           <h3 className="text-sm font-semibold text-[#064E3B] uppercase tracking-wider">
-                            {activeSearchTab === 'all' ? 'All Results' : `${searchTabs.find(t => t.id === activeSearchTab)?.name} Results`}
+                            Search Results
                           </h3>
                           <p className="text-xs text-[#1E293B] mt-1">
                             {searchResults.length} results found
@@ -1049,65 +878,7 @@ export const Navbar: React.FC = () => {
                           No results found for "{searchQuery}"
                         </h3>
                       </motion.div>
-                    ) : (
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="p-6"
-                      >
-                        <div className="mb-6">
-                          <h4 className="font-medium text-[#064E3B] mb-4 text-base">
-                            Featured in {searchTabs.find(t => t.id === activeSearchTab)?.name}
-                          </h4>
-                          <div className="grid grid-cols-2 gap-3">
-                            {getFeaturedItems().map((item, index) => (
-                              <motion.button
-                                key={index}
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
-                                onClick={() => handleSearchClick(item.url)}
-                                className="p-3 bg-[#F5F5F5] hover:bg-[#064E3B]/10 rounded-xl border border-gray-200 hover:border-[#064E3B]/30 transition-all duration-200 text-left"
-                              >
-                                <div className="flex items-center gap-2 mb-2">
-                                  <span className="text-lg">{item.icon}</span>
-                                  <span className="font-medium text-[#064E3B] text-base">
-                                    {item.title}
-                                  </span>
-                                </div>
-                                <div className="text-xs text-[#1E293B]">
-                                  {item.description}
-                                </div>
-                              </motion.button>
-                            ))}
-                          </div>
-                        </div>
-                        
-                        <div>
-                          <h4 className="font-medium text-[#064E3B] mb-4 text-base">
-                            Popular Searches
-                          </h4>
-                          <div className="flex flex-wrap gap-2">
-                            {["Emergency", "Appointment", "Pediatrics", "Doctor", "Gynecology", "Physiotherapy"].map(
-                              (term, index) => (
-                                <motion.button
-                                  key={index}
-                                  whileHover={{ scale: 1.05 }}
-                                  whileTap={{ scale: 0.95 }}
-                                  onClick={() => {
-                                    setSearchQuery(term);
-                                    handleSearchInputChange(term);
-                                  }}
-                                  className="px-3 py-1.5 bg-[#F5F5F5] hover:bg-[#064E3B]/10 text-[#064E3B] rounded-full text-sm font-medium border border-gray-200 hover:border-[#064E3B]/30 transition-all duration-200"
-                                >
-                                  {term}
-                                </motion.button>
-                              )
-                            )}
-                          </div>
-                        </div>
-                      </motion.div>
-                    )}
+                    ) : null}
                   </AnimatePresence>
                 </div>
               </div>
@@ -1116,7 +887,7 @@ export const Navbar: React.FC = () => {
         )}
       </AnimatePresence>
 
-      {/* Desktop Menu */}
+      {/* Desktop Menu - Slides from right, content from left */}
       <AnimatePresence>
         {isMenuOpen && !isMobile && (
           <>
@@ -1140,7 +911,13 @@ export const Navbar: React.FC = () => {
               }}
               className="menu-container fixed top-0 right-0 h-full w-96 z-50 bg-white shadow-2xl border-l border-gray-200 overflow-y-auto"
             >
-              <div className="sticky top-0 bg-white border-b border-gray-200 z-10">
+              {/* Menu Header */}
+              <motion.div 
+                initial={{ x: -50, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: 0.1, duration: 0.3 }}
+                className="sticky top-0 bg-white border-b border-gray-200 z-10"
+              >
                 <div className="p-6">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -1157,119 +934,99 @@ export const Navbar: React.FC = () => {
                       </div>
                     </div>
                     
-                    <button
+                    <motion.button
+                      whileHover={{ rotate: 90, scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
                       onClick={() => setIsMenuOpen(false)}
                       className="p-2 hover:bg-[#F5F5F5] rounded-full transition-colors"
                     >
                       <X className="h-6 w-6 text-[#1E293B] hover:text-[#064E3B]" />
-                    </button>
+                    </motion.button>
                   </div>
                 </div>
-              </div>
+              </motion.div>
 
-              <div className="p-6 space-y-6">
+              {/* Menu Content with staggered left entrance */}
+              <motion.div 
+                initial="hidden"
+                animate="visible"
+                variants={{
+                  hidden: { opacity: 0 },
+                  visible: { 
+                    opacity: 1,
+                    transition: {
+                      staggerChildren: 0.1,
+                      delayChildren: 0.2
+                    }
+                  }
+                }}
+                className="p-6 space-y-6"
+              >
+                {/* Navigation Items */}
                 <div className="space-y-4">
-                  <h3 className="text-sm font-semibold text-[#1E293B] uppercase tracking-wider px-2">
+                  <motion.h3 
+                    initial={{ x: -30, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: 0.1, duration: 0.3 }}
+                    className="text-sm font-semibold text-[#1E293B] uppercase tracking-wider px-2"
+                  >
                     Navigation
-                  </h3>
+                  </motion.h3>
                   
                   <div className="space-y-2">
                     {navItems.map((item, idx) => (
-                      <div key={idx}>
-                        {item.subItems ? (
-                          <div className="space-y-2">
-                            <button
-                              onClick={() => setActiveDropdown(activeDropdown === item.name ? null : item.name)}
-                              className="w-full flex items-center gap-3 p-3 rounded-xl bg-[#F5F5F5] hover:bg-[#064E3B]/5 transition-colors"
-                            >
-                              <div className="p-2 bg-[#064E3B]/10 rounded-lg">
-                                <div className="text-[#064E3B]">
-                                  {item.icon}
-                                </div>
-                              </div>
-                              <div className="flex-1 text-left">
-                                <h3 className="font-semibold text-[#064E3B]">
-                                  {item.name}
-                                </h3>
-                                <p className="text-xs text-[#1E293B]">{item.description}</p>
-                              </div>
-                              <ChevronRight className={`h-4 w-4 text-gray-400 transform transition-transform ${
-                                activeDropdown === item.name ? "rotate-90" : ""
-                              }`} />
-                            </button>
-                            
-                            <AnimatePresence>
-                              {activeDropdown === item.name && (
-                                <motion.div
-                                  initial={{ height: 0, opacity: 0 }}
-                                  animate={{ height: "auto", opacity: 1 }}
-                                  exit={{ height: 0, opacity: 0 }}
-                                  className="ml-12 overflow-hidden"
-                                >
-                                  <div className="py-2 space-y-1">
-                                    {item.subItems.map((sub, i) => (
-                                      <Link
-                                        key={i}
-                                        href={sub.href}
-                                        onClick={() => setIsMenuOpen(false)}
-                                        className="flex items-center gap-3 p-2 rounded-lg hover:bg-[#F5F5F5] transition-colors group"
-                                      >
-                                        <span className="text-lg">{sub.icon}</span>
-                                        <div>
-                                          <div className="font-medium text-[#1E293B] group-hover:text-[#064E3B]">
-                                            {sub.name}
-                                          </div>
-                                          <div className="text-xs text-gray-500">{sub.tag}</div>
-                                        </div>
-                                      </Link>
-                                    ))}
-                                  </div>
-                                </motion.div>
-                              )}
-                            </AnimatePresence>
+                      <motion.div
+                        key={idx}
+                        initial={{ x: -50, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ delay: 0.15 + (idx * 0.05), duration: 0.3 }}
+                      >
+                        <Link
+                          href={item.href}
+                          onClick={() => setIsMenuOpen(false)}
+                          className={`flex items-center gap-3 p-3 rounded-xl transition-all duration-200 ${
+                            item.cta
+                              ? 'bg-gradient-to-r from-[#064E3B] to-[#064E3B]/90 hover:shadow-lg hover:shadow-[#064E3B]/20'
+                              : 'hover:bg-[#F5F5F5]'
+                          }`}
+                        >
+                          <div className={`p-2 rounded-lg ${
+                            item.cta
+                              ? 'bg-white/20'
+                              : 'bg-[#064E3B]/10'
+                          }`}>
+                            <div className={item.cta ? 'text-white' : 'text-[#064E3B]'}>
+                              {item.icon}
+                            </div>
                           </div>
-                        ) : (
-                          <Link
-                            href={item.href}
-                            onClick={() => setIsMenuOpen(false)}
-                            className={`flex items-center gap-3 p-3 rounded-xl transition-all duration-200 ${
-                              item.cta
-                                ? 'bg-gradient-to-r from-[#064E3B] to-[#064E3B]/90 hover:shadow-lg hover:shadow-[#064E3B]/20'
-                                : 'hover:bg-[#F5F5F5]'
-                            }`}
-                          >
-                            <div className={`p-2 rounded-lg ${
-                              item.cta
-                                ? 'bg-white/20'
-                                : 'bg-[#064E3B]/10'
+                          <div className="flex-1">
+                            <h3 className={`font-semibold ${
+                              item.cta ? 'text-white' : 'text-[#064E3B]'
                             }`}>
-                              <div className={item.cta ? 'text-white' : 'text-[#064E3B]'}>
-                                {item.icon}
-                              </div>
-                            </div>
-                            <div className="flex-1">
-                              <h3 className={`font-semibold ${
-                                item.cta ? 'text-white' : 'text-[#064E3B]'
-                              }`}>
-                                {item.name}
-                              </h3>
-                              <p className={`text-xs ${
-                                item.cta ? 'text-white/80' : 'text-[#1E293B]'
-                              }`}>
-                                {item.description}
-                              </p>
-                            </div>
-                            <ChevronRight className={`h-4 w-4 ${
-                              item.cta ? 'text-white' : 'text-gray-400'
-                            }`} />
-                          </Link>
-                        )}
-                      </div>
+                              {item.name}
+                            </h3>
+                            <p className={`text-xs ${
+                              item.cta ? 'text-white/80' : 'text-[#1E293B]'
+                            }`}>
+                              {item.description}
+                            </p>
+                          </div>
+                          <ChevronRight className={`h-4 w-4 ${
+                            item.cta ? 'text-white' : 'text-gray-400'
+                          }`} />
+                        </Link>
+                      </motion.div>
                     ))}
                   </div>
                 </div>
 
-                <div className="p-4 bg-gradient-to-br from-[#064E3B]/5 to-[#F5F5F5] rounded-xl border border-[#064E3B]/20">
+                {/* Contact Info Card */}
+                <motion.div 
+                  initial={{ x: -50, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: 0.5, duration: 0.3 }}
+                  className="p-4 bg-gradient-to-br from-[#064E3B]/5 to-[#F5F5F5] rounded-xl border border-[#064E3B]/20"
+                >
                   <h4 className="font-bold text-[#064E3B] mb-3">Need Assistance?</h4>
                   <div className="space-y-3">
                     <div className="flex items-center gap-3">
@@ -1282,25 +1039,30 @@ export const Navbar: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </motion.div>
 
-                <div>
+                {/* Book Appointment Button */}
+                <motion.div
+                  initial={{ x: -50, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: 0.6, duration: 0.3 }}
+                >
                   <Link
-                    href="/appointment"
+                    href="/portfolio/contact"
                     onClick={() => setIsMenuOpen(false)}
                     className="flex items-center justify-center gap-2 w-full px-4 py-3.5 bg-gradient-to-r from-[#064E3B] to-[#064E3B]/90 text-white rounded-xl font-bold hover:shadow-xl hover:shadow-[#064E3B]/20 hover:bg-[#064E3B] transition-all duration-300"
                   >
                     <Calendar className="h-5 w-5" />
                     Book Appointment
                   </Link>
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
             </motion.div>
           </>
         )}
       </AnimatePresence>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu - Slides from right, content from left */}
       <AnimatePresence>
         {isMenuOpen && isMobile && (
           <>
@@ -1308,26 +1070,29 @@ export const Navbar: React.FC = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => {
-                setIsMenuOpen(false);
-                setActiveDropdown(null);
-              }}
+              onClick={() => setIsMenuOpen(false)}
               className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40"
             />
 
             <motion.div
               ref={menuRef}
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              exit={{ y: "100%" }}
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
               transition={{ 
                 type: "tween",
                 duration: 0.3,
                 ease: "easeOut"
               }}
-              className="menu-container fixed bottom-0 left-0 right-0 max-h-[85vh] bg-white rounded-t-3xl shadow-2xl z-40 overflow-y-auto border-t border-gray-200"
+              className="menu-container fixed top-0 right-0 h-full w-full max-w-sm z-40 bg-white shadow-2xl border-l border-gray-200 overflow-y-auto"
             >
-              <div className="sticky top-0 bg-white border-b border-gray-200 z-10 p-4">
+              {/* Mobile Menu Header */}
+              <motion.div 
+                initial={{ x: -30, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: 0.1, duration: 0.3 }}
+                className="sticky top-0 bg-white border-b border-gray-200 z-10 p-4"
+              >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <Image
@@ -1342,113 +1107,79 @@ export const Navbar: React.FC = () => {
                       <div className="text-xs text-[#1E293B]">Siddique Heart Medical Complex</div>
                     </div>
                   </div>
-                  <button
+                  <motion.button
+                    whileHover={{ rotate: 90, scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
                     onClick={() => setIsMenuOpen(false)}
                     className="p-2 hover:bg-[#F5F5F5] rounded-full transition-colors"
                   >
                     <X className="h-5 w-5 text-[#1E293B] hover:text-[#064E3B]" />
-                  </button>
+                  </motion.button>
                 </div>
-              </div>
+              </motion.div>
 
-              <div className="p-4">
+              {/* Mobile Menu Content with staggered left entrance */}
+              <motion.div 
+                initial="hidden"
+                animate="visible"
+                variants={{
+                  hidden: { opacity: 0 },
+                  visible: { 
+                    opacity: 1,
+                    transition: {
+                      staggerChildren: 0.08,
+                      delayChildren: 0.15
+                    }
+                  }
+                }}
+                className="p-4"
+              >
                 <nav className="space-y-2">
                   {navItems.map((item, idx) => (
-                    <div key={idx} className="mb-2">
-                      {item.subItems ? (
-                        <>
-                          <button
-                            onClick={() =>
-                              setActiveDropdown(
-                                activeDropdown === item.name ? null : item.name
-                              )
-                            }
-                            className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-[#F5F5F5] transition-colors"
-                          >
-                            <div className="flex items-center gap-3">
-                              <div className={`p-2 rounded-lg ${
-                                item.featured 
-                                  ? 'bg-gradient-to-br from-[#064E3B]/20 to-[#1FB6A6]/20' 
-                                  : 'bg-[#F5F5F5]'
-                              }`}>
-                                <div className="text-[#064E3B]">
-                                  {item.icon}
-                                </div>
-                              </div>
-                              <div className="text-left">
-                                <div className="font-semibold text-[#064E3B]">{item.name}</div>
-                                <div className="text-xs text-[#1E293B]">{item.description}</div>
-                              </div>
-                            </div>
-                            <ChevronRight
-                              className={`h-4 w-4 text-gray-400 transform transition-transform ${
-                                activeDropdown === item.name ? "rotate-90" : ""
-                              }`}
-                            />
-                          </button>
-
-                          <AnimatePresence>
-                            {activeDropdown === item.name && (
-                              <motion.div
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: "auto", opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
-                                className="ml-14 overflow-hidden"
-                              >
-                                <div className="py-2 space-y-1">
-                                  {item.subItems.map((sub, i) => (
-                                    <Link
-                                      key={i}
-                                      href={sub.href}
-                                      onClick={() => setIsMenuOpen(false)}
-                                      className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-[#F5F5F5] transition-colors"
-                                    >
-                                      <span className="text-xl">{sub.icon}</span>
-                                      <div>
-                                        <div className="text-[#064E3B] font-medium">{sub.name}</div>
-                                        <div className="text-xs text-gray-500">{sub.tag}</div>
-                                      </div>
-                                    </Link>
-                                  ))}
-                                </div>
-                              </motion.div>
-                            )}
-                          </AnimatePresence>
-                        </>
-                      ) : (
-                        <Link
-                          href={item.href}
-                          onClick={() => setIsMenuOpen(false)}
-                          className={`w-full flex items-center gap-3 p-3 rounded-xl transition-colors ${
-                            item.cta 
-                              ? 'bg-gradient-to-r from-[#064E3B] to-[#064E3B]/90'
-                              : 'hover:bg-[#F5F5F5]'
-                          }`}
-                        >
-                          <div className={`p-2 rounded-lg ${
-                            item.cta 
-                              ? 'bg-white/20' 
-                              : 'bg-[#064E3B]/10'
-                          }`}>
-                            <div className={item.cta ? 'text-white' : 'text-[#064E3B]'}>
-                              {item.icon}
-                            </div>
+                    <motion.div
+                      key={idx}
+                      initial={{ x: -40, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ delay: 0.2 + (idx * 0.05), duration: 0.3 }}
+                    >
+                      <Link
+                        href={item.href}
+                        onClick={() => setIsMenuOpen(false)}
+                        className={`w-full flex items-center gap-3 p-3 rounded-xl transition-colors ${
+                          item.cta 
+                            ? 'bg-gradient-to-r from-[#064E3B] to-[#064E3B]/90'
+                            : 'hover:bg-[#F5F5F5]'
+                        }`}
+                      >
+                        <div className={`p-2 rounded-lg ${
+                          item.cta 
+                            ? 'bg-white/20' 
+                            : 'bg-[#064E3B]/10'
+                        }`}>
+                          <div className={item.cta ? 'text-white' : 'text-[#064E3B]'}>
+                            {item.icon}
                           </div>
-                          <div className="text-left">
-                            <div className={`font-semibold ${
-                              item.cta ? 'text-white' : 'text-[#064E3B]'
-                            }`}>{item.name}</div>
-                            <div className={`text-xs ${
-                              item.cta ? 'text-white/80' : 'text-[#1E293B]'
-                            }`}>{item.description}</div>
-                          </div>
-                        </Link>
-                      )}
-                    </div>
+                        </div>
+                        <div className="text-left">
+                          <div className={`font-semibold ${
+                            item.cta ? 'text-white' : 'text-[#064E3B]'
+                          }`}>{item.name}</div>
+                          <div className={`text-xs ${
+                            item.cta ? 'text-white/80' : 'text-[#1E293B]'
+                          }`}>{item.description}</div>
+                        </div>
+                      </Link>
+                    </motion.div>
                   ))}
                 </nav>
 
-                <div className="mt-6 space-y-4">
+                {/* Mobile Contact Info */}
+                <motion.div 
+                  initial={{ x: -40, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: 0.6, duration: 0.3 }}
+                  className="mt-6 space-y-4"
+                >
                   <div className="p-4 bg-gradient-to-br from-[#064E3B]/5 to-[#F5F5F5] rounded-xl border border-[#064E3B]/20">
                     <div className="space-y-3">
                       <div className="flex items-center gap-3">
@@ -1463,18 +1194,25 @@ export const Navbar: React.FC = () => {
                     </div>
                   </div>
 
-                  <Link
-                    href="/appointment"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="block w-full px-4 py-3.5 bg-gradient-to-r from-[#064E3B] to-[#064E3B]/90 text-white rounded-xl font-bold text-center hover:shadow-lg hover:shadow-[#064E3B]/20 transition-all duration-300"
+                  {/* Mobile Book Appointment Button */}
+                  <motion.div
+                    initial={{ x: -40, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: 0.7, duration: 0.3 }}
                   >
-                    <div className="flex items-center justify-center gap-2">
-                      <Calendar className="h-5 w-5" />
-                      Book Appointment
-                    </div>
-                  </Link>
-                </div>
-              </div>
+                    <Link
+                      href="/portfolio/contact"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="block w-full px-4 py-3.5 bg-gradient-to-r from-[#064E3B] to-[#064E3B]/90 text-white rounded-xl font-bold text-center hover:shadow-lg hover:shadow-[#064E3B]/20 transition-all duration-300"
+                    >
+                      <div className="flex items-center justify-center gap-2">
+                        <Calendar className="h-5 w-5" />
+                        Book Appointment
+                      </div>
+                    </Link>
+                  </motion.div>
+                </motion.div>
+              </motion.div>
             </motion.div>
           </>
         )}

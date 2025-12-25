@@ -5,63 +5,84 @@ import { motion, Variants } from "framer-motion";
 import Image from "next/image";
 import { 
   FaHospital, 
-  FaUserMd, 
   FaHeartbeat, 
-  FaUsers,
-  FaAward,
-  FaStethoscope,
-  FaHandHoldingMedical,
-  FaGlobeAmericas,
-  FaLightbulb,
-  FaShieldAlt,
   FaStar,
+  FaShieldAlt,
   FaHandsHelping,
-  FaBolt,
-  FaChartLine,
-  FaUsersCog,
-  FaMicroscope
+  FaHandHoldingMedical,
+  FaLightbulb
 } from "react-icons/fa";
-
-const AboutSection: React.FC = () => {
+ const AboutSection: React.FC = () => {
   const ref = useRef<HTMLDivElement>(null);
-  const [isInView, setIsInView] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [sectionInView, setSectionInView] = useState(false);
+  const [itemInView, setItemInView] = useState<number[]>([]);
 
-  // Intersection Observer for scroll animations
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true);
-          observer.disconnect(); // Stop observing once in view
-        }
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setSectionInView(true);
+            const index = parseInt(entry.target.getAttribute('data-index') || '0');
+            if (!itemInView.includes(index)) {
+              setItemInView(prev => [...prev, index]);
+            }
+          }
+        });
       },
       {
-        threshold: 0.1, // Trigger when 10% of element is visible
-        rootMargin: "0px 0px -50px 0px" // Adjust trigger point
+        threshold: 0.2,
+        rootMargin: "0px 0px -100px 0px"
       }
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
+    // Observe each section item
+    document.querySelectorAll('[data-section-item]').forEach((el, index) => {
+      observer.observe(el);
+    });
 
-    return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
+    return () => observer.disconnect();
+  }, [itemInView]);
+
+  // Slide animations
+  const slideInLeft:Variants = {
+    hidden: { opacity: 0, x: -80 },
+    visible: { 
+      opacity: 1, 
+      x: 0,
+      transition: {
+        duration: 0.8,
+        ease: [0.22, 1, 0.36, 1]
       }
-    };
-  }, []);
+    }
+  };
 
-  // Stats data
-  const stats = [
-    { number: "100+", label: "Hospital Beds", icon: <FaHospital /> },
-    { number: "50+", label: "Expert Doctors", icon: <FaUserMd /> },
-    { number: "3000+", label: "Annual Procedures", icon: <FaStethoscope /> },
-    { number: "20000+", label: "Annual Patients", icon: <FaUsers /> }
-  ];
+  const slideInRight:Variants = {
+    hidden: { opacity: 0, x: 80 },
+    visible: { 
+      opacity: 1, 
+      x: 0,
+      transition: {
+        duration: 0.8,
+        ease: [0.22, 1, 0.36, 1]
+      }
+    }
+  };
 
-  // Animation variants
-  const containerVariants = {
+  const fadeInUp:Variants = {
+    hidden: { opacity: 0, y: 40 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  const staggerContainer:Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -72,225 +93,177 @@ const AboutSection: React.FC = () => {
     }
   };
 
-  const itemVariants:Variants = {
-    hidden: { y: 40, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
+  const cardHover:Variants = {
+    rest: { y: 0, scale: 1 },
+    hover: { 
+      y: -6,
+      scale: 1.02,
       transition: {
-        type: "spring",
-        stiffness: 80,
-        damping: 12
-      }
-    }
-  };
-
-  const fadeInUp:Variants = {
-    hidden: { y: 50, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.7,
-        ease: [0.25, 0.1, 0.25, 1]
-      }
-    }
-  };
-
-  const slideInLeft:Variants = {
-    hidden: { x: -60, opacity: 0 },
-    visible: {
-      x: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.8,
-        ease: [0.25, 0.1, 0.25, 1]
-      }
-    }
-  };
-
-  const slideInRight:Variants = {
-    hidden: { x: 60, opacity: 0 },
-    visible: {
-      x: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.8,
-        ease: [0.25, 0.1, 0.25, 1]
-      }
-    }
-  };
-
-  const scaleIn:Variants = {
-    hidden: { scale: 0.9, opacity: 0 },
-    visible: {
-      scale: 1,
-      opacity: 1,
-      transition: {
-        duration: 0.6,
+        duration: 0.3,
         ease: "easeOut"
       }
     }
   };
 
-  
-
   return (
-    <section ref={ref} className="relative py-16 md:py-24 bg-gradient-to-b from-white via-gray-50 to-white overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        {/* Geometric patterns */}
-        <div className="absolute top-0 left-1/4 w-64 h-64 bg-gradient-to-br from-[#064E3B]/5 to-[#1FB6A6]/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-tr from-[#064E3B]/5 to-[#0B6E5E]/5 rounded-full blur-3xl" />
-        
-        {/* Grid pattern */}
-        <div 
-          className="absolute inset-0 opacity-5"
-          style={{
-            backgroundImage: `linear-gradient(90deg, #064E3B 1px, transparent 1px),
-                             linear-gradient(180deg, #064E3B 1px, transparent 1px)`,
-            backgroundSize: '50px 50px'
-          }}
-        />
+    <section ref={ref} className="relative py-20 md:py-32 bg-white overflow-hidden">
+      {/* Background decorative elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-0 w-64 h-64 bg-gradient-to-br from-[#064E3B]/5 to-transparent rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-tr from-[#1FB6A6]/5 to-transparent rounded-full blur-3xl" />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
+        {/* Section Header - Fade in */}
         <motion.div
           initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          variants={containerVariants}
-          className="text-center mb-12 md:mb-20"
+          animate={sectionInView ? "visible" : "hidden"}
+          variants={staggerContainer}
+          className="text-center mb-20"
         >
-          <motion.div variants={itemVariants} className="inline-block mb-4 md:mb-5">
-            <div className="inline-flex items-center gap-2 px-4 md:px-5 py-2 md:py-2.5 bg-gradient-to-r from-[#064E3B]/10 to-[#1FB6A6]/10 rounded-full border border-[#064E3B]/20">
+          <motion.div variants={fadeInUp} className="inline-block mb-6">
+            <div className="inline-flex items-center gap-3 px-5 py-2.5 bg-gradient-to-r from-[#064E3B]/10 to-[#1FB6A6]/10 rounded-full">
               <div className="w-2 h-2 bg-[#064E3B] rounded-full animate-pulse" />
-              <span className="text-[#064E3B] text-xs md:text-sm font-semibold tracking-wider uppercase">
-                About Siddiq
+              <span className="text-[#064E3B] text-sm font-semibold tracking-wider uppercase">
+                About Our Hospital
               </span>
             </div>
           </motion.div>
 
           <motion.h2 
-            variants={itemVariants}
-            className="text-2xl md:text-[2rem] lg:text-[2.5rem] font-bold text-gray-900 mb-4 md:mb-5 leading-tight"
+            variants={fadeInUp}
+            className="text-4xl md:text-5xl lg:text-5xl font-bold text-gray-900 mb-6"
           >
-            Hospital & Maternity Complex
+            Siddiq Hospital & Maternity Complex
           </motion.h2>
 
           <motion.p 
-            variants={itemVariants}
-            className="text-gray-700 text-base md:text-[1.2rem] font-medium max-w-3xl mx-auto"
+            variants={fadeInUp}
+            className="text-gray-600 text-xl max-w-3xl mx-auto"
           >
-            The Premier Healthcare Provider in Pakistan
+            Premier Healthcare Provider in Pakistan
           </motion.p>
         </motion.div>
 
-        {/* First Section - Image 1 with Introduction */}
-        <div className="grid lg:grid-cols-2 gap-8 md:gap-14 lg:gap-20 items-center mb-12 md:mb-24">
+        {/* First Section - Image slides from left, Text slides from right */}
+        <div className="grid lg:grid-cols-2 gap-12 items-center mb-24">
+          {/* Image slides from left */}
           <motion.div
+            data-section-item
+            data-index="1"
             initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
-            variants={scaleIn}
-            className="relative group"
+            animate={itemInView.includes(1) ? "visible" : "hidden"}
+            variants={slideInLeft}
+            className="relative"
           >
-            <div className="relative rounded-xl md:rounded-2xl overflow-hidden shadow-lg md:shadow-2xl">
-              <div className="aspect-[4/3] relative bg-gray-200">
-                {/* First, try your local image */}
+            <div className="relative rounded-2xl overflow-hidden shadow-xl group">
+              <div className="aspect-[4/3] relative bg-gray-100">
                 <Image
                   src="/about/about1.jpg"
-                  alt="Siddiq Hospital & Maternity Complex - Premier Healthcare Provider"
+                  alt="Siddiq Hospital & Maternity Complex"
                   fill
-                  className="object-cover transform group-hover:scale-105 transition-transform duration-700"
+                  className={`object-cover transition-transform duration-700 group-hover:scale-105 ${
+                    imageLoaded ? 'opacity-100' : 'opacity-0'
+                  }`}
                   sizes="(max-width: 768px) 100vw, 50vw"
+                  onLoad={() => setImageLoaded(true)}
                   onError={(e) => {
-                    // If local image fails, use Unsplash fallback
                     const target = e.target as HTMLImageElement;
                     target.src = "https://images.unsplash.com/photo-1516549655669-df6654e44780?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80";
                   }}
                 />
+                {!imageLoaded && (
+                  <div className="absolute inset-0 bg-gray-100 animate-pulse" />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
               </div>
+              
+              {/* Decorative border effect */}
+              <div className="absolute inset-0 border-2 border-white/10 rounded-2xl pointer-events-none" />
             </div>
-            
-            {/* Floating Stats Card */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.4 }}
-              className="absolute -bottom-4 -right-4 md:-bottom-6 md:-right-6 bg-white rounded-lg md:rounded-xl shadow-lg md:shadow-2xl p-4 md:p-6 border border-gray-200"
-            >
-              <div className="flex items-center gap-3 md:gap-4">
-                <div className="p-2 md:p-3 bg-gradient-to-br from-[#064E3B] to-[#0B6E5E] rounded-lg">
-                  <FaAward className="h-5 w-5 md:h-6 md:w-6 text-white" />
-                </div>
-                <div>
-                  <div className="text-lg md:text-2xl font-bold text-gray-900">100+</div>
-                  <div className="text-gray-600 text-xs md:text-sm font-medium">Hospital Beds</div>
-                </div>
-              </div>
-            </motion.div>
           </motion.div>
 
+          {/* Text content slides from right */}
           <motion.div
+            data-section-item
+            data-index="2"
             initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
-            variants={fadeInUp}
-            className="space-y-4 md:space-y-6"
+            animate={itemInView.includes(2) ? "visible" : "hidden"}
+            variants={slideInRight}
+            className="space-y-6"
           >
-            <h3 className="text-gray-900 text-xl md:text-[1.8rem] font-bold leading-tight">
-              Internationally Acclaimed Healthcare Excellence
+            <h3 className="text-gray-900 text-3xl font-bold">
+              Internationally Acclaimed Healthcare
             </h3>
             
-            <div className="space-y-3 md:space-y-4">
-              <p className="text-gray-700 text-sm md:text-[1rem] leading-relaxed">
-                Nestled in the heart of Lahore, Siddiq Hospital & Maternity Complex stands as an internationally 
-                acclaimed 100-bed tertiary care multi-specialty hospital and healthcare provider. This modern facility 
-                boasts sub-specialized departments in Medical, Surgical, Obstetrics & Gynecology, and Pediatrics, 
-                complemented by cutting-edge anesthesia, radiology, and laboratory services.
+            <div className="space-y-4">
+              <p className="text-gray-600 leading-relaxed">
+                Siddiq Hospital & Maternity Complex stands as a 100-bed tertiary care multi-specialty hospital. 
+                This modern facility features sub-specialized departments in Medical, Surgical, Obstetrics & Gynecology, 
+                and Pediatrics, complemented by state-of-the-art anesthesia, radiology, and laboratory services.
               </p>
               
-              <p className="text-gray-700 text-sm md:text-[1rem] leading-relaxed">
-                SHMC originated from the vision of a group of eminent medical specialists based in the United States. 
-                Their aspiration to bring back their medical expertise to their homeland transformed into a beacon of 
-                healthcare excellence in Pakistan, starting from an idea conceived during a Pennsylvania retreat.
+              <p className="text-gray-600 leading-relaxed">
+                SHMC originated from the vision of a group of eminent medical specialists based in the United States 
+                who wanted to bring their medical expertise back to their homeland, creating a beacon of healthcare 
+                excellence in Pakistan.
               </p>
-            </div>
-
-            {/* Quick Stats */}
-            <div className="grid grid-cols-2 gap-3 md:gap-4 pt-3 md:pt-4">
-              {stats.slice(0, 2).map((stat, index) => (
-                <div key={index} className="flex items-center gap-2 md:gap-3 p-3 md:p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
-                  <div className="p-1.5 md:p-2 bg-gray-100 rounded-lg">
-                    <div className="text-[#064E3B] text-sm md:text-base">
-                      {stat.icon}
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-lg md:text-2xl font-bold text-gray-900">{stat.number}</div>
-                    <div className="text-gray-600 text-xs md:text-sm">{stat.label}</div>
-                  </div>
-                </div>
-              ))}
             </div>
           </motion.div>
         </div>
 
-        {/* Second Section - Image 2 with Beyond Conventional Healthcare */}
-        <div className="grid lg:grid-cols-2 gap-8 md:gap-14 lg:gap-20 items-center mb-12 md:mb-24">
+        {/* Second Section - Text slides from left, Image slides from right */}
+        <div className="grid lg:grid-cols-2 gap-12 items-center mb-24">
+          {/* Text content slides from left */}
           <motion.div
+            data-section-item
+            data-index="3"
             initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
-            variants={slideInRight}
-            className="lg:order-2 relative group"
+            animate={itemInView.includes(3) ? "visible" : "hidden"}
+            variants={slideInLeft}
+            className="space-y-6"
           >
-            <div className="relative rounded-xl md:rounded-2xl overflow-hidden shadow-lg md:shadow-2xl">
-              <div className="aspect-[4/3] relative bg-gray-200">
+            <div className="inline-flex items-center gap-2 mb-2">
+              <div className="h-px w-12 bg-gradient-to-r from-[#064E3B] to-[#1FB6A6]" />
+              <span className="text-[#064E3B] font-semibold text-sm uppercase tracking-wider">
+                Beyond Conventional
+              </span>
+            </div>
+
+            <h3 className="text-gray-900 text-3xl font-bold">
+              Comprehensive Healthcare Services
+            </h3>
+            
+            <div className="space-y-4">
+              <p className="text-gray-600 leading-relaxed">
+                With a strong legacy of excellence, SHMC is committed to delivering high-quality medical care while 
+                continuously improving standards across all departments.
+              </p>
+              
+              <p className="text-gray-600 leading-relaxed">
+                The hospital actively invests in the latest healthcare technologies to ensure exceptional patient 
+                outcomes, while focusing on innovation in clinical results, infrastructure development, and continuous 
+                staff training.
+              </p>
+            </div>
+          </motion.div>
+
+          {/* Image slides from right */}
+          <motion.div
+            data-section-item
+            data-index="4"
+            initial="hidden"
+            animate={itemInView.includes(4) ? "visible" : "hidden"}
+            variants={slideInRight}
+            className="relative"
+          >
+            <div className="relative rounded-2xl overflow-hidden shadow-xl group">
+              <div className="aspect-[4/3] relative bg-gray-100">
                 <Image
                   src="/about/about2.jpg"
-                  alt="SHMC Beyond Conventional Healthcare Offerings"
+                  alt="SHMC Healthcare Services"
                   fill
-                  className="object-cover transform group-hover:scale-105 transition-transform duration-700"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
                   sizes="(max-width: 768px) 100vw, 50vw"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
@@ -299,86 +272,31 @@ const AboutSection: React.FC = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
               </div>
-            </div>
-
-            {/* Innovation Badge */}
-            <div className="absolute -top-3 -left-3 md:-top-4 md:-left-4 bg-gradient-to-r from-[#064E3B] to-[#0B6E5E] text-white px-3 py-1.5 md:px-5 md:py-2.5 rounded-lg shadow-xl">
-              <div className="flex items-center gap-1 md:gap-2">
-                <FaBolt className="h-3 w-3 md:h-4 md:w-4" />
-                <span className="font-bold text-xs md:text-sm">Innovation Leader</span>
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
-            variants={slideInLeft}
-            className="lg:order-1 space-y-4 md:space-y-6"
-          >
-            <div className="inline-flex items-center gap-2 mb-3 md:mb-4">
-              <FaChartLine className="h-4 w-4 md:h-5 md:w-5 text-[#064E3B]" />
-              <span className="text-[#064E3B] font-semibold text-xs md:text-sm uppercase tracking-wider">
-                Beyond Conventional
-              </span>
-            </div>
-
-            <h3 className="text-gray-900 text-xl md:text-[1.8rem] font-bold leading-tight">
-              Beyond Conventional Healthcare Offerings
-            </h3>
-            
-            <div className="space-y-3 md:space-y-4">
-              <p className="text-gray-700 text-sm md:text-[1rem] leading-relaxed">
-                Siddiq Hospital & Maternity Complex (SHMC) is at the forefront of innovative healthcare practices 
-                in Pakistan. With a strong legacy of excellence, SHMC is committed to delivering high-quality 
-                medical care while continuously improving standards across all departments.
-              </p>
               
-              <p className="text-gray-700 text-sm md:text-[1rem] leading-relaxed">
-                The hospital actively invests in the latest healthcare technologies to ensure exceptional patient 
-                outcomes. Alongside technological advancement, SHMC focuses on innovation in clinical results, 
-                infrastructure development, and continuous staff training.
-              </p>
-              
-              <p className="text-gray-700 text-sm md:text-[1rem] leading-relaxed">
-                Supported by highly experienced, board-certified doctors from the United States and the United Kingdom, 
-                as well as well-trained nurses and skilled paramedical staff, SHMC is dedicated to raising healthcare 
-                service standards to new heights across the country.
-              </p>
-            </div>
-
-            {/* Innovation Points */}
-            <div className="space-y-2 md:space-y-3 pt-3 md:pt-4">
-              {[
-                "Latest Healthcare Technologies",
-                "Board-Certified International Doctors",
-                "Continuous Staff Training",
-                "Infrastructure Development"
-              ].map((point, index) => (
-                <div key={index} className="flex items-center gap-2 md:gap-3">
-                  <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-[#064E3B] rounded-full flex-shrink-0" />
-                  <span className="text-gray-700 text-xs md:text-sm font-medium">{point}</span>
-                </div>
-              ))}
+              {/* Decorative border effect */}
+              <div className="absolute inset-0 border-2 border-white/10 rounded-2xl pointer-events-none" />
             </div>
           </motion.div>
         </div>
 
-        {/* Third Section - Image 3 with Comprehensive Care */}
-        <div className="grid lg:grid-cols-2 gap-8 md:gap-14 lg:gap-20 items-center">
+        {/* Third Section - Image slides from left, Text slides from right */}
+        <div className="grid lg:grid-cols-2 gap-12 items-center mb-24">
+          {/* Image slides from left */}
           <motion.div
+            data-section-item
+            data-index="5"
             initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
-            variants={scaleIn}
-            className="relative group"
+            animate={itemInView.includes(5) ? "visible" : "hidden"}
+            variants={slideInLeft}
+            className="relative"
           >
-            <div className="relative rounded-xl md:rounded-2xl overflow-hidden shadow-lg md:shadow-2xl">
-              <div className="aspect-[4/3] relative bg-gray-200">
+            <div className="relative rounded-2xl overflow-hidden shadow-xl group">
+              <div className="aspect-[4/3] relative bg-gray-100">
                 <Image
                   src="/about/about3.jpg"
-                  alt="Comprehensive Care & Exceptional Service on Every Visit"
+                  alt="SHMC Patient Care"
                   fill
-                  className="object-cover transform group-hover:scale-105 transition-transform duration-700"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
                   sizes="(max-width: 768px) 100vw, 50vw"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
@@ -387,171 +305,143 @@ const AboutSection: React.FC = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
               </div>
-            </div>
-
-            {/* Service Excellence Badge */}
-            <div className="absolute -bottom-3 -right-3 md:-bottom-4 md:-right-4 bg-gradient-to-r from-[#1FB6A6] to-[#0B6E5E] text-white px-3 py-1.5 md:px-5 md:py-2.5 rounded-lg shadow-xl">
-              <div className="flex items-center gap-1 md:gap-2">
-                <FaUsersCog className="h-3 w-3 md:h-4 md:w-4" />
-                <span className="font-bold text-xs md:text-sm">Service Excellence</span>
-              </div>
+              
+              {/* Decorative border effect */}
+              <div className="absolute inset-0 border-2 border-white/10 rounded-2xl pointer-events-none" />
             </div>
           </motion.div>
 
+          {/* Text content slides from right */}
           <motion.div
+            data-section-item
+            data-index="6"
             initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
-            variants={fadeInUp}
-            className="space-y-4 md:space-y-6"
+            animate={itemInView.includes(6) ? "visible" : "hidden"}
+            variants={slideInRight}
+            className="space-y-6"
           >
-            <div className="inline-flex items-center gap-2 mb-3 md:mb-4">
-              <FaHandHoldingMedical className="h-4 w-4 md:h-5 md:w-5 text-[#064E3B]" />
-              <span className="text-[#064E3B] font-semibold text-xs md:text-sm uppercase tracking-wider">
-                Patient-Centered Care
+            <div className="inline-flex items-center gap-2 mb-2">
+              <div className="h-px w-12 bg-gradient-to-r from-[#064E3B] to-[#1FB6A6]" />
+              <span className="text-[#064E3B] font-semibold text-sm uppercase tracking-wider">
+                Our Commitment
               </span>
             </div>
 
-            <h3 className="text-gray-900 text-xl md:text-[1.8rem] font-bold leading-tight">
-              Comprehensive Care & Exceptional Service on Every Visit
+            <h3 className="text-gray-900 text-3xl font-bold">
+              Patient-Centered Excellence
             </h3>
             
-            <div className="space-y-3 md:space-y-4">
-              <p className="text-gray-700 text-sm md:text-[1rem] leading-relaxed">
-                At Siddiq Hospital & Maternity Complex, we are committed to providing comprehensive medical care 
-                combined with exceptional service at every stage of the patient journey. Our focus is on delivering 
-                personalized, compassionate, and reliable healthcare experiences—every visit, every time.
+            <div className="space-y-4">
+              <p className="text-gray-600 leading-relaxed">
+                At Siddiq Hospital & Maternity Complex, we provide comprehensive medical care with exceptional service 
+                at every stage of the patient journey.
               </p>
               
-              <p className="text-gray-700 text-sm md:text-[1rem] leading-relaxed">
-                By maintaining professionalism, ethical medical practices, strict adherence to quality standards, 
-                patient safety, and an inclusive work culture, SHMC strives to be the preferred healthcare destination 
-                for patients nationwide.
+              <p className="text-gray-600 leading-relaxed">
+                We maintain professionalism, ethical medical practices, strict adherence to quality standards, patient 
+                safety, and an inclusive work culture to be the preferred healthcare destination nationwide.
               </p>
             </div>
 
-            {/* Core Values Grid */}
-            <div className="grid grid-cols-2 gap-3 md:gap-4 pt-4 md:pt-6">
+            {/* Core Values Cards - Staggered fade in */}
+            <motion.div 
+              initial="hidden"
+              animate={itemInView.includes(6) ? "visible" : "hidden"}
+              variants={staggerContainer}
+              className="grid grid-cols-2 gap-4 pt-6"
+            >
               {[
                 { icon: <FaStar />, title: "Excellence", desc: "International standards" },
                 { icon: <FaHeartbeat />, title: "Compassion", desc: "Personalized care" },
                 { icon: <FaShieldAlt />, title: "Integrity", desc: "Ethical practices" },
                 { icon: <FaHandsHelping />, title: "Trust", desc: "Patient confidence" }
               ].map((value, index) => (
-                <div key={index} className="p-3 md:p-4 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
-                  <div className="flex items-center gap-2 md:gap-3">
-                    <div className="p-1.5 md:p-2 bg-gray-100 rounded-lg">
-                      <div className="text-[#064E3B] text-sm md:text-base">
+                <motion.div
+                  key={index}
+                  variants={fadeInUp}
+                  whileHover="hover"
+                  initial="rest"
+                  animate="rest"
+                 
+                  className="p-5 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="p-3 bg-gradient-to-br from-[#064E3B]/10 to-[#1FB6A6]/10 rounded-lg">
+                      <div className="text-[#064E3B] text-lg">
                         {value.icon}
                       </div>
                     </div>
                     <div>
-                      <h4 className="text-gray-900 font-bold text-xs md:text-sm">{value.title}</h4>
-                      <p className="text-gray-600 text-[10px] md:text-xs">{value.desc}</p>
+                      <h4 className="text-gray-900 font-bold text-sm mb-1">{value.title}</h4>
+                      <p className="text-gray-600 text-xs">{value.desc}</p>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           </motion.div>
         </div>
 
-        {/* Mission & Vision Section */}
-        <motion.div
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          variants={containerVariants}
-          className="mt-16 md:mt-28"
-        >
-          <div className="grid lg:grid-cols-2 gap-6 md:gap-8">
-            {/* Mission Card */}
-            <motion.div 
-              variants={itemVariants}
-              whileHover={{ y: -5 }}
-              className="relative p-6 md:p-8 bg-white rounded-xl md:rounded-2xl border border-gray-200 shadow-lg overflow-hidden group"
-            >
-              <div className="absolute top-0 right-0 w-24 h-24 md:w-32 md:h-32 bg-gradient-to-br from-[#064E3B]/5 to-transparent rounded-bl-full" />
-              
-              <div className="flex items-center gap-3 md:gap-4 mb-4 md:mb-6">
-                <div className="p-2 md:p-3 bg-gradient-to-br from-[#064E3B] to-[#0B6E5E] rounded-lg md:rounded-xl">
-                  <FaMicroscope className="h-5 w-5 md:h-6 md:w-6 text-white" />
-                </div>
-                <h3 className="text-gray-900 font-bold text-lg md:text-xl">Our Mission</h3>
+        {/* Mission & Vision Cards - Sliding from opposite sides */}
+        <div className="grid lg:grid-cols-2 gap-8">
+          {/* Mission Card slides from left */}
+          <motion.div
+            data-section-item
+            data-index="7"
+            initial="hidden"
+            animate={itemInView.includes(7) ? "visible" : "hidden"}
+            variants={slideInLeft}
+            whileHover="hover"
+          
+            
+            className="relative p-8 bg-white rounded-2xl border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group"
+          >
+            {/* Background gradient */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#064E3B]/5 to-transparent rounded-bl-full" />
+            
+            <div className="flex items-center gap-5 mb-6">
+              <div className="p-4 bg-gradient-to-br from-[#064E3B] to-[#0B6E5E] rounded-xl group-hover:scale-110 transition-transform duration-300">
+                <FaHandHoldingMedical className="h-6 w-6 text-white" />
               </div>
-              
-              <p className="text-gray-700 text-sm md:text-[1rem] leading-relaxed">
-                The healthcare professionals, including doctors, nurses, and staff, endeavor to deliver medical 
-                care that is accessible, innovative, and comprehensive to our patients, aligning with international 
-                standards.
-              </p>
-            </motion.div>
-
-            {/* Vision Card */}
-            <motion.div 
-              variants={itemVariants}
-              whileHover={{ y: -5 }}
-              className="relative p-6 md:p-8 bg-white rounded-xl md:rounded-2xl border border-gray-200 shadow-lg overflow-hidden group"
-            >
-              <div className="absolute top-0 left-0 w-24 h-24 md:w-32 md:h-32 bg-gradient-to-br from-[#1FB6A6]/5 to-transparent rounded-br-full" />
-              
-              <div className="flex items-center gap-3 md:gap-4 mb-4 md:mb-6">
-                <div className="p-2 md:p-3 bg-gradient-to-br from-[#1FB6A6] to-[#0B6E5E] rounded-lg md:rounded-xl">
-                  <FaLightbulb className="h-5 w-5 md:h-6 md:w-6 text-white" />
-                </div>
-                <h3 className="text-gray-900 font-bold text-lg md:text-xl">Our Vision</h3>
-              </div>
-              
-              <p className="text-gray-700 text-sm md:text-[1rem] leading-relaxed">
-                Elevating Siddiq Hospital & Maternity Complex to the pinnacle of healthcare delivery in Pakistan, 
-                we aim to advance our technology and embody the art of compassion in serving our patients.
-              </p>
-            </motion.div>
-          </div>
-        </motion.div>
-
-        {/* Stats Banner */}
-        <motion.div
-          initial={{ opacity: 0, y: 60 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.6 }}
-          className="mt-12 md:mt-24 bg-gradient-to-r from-[#064E3B] via-[#0B6E5E] to-[#064E3B] rounded-xl md:rounded-2xl shadow-xl md:shadow-2xl overflow-hidden"
-        >
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 p-8 md:p-12">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-2xl md:text-4xl font-bold text-white mb-1 md:mb-2">{stat.number}</div>
-                <div className="text-white/80 text-xs md:text-sm font-medium">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* CTA Section */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={isInView ? { opacity: 1, scale: 1 } : {}}
-          transition={{ delay: 0.8 }}
-          className="mt-12 md:mt-24 text-center"
-        >
-          <div className="inline-block max-w-2xl">
-            <h3 className="text-gray-900 text-xl md:text-[1.8rem] font-bold mb-4 md:mb-6">
-              Experience World-Class Healthcare Today
-            </h3>
-            <p className="text-gray-600 text-sm md:text-[1rem] mb-6 md:mb-8">
-              Join thousands of satisfied patients who trust SHMC for their healthcare needs.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center">
-              <button className="px-6 md:px-8 py-2.5 md:py-3.5 bg-gradient-to-r from-[#064E3B] to-[#0B6E5E] text-white font-bold rounded-lg hover:shadow-xl hover:shadow-[#064E3B]/20 transition-all duration-300">
-                Book Appointment
-              </button>
-              <button className="px-6 md:px-8 py-2.5 md:py-3.5 bg-white text-[#064E3B] font-bold rounded-lg border-2 border-[#064E3B] hover:bg-[#064E3B] hover:text-white transition-all duration-300">
-                Contact Us
-              </button>
+              <h3 className="text-gray-900 font-bold text-xl">Our Mission</h3>
             </div>
-          </div>
-        </motion.div>
+            
+            <p className="text-gray-600 leading-relaxed relative z-10">
+              To deliver accessible, innovative, and comprehensive medical care to our patients, 
+              aligned with international standards of excellence.
+            </p>
+          </motion.div>
+
+          {/* Vision Card slides from right */}
+          <motion.div
+            data-section-item
+            data-index="8"
+            initial="hidden"
+            animate={itemInView.includes(8) ? "visible" : "hidden"}
+            variants={slideInRight}
+            whileHover="hover"
+            
+            
+           
+            className="relative p-8 bg-white rounded-2xl border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group"
+          >
+            {/* Background gradient */}
+            <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[#1FB6A6]/5 to-transparent rounded-br-full" />
+            
+            <div className="flex items-center gap-5 mb-6">
+              <div className="p-4 bg-gradient-to-br from-[#1FB6A6] to-[#0B6E5E] rounded-xl group-hover:scale-110 transition-transform duration-300">
+                <FaLightbulb className="h-6 w-6 text-white" />
+              </div>
+              <h3 className="text-gray-900 font-bold text-xl">Our Vision</h3>
+            </div>
+            
+            <p className="text-gray-600 leading-relaxed relative z-10">
+              To elevate SHMC to the pinnacle of healthcare delivery in Pakistan, advancing our technology 
+              and embodying compassion in serving our patients.
+            </p>
+          </motion.div>
+        </div>
       </div>
     </section>
   );
-};
-
-export default AboutSection;
+};export default AboutSection;

@@ -3,106 +3,83 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, useInView, Variants } from "framer-motion";
 import { 
-  FaUserMd,
-  FaHeartbeat,
-  FaStethoscope,
-  FaHospital,
-  FaAward,
-  FaUsers,
   FaClock,
-  FaAmbulance,
-  FaMicroscope,
+  FaStethoscope,
+  FaUserMd,
+  FaHospital,
+  FaMapMarkerAlt,
+  FaHeartbeat,
   FaShieldAlt,
   FaHandHoldingMedical,
-  FaChartLine,
-
-  FaUserFriends,
- 
-  FaLeaf,
   FaStar,
-  FaCheckCircle,
-  FaThumbsUp,
- 
-  FaMobileAlt,
-  FaCertificate
+  FaAward,
+  FaCheckCircle
 } from "react-icons/fa";
 
 export const WhyChooseUsSection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.1 });
 
-  // Main reasons data
-  const mainReasons = [
+  // Key reasons data
+  const keyReasons = [
     {
-      icon: <FaUserMd />,
-      title: "Expert Medical Team",
-      description: "Board-certified specialists with international training and decades of collective experience in advanced medical procedures.",
-      features: ["International Certifications", "15+ Years Average Experience", "Continuous Training"]
+      icon: <FaClock />,
+      title: "24/7 Emergency Services",
+      description: "Immediate medical attention available round the clock for urgent cases."
     },
     {
-      icon: <FaHeartbeat />,
-      title: "Advanced Technology",
-      description: "State-of-the-art medical equipment and modern diagnostic tools ensuring accurate diagnosis and effective treatment.",
-      features: ["Digital Imaging Systems", "Minimal Invasive Surgery", "Modern ICU"]
+      icon: <FaStethoscope />,
+      title: "Wide Range of Medical Services",
+      description: "Multi-specialty care including general medicine, surgery, maternity, cardiology, orthopedics, dermatology, physiotherapy, and diagnostics."
+    },
+    {
+      icon: <FaUserMd />,
+      title: "Experienced Medical Team",
+      description: "Skilled doctors, nurses, and staff dedicated to personalized patient care."
     },
     {
       icon: <FaHospital />,
-      title: "Comprehensive Care",
-      description: "Full spectrum healthcare services from preventive care to complex surgical interventions under one roof.",
-      features: ["Multi-Specialty Departments", "24/7 Emergency", "Maternity & NICU"]
+      title: "Modern Facilities & Technology",
+      description: "Advanced medical equipment for accurate diagnosis, treatment, and faster recovery."
     },
     {
-      icon: <FaAward />,
-      title: "Quality & Safety",
-      description: "Rigorous quality control measures and international safety protocols to ensure patient well-being at every step.",
-      features: ["ISO Certified", "Infection Control", "Patient Safety Protocols"]
+      icon: <FaMapMarkerAlt />,
+      title: "Convenient Location",
+      description: "Centrally located in Lahore for easy access to quality healthcare."
     }
   ];
 
-  // Additional features
-  const features = [
+  // Core values data
+  const coreValues = [
     {
-      icon: <FaClock />,
-      title: "24/7 Emergency",
-      description: "Round-the-clock emergency services with immediate response teams"
+      icon: <FaAward />,
+      title: "Pursuing Excellence",
+      description: "We continually push ourselves to improve every day, ensuring the highest standard of medical care."
     },
     {
-      icon: <FaAmbulance />,
-      title: "Quick Ambulance",
-      description: "Advanced life support ambulance service with GPS tracking"
-    },
-    {
-      icon: <FaMicroscope />,
-      title: "Modern Lab",
-      description: "Fully equipped pathology lab with rapid test results"
+      icon: <FaHeartbeat />,
+      title: "Compassion",
+      description: "Providing unwavering support to our patients in every possible way."
     },
     {
       icon: <FaShieldAlt />,
-      title: "Patient Privacy",
-      description: "Strict confidentiality and data protection measures"
+      title: "Integrity",
+      description: "Approaching every medical challenge with honesty and professionalism."
     },
     {
       icon: <FaHandHoldingMedical />,
-      title: "Insurance Support",
-      description: "Direct billing with major insurance providers"
+      title: "Trust",
+      description: "Respecting and upholding the trust our patients place in us."
     },
     {
-      icon: <FaChartLine />,
-      title: "Digital Records",
-      description: "Electronic medical records for seamless care coordination"
+      icon: <FaCheckCircle />,
+      title: "Transparency",
+      description: "Ensuring our patients fully understand every medical decision they make."
     }
   ];
 
-  // Stats data
-  const stats = [
-    { value: "99%", label: "Patient Satisfaction" },
-    { value: "24/7", label: "Emergency Services" },
-    { value: "50+", label: "Specialists" },
-    { value: "20+", label: "Medical Departments" }
-  ];
-
   // Animation variants
-  const containerVariants:Variants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -113,7 +90,7 @@ export const WhyChooseUsSection = () => {
     }
   };
 
-  const itemVariants:Variants = {
+  const itemVariants: Variants = {
     hidden: { y: 40, opacity: 0 },
     visible: {
       y: 0,
@@ -126,7 +103,7 @@ export const WhyChooseUsSection = () => {
     }
   };
 
-  const cardHover:Variants = {
+  const cardHover: Variants = {
     hover: {
       y: -8,
       transition: {
@@ -202,107 +179,146 @@ export const WhyChooseUsSection = () => {
 
           <motion.p 
             variants={itemVariants}
-            className="text-[#E5E7EB] text-lg md:text-xl max-w-3xl mx-auto"
+            className="text-[#E5E7EB] text-lg md:text-xl max-w-3xl mx-auto leading-relaxed"
           >
-            Discover the distinct advantages that make us the preferred healthcare destination 
-            for thousands of patients across Pakistan.
+            Siddiq Hospital & Maternity Complex is a trusted healthcare provider in Lahore, 
+            offering comprehensive medical services, modern facilities, and 24/7 emergency care. 
+            We are committed to patient-centered treatment, ensuring every individual receives 
+            compassionate, reliable, and high-quality healthcare.
           </motion.p>
         </motion.div>
 
-        {/* Main Reasons Grid */}
+        {/* Key Reasons Grid */}
         <motion.div
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
           variants={containerVariants}
-          className="grid md:grid-cols-2 gap-8 mb-20"
-        >
-          {mainReasons.map((reason, index) => (
-            <motion.div
-              key={index}
-              variants={itemVariants}
-              whileHover="hover"
-             
-              className="group relative"
-            >
-              <div className="relative p-8 bg-[#111111] rounded-2xl border border-[#1FB6A6]/10 hover:border-[#1FB6A6]/30 transition-all duration-500 overflow-hidden">
-                {/* Background glow effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[#1FB6A6]/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                
-                {/* Icon */}
-                <div className="mb-6">
-                  <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-[#1FB6A6] to-[#0B6E5E] flex items-center justify-center shadow-lg shadow-[#1FB6A6]/20">
-                    <div className="text-white text-2xl">
-                      {reason.icon}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Content */}
-                <h3 className="text-2xl font-bold text-white mb-4">
-                  {reason.title}
-                </h3>
-                
-                <p className="text-[#E5E7EB] mb-6">
-                  {reason.description}
-                </p>
-
-                {/* Features List */}
-                <div className="space-y-3">
-                  {reason.features.map((feature, featureIndex) => (
-                    <div key={featureIndex} className="flex items-center gap-3">
-                      <FaCheckCircle className="text-[#1FB6A6] flex-shrink-0" />
-                      <span className="text-[#E5E7EB] text-sm">{feature}</span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Hover effect line */}
-                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#1FB6A6] to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {/* Additional Features Grid */}
-        <motion.div
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          variants={containerVariants}
-          className="mb-20"
+          className="mb-24"
         >
           <motion.div variants={itemVariants} className="text-center mb-12">
             <h3 className="text-3xl font-bold text-white mb-4">
-              Our Commitment to Excellence
+              Key Reasons to Choose Us
             </h3>
             <p className="text-[#E5E7EB] max-w-2xl mx-auto">
-              Every aspect of our hospital is designed with patient comfort and medical excellence in mind
+              Discover what makes Siddiq Hospital the preferred choice for healthcare in Lahore
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((feature, index) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {keyReasons.map((reason, index) => (
+              <motion.div
+                key={index}
+                variants={itemVariants}
+                whileHover="hover"
+                className="group"
+              >
+                <div className="relative p-6 bg-[#111111] rounded-xl border border-[#1FB6A6]/10 hover:border-[#1FB6A6]/30 transition-all duration-500 h-full">
+                  {/* Background glow effect */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#1FB6A6]/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl" />
+                  
+                  {/* Icon */}
+                  <div className="mb-5">
+                    <div className="w-14 h-14 rounded-lg bg-gradient-to-br from-[#1FB6A6] to-[#0B6E5E] flex items-center justify-center shadow-lg shadow-[#1FB6A6]/20">
+                      <div className="text-white text-xl">
+                        {reason.icon}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <h3 className="text-xl font-bold text-white mb-3">
+                    {reason.title}
+                  </h3>
+                  
+                  <p className="text-[#E5E7EB] text-sm leading-relaxed">
+                    {reason.description}
+                  </p>
+
+                  {/* Hover effect line */}
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#1FB6A6] to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 rounded-b-xl" />
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Core Values Section */}
+        <motion.div
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          variants={containerVariants}
+          className="relative"
+        >
+          <motion.div variants={itemVariants} className="text-center mb-12">
+            <h3 className="text-3xl font-bold text-white mb-4">
+              Our Core Values
+            </h3>
+            <p className="text-[#E5E7EB] max-w-2xl mx-auto">
+              These values reflect why patients trust Siddiq Hospital
+            </p>
+          </motion.div>
+
+          {/* Core Values Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            {coreValues.slice(0, 3).map((value, index) => (
               <motion.div
                 key={index}
                 variants={itemVariants}
                 whileHover={{ scale: 1.03 }}
                 className="group"
               >
-                <div className="relative p-6 bg-[#111111] rounded-xl border border-[#1FB6A6]/5 hover:border-[#1FB6A6]/20 transition-all duration-300">
+                <div className="relative p-6 bg-gradient-to-br from-[#111111] to-black rounded-xl border border-[#1FB6A6]/20 hover:border-[#1FB6A6]/40 transition-all duration-300 h-full">
                   {/* Icon */}
                   <div className="mb-4">
-                    <div className="w-12 h-12 rounded-lg bg-[#1FB6A6]/10 flex items-center justify-center">
-                      <div className="text-[#1FB6A6] text-lg">
-                        {feature.icon}
+                    <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#1FB6A6] to-[#0B6E5E] flex items-center justify-center">
+                      <div className="text-white text-lg">
+                        {value.icon}
                       </div>
                     </div>
                   </div>
 
                   {/* Content */}
                   <h4 className="text-lg font-semibold text-white mb-2">
-                    {feature.title}
+                    {value.title}
                   </h4>
-                  <p className="text-[#E5E7EB] text-sm">
-                    {feature.description}
+                  <p className="text-[#E5E7EB] text-sm leading-relaxed">
+                    {value.description}
+                  </p>
+
+                  {/* Hover indicator */}
+                  <div className="absolute top-0 right-0 mt-4 mr-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="w-2 h-2 bg-[#1FB6A6] rounded-full" />
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Last two core values in a centered row */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+            {coreValues.slice(3, 5).map((value, index) => (
+              <motion.div
+                key={index + 3}
+                variants={itemVariants}
+                whileHover={{ scale: 1.03 }}
+                className="group"
+              >
+                <div className="relative p-6 bg-gradient-to-br from-[#111111] to-black rounded-xl border border-[#1FB6A6]/20 hover:border-[#1FB6A6]/40 transition-all duration-300 h-full">
+                  {/* Icon */}
+                  <div className="mb-4">
+                    <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#1FB6A6] to-[#0B6E5E] flex items-center justify-center">
+                      <div className="text-white text-lg">
+                        {value.icon}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <h4 className="text-lg font-semibold text-white mb-2">
+                    {value.title}
+                  </h4>
+                  <p className="text-[#E5E7EB] text-sm leading-relaxed">
+                    {value.description}
                   </p>
 
                   {/* Hover indicator */}
@@ -315,136 +331,6 @@ export const WhyChooseUsSection = () => {
           </div>
         </motion.div>
 
-        {/* Stats Banner */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.6 }}
-          className="relative mb-20"
-        >
-          <div className="relative bg-gradient-to-r from-[#111111] to-[#1a1a1a] rounded-2xl overflow-hidden border border-[#1FB6A6]/20">
-            {/* Stats Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 p-12">
-              {stats.map((stat, index) => (
-                <div key={index} className="text-center">
-                  <div className="text-4xl md:text-5xl font-bold text-white mb-2">
-                    {stat.value}
-                  </div>
-                  <div className="text-[#E5E7EB] text-sm font-medium">
-                    {stat.label}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Pattern overlay */}
-            <div 
-              className="absolute inset-0 opacity-5"
-              style={{
-                backgroundImage: `radial-gradient(circle at 25% 25%, #1FB6A6 2px, transparent 2px)`,
-                backgroundSize: '30px 30px'
-              }}
-            />
-          </div>
-        </motion.div>
-
-        {/* Unique Selling Points */}
-        <motion.div
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          variants={containerVariants}
-          className="relative"
-        >
-          <div className="bg-gradient-to-br from-[#111111] to-black rounded-2xl border border-[#1FB6A6]/20 p-8 md:p-12">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              {/* Left side - USP list */}
-              <motion.div variants={itemVariants}>
-                <h3 className="text-2xl font-bold text-white mb-8">
-                  What Sets Us Apart
-                </h3>
-                
-                <div className="space-y-6">
-                  {[
-                    {
-                      icon: <FaCertificate />,
-                      title: "International Standards",
-                      description: "Accredited healthcare services meeting global medical protocols"
-                    },
-                    {
-                      icon: <FaUserFriends />,
-                      title: "Patient-Centric Approach",
-                      description: "Personalized care plans tailored to individual patient needs"
-                    },
-                    {
-                      icon: <FaLeaf />,
-                      title: "Healing Environment",
-                      description: "Modern facilities designed for comfort and quick recovery"
-                    },
-                    {
-                      icon: <FaMobileAlt />,
-                      title: "Digital Convenience",
-                      description: "Online appointment booking and telemedicine consultations"
-                    }
-                  ].map((usp, index) => (
-                    <div key={index} className="flex items-start gap-4">
-                      <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#1FB6A6] to-[#0B6E5E] flex items-center justify-center flex-shrink-0">
-                        <div className="text-white text-lg">
-                          {usp.icon}
-                        </div>
-                      </div>
-                      <div>
-                        <h4 className="text-lg font-semibold text-white mb-1">
-                          {usp.title}
-                        </h4>
-                        <p className="text-[#E5E7EB] text-sm">
-                          {usp.description}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-
-              {/* Right side - Testimonial/CTA */}
-              <motion.div variants={itemVariants}>
-                <div className="bg-gradient-to-br from-[#1FB6A6]/10 to-transparent rounded-xl p-8 border border-[#1FB6A6]/20">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#1FB6A6] to-[#0B6E5E] flex items-center justify-center">
-                      <FaThumbsUp className="text-white text-xl" />
-                    </div>
-                    <div>
-                      <h4 className="text-xl font-bold text-white">Trust & Reliability</h4>
-                      <p className="text-[#E5E7EB] text-sm">Verified by Patients</p>
-                    </div>
-                  </div>
-
-                  <div className="space-y-4 mb-8">
-                    <p className="text-[#E5E7EB] italic">
-                      The care I received at Siddiq Hospital was exceptional. From diagnosis to recovery, 
-                      every step was handled with utmost professionalism and compassion.
-                    </p>
-                    <div className="flex items-center gap-2">
-                      {[...Array(5)].map((_, i) => (
-                        <FaStar key={i} className="text-yellow-400" />
-                      ))}
-                      <span className="text-white text-sm ml-2">4.9/5 Rating</span>
-                    </div>
-                  </div>
-
-                  <div className="pt-6 border-t border-[#1FB6A6]/20">
-                    <button className="w-full py-3.5 bg-gradient-to-r from-[#1FB6A6] to-[#0B6E5E] text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-[#1FB6A6]/20 transition-all duration-300">
-                      Experience Our Care
-                    </button>
-                    <p className="text-center text-[#E5E7EB] text-sm mt-3">
-                      Join thousands of satisfied patients
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            </div>
-          </div>
-        </motion.div>
-
         {/* CTA Section */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
@@ -454,10 +340,10 @@ export const WhyChooseUsSection = () => {
         >
           <div className="inline-block max-w-2xl">
             <h3 className="text-3xl font-bold text-white mb-6">
-              Ready to Experience Excellence?
+              Ready to Experience Our Care?
             </h3>
             <p className="text-[#E5E7EB] mb-8">
-              Choose Siddiq Hospital for world-class healthcare in Pakistan
+              Choose Siddiq Hospital for compassionate, reliable, and high-quality healthcare in Lahore
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button className="px-8 py-3.5 bg-gradient-to-r from-[#1FB6A6] to-[#0B6E5E] text-white font-semibold rounded-lg hover:shadow-xl hover:shadow-[#1FB6A6]/20 transition-all duration-300">
@@ -467,9 +353,7 @@ export const WhyChooseUsSection = () => {
                 Call 0303 6828260
               </button>
             </div>
-            <p className="text-[#E5E7EB] text-sm mt-6">
-              Emergency services available 24/7 • Free ambulance within city limits
-            </p>
+           
           </div>
         </motion.div>
       </div>
