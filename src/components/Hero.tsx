@@ -452,7 +452,7 @@ export const HeroSection: React.FC = () => {
                   >
                     <FaPhoneAlt className="h-4 w-4" />
                   </motion.div>
-                  <span className="relative z-10">Book Appointment Now</span>
+                  <span className="relative z-10">Contact Now</span>
                   
                   <motion.div 
                     className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"

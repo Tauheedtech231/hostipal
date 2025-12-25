@@ -346,9 +346,13 @@ export const WhyChooseUsSection = () => {
               Choose Siddiq Hospital for compassionate, reliable, and high-quality healthcare in Lahore
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="px-8 py-3.5 bg-gradient-to-r from-[#1FB6A6] to-[#0B6E5E] text-white font-semibold rounded-lg hover:shadow-xl hover:shadow-[#1FB6A6]/20 transition-all duration-300">
-                Book Appointment Now
-              </button>
+              <button
+  onClick={() => window.location.href = "/portfolio/contact"}
+  className="px-8 py-3.5 bg-gradient-to-r from-[#1FB6A6] to-[#0B6E5E] text-white font-semibold rounded-lg hover:shadow-xl hover:shadow-[#1FB6A6]/20 transition-all duration-300"
+>
+  Book Appointment Now
+</button>
+
               <button className="px-8 py-3.5 bg-white/10 text-white font-semibold rounded-lg border border-white/20 hover:bg-white/20 transition-all duration-300">
                 Call 0303 6828260
               </button>

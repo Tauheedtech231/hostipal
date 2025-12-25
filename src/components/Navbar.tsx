@@ -15,7 +15,6 @@ export const Navbar: React.FC = () => {
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [showSearchModal, setShowSearchModal] = useState(false);
   const [showContactSlider, setShowContactSlider] = useState(false);
-  const [activeSearchTab, setActiveSearchTab] = useState<string>("all");
   const [lastScrollY, setLastScrollY] = useState(0);
   const [showTopContactBar, setShowTopContactBar] = useState(true);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -28,38 +27,44 @@ export const Navbar: React.FC = () => {
       name: "Home", 
       href: "/",
       icon: <Home className="h-5 w-5" />,
-      description: "Welcome to SHMC"
+      description: "Welcome to SHMC",
+      keywords: ["home", "main", "welcome", "hospital", "shmc"]
     },
     { 
       name: "About Us", 
       href: "/portfolio/about",
       icon: <User className="h-5 w-5" />,
-      description: "Our Story & Mission"
+      description: "Our Story & Mission",
+      keywords: ["about", "story", "mission", "vision", "about us", "who we are"]
     },
     {
       name: "Services",
       href: "/portfolio/services",
       icon: <Stethoscope className="h-5 w-5" />,
       description: "Medical Services & Care",
+      keywords: ["services", "medical", "care", "treatment", "healthcare", "doctors"]
     },
     { 
       name: "Testimonials", 
       href: "/portfolio/testimonials",
       icon: <Users className="h-5 w-5" />,
-      description: "Reviews from Patients"
+      description: "Reviews from Patients",
+      keywords: ["testimonials", "reviews", "patients", "feedback", "stories", "experience"]
     },
     { 
       name: "Carrers", 
       href: "/portfolio/careers",
       icon: <GalleryVertical className="h-5 w-5" />,
-      description: "Hospital & Facilities"
+      description: "Join Our Team",
+      keywords: ["careers", "jobs", "employment", "work", "join us", "vacancies", "hiring"]
     },
     { 
       name: "Contact", 
       href: "/portfolio/contact",
       icon: <Phone className="h-5 w-5" />,
       description: "Get in Touch with Us",
-      cta: true
+      cta: true,
+      keywords: ["contact", "get in touch", "reach us", "phone", "email", "location", "address"]
     },
   ];
 
@@ -75,50 +80,6 @@ export const Navbar: React.FC = () => {
       saturday: "9:00 AM - 10:00 PM",
       sunday: "9:00 AM - 8:00 PM"
     }
-  };
-
-  const searchTabs = [
-    { id: "all", name: "All", icon: "🔍" },
-    { id: "home", name: "Home", icon: "🏠" },
-    { id: "about", name: "About", icon: "🏥" },
-    { id: "contact", name: "Contact", icon: "📞" },
-    { id: "team", name: "Team", icon: "👨‍⚕️" },
-  ];
-
-  const searchData = {
-    home: [
-      { title: "Home Page", url: "/", category: "Home", icon: "🏠", description: "Welcome to SHMC" },
-      { title: "Emergency Services", url: "/services/emergency", category: "Home", icon: "🚨", description: "24/7 Emergency Care" },
-      { title: "Patient Portal", url: "/portal", category: "Home", icon: "📱", description: "Access Your Health Records" },
-      { title: "Visiting Hours", url: "/visiting", category: "Home", icon: "🕒", description: "Plan Your Visit" },
-    ],
-    about: [
-      { title: "About SHMC", url: "/about", category: "About", icon: "🏥", description: "Our Hospital Story" },
-      { title: "Mission & Vision", url: "/about/mission", category: "About", icon: "🎯", description: "Our Healthcare Mission" },
-      { title: "Facilities", url: "/about/facilities", category: "About", icon: "🏢", description: "Hospital Infrastructure" },
-      { title: "Testimonials", url: "/about/testimonials", category: "About", icon: "💬", description: "Patient Stories" },
-    ],
-    contact: [
-      { title: "Contact Us", url: "/portfolio/contact", category: "Contact", icon: "📞", description: "Get in Touch" },
-      { title: "Book Appointment", url: "/appointment", category: "Contact", icon: "📅", description: "Schedule a Visit" },
-      { title: "Emergency Contact", url: "/emergency", category: "Contact", icon: "🚨", description: "24/7 Emergency Line" },
-      { title: "Feedback", url: "/feedback", category: "Contact", icon: "💬", description: "Share Your Experience" },
-    ],
-    team: [
-      { title: "Medical Team", url: "/doctors", category: "Team", icon: "👨‍⚕️", description: "Expert Doctors" },
-      { title: "Dr. Roman Asher", url: "/doctors/roman-asher", category: "Team", icon: "👨‍⚕️", description: "Cardiologist" },
-      { title: "Dr. Sarah Khan", url: "/doctors/sarah-khan", category: "Team", icon: "👩‍⚕️", description: "Pediatrician" },
-      { title: "Dr. Ali Raza", url: "/doctors/ali-raza", category: "Team", icon: "👨‍⚕️", description: "Surgeon" },
-    ]
-  };
-
-  const getAllSearchData = () => {
-    return [
-      ...searchData.home,
-      ...searchData.about,
-      ...searchData.contact,
-      ...searchData.team
-    ];
   };
 
   useEffect(() => {
@@ -208,14 +169,14 @@ export const Navbar: React.FC = () => {
   const handleSearch = (e: FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim() && searchResults.length > 0) {
-      window.location.href = searchResults[0].url;
+      window.location.href = searchResults[0].href;
       setShowSearchModal(false);
       setSearchQuery("");
     }
   };
 
-  const handleSearchClick = (url: string) => {
-    window.location.href = url;
+  const handleSearchClick = (href: string) => {
+    window.location.href = href;
     setShowSearchModal(false);
     setSearchQuery("");
     setSearchResults([]);
@@ -224,29 +185,12 @@ export const Navbar: React.FC = () => {
   const handleSearchInputChange = (value: string) => {
     setSearchQuery(value);
     if (value.trim()) {
-      let results: any[] = [];
-      
-      switch(activeSearchTab) {
-        case 'all':
-          results = getAllSearchData();
-          break;
-        case 'home':
-          results = searchData.home;
-          break;
-        case 'about':
-          results = searchData.about;
-          break;
-        case 'contact':
-          results = searchData.contact;
-          break;
-        case 'team':
-          results = searchData.team;
-          break;
-      }
-      
-      const filteredResults = results.filter(item =>
-        item.title.toLowerCase().includes(value.toLowerCase()) ||
-        item.description.toLowerCase().includes(value.toLowerCase())
+      const filteredResults = navItems.filter(item =>
+        item.name.toLowerCase().includes(value.toLowerCase()) ||
+        item.description.toLowerCase().includes(value.toLowerCase()) ||
+        item.keywords?.some(keyword => 
+          keyword.toLowerCase().includes(value.toLowerCase())
+        )
       );
       setSearchResults(filteredResults.slice(0, 8));
     } else {
@@ -254,23 +198,15 @@ export const Navbar: React.FC = () => {
     }
   };
 
-  const getFeaturedItems = () => {
-    switch(activeSearchTab) {
-      case 'home':
-        return searchData.home.slice(0, 4);
-      case 'about':
-        return searchData.about.slice(0, 4);
-      case 'contact':
-        return searchData.contact.slice(0, 4);
-      case 'team':
-        return searchData.team.slice(0, 4);
-      default:
-        return [
-          searchData.home[0],
-          searchData.about[0],
-          searchData.contact[0],
-          searchData.team[0]
-        ];
+  const getEmojiForCategory = (name: string) => {
+    switch(name.toLowerCase()) {
+      case 'home': return '🏠';
+      case 'about us': return '🏥';
+      case 'services': return '⚕️';
+      case 'testimonials': return '⭐';
+      case 'carrers': return '💼';
+      case 'contact': return '📞';
+      default: return '🔍';
     }
   };
 
@@ -370,6 +306,7 @@ export const Navbar: React.FC = () => {
 
       {/* Main Navbar */}
       <motion.header
+        key="main-navbar"
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ type: "spring", stiffness: 100, damping: 20 }}
@@ -378,6 +315,7 @@ export const Navbar: React.FC = () => {
             ? "bg-white/95 backdrop-blur-xl shadow-lg py-3 border-b border-gray-200" 
             : "bg-white py-4 border-b border-gray-200"
         }`}
+        style={{ display: isMenuOpen && isMobile ? 'none' : 'block' }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
@@ -394,7 +332,6 @@ export const Navbar: React.FC = () => {
                   className="object-cover rounded-full"
                 />
               </div>
-              
             </Link>
 
             <div className="hidden lg:flex items-center gap-3">
@@ -724,31 +661,6 @@ export const Navbar: React.FC = () => {
                       </div>
                     </div>
                   </motion.div>
-                  
-                  <motion.div 
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 }}
-                    className="grid grid-cols-1 md:grid-cols-2 gap-3"
-                  >
-                    <Link
-                      href="/portfolio/contact"
-                      onClick={() => setShowContactSlider(false)}
-                      className="inline-flex items-center justify-center gap-2 w-full px-4 py-3.5 bg-gradient-to-r from-[#064E3B] to-[#0B6E5E] text-white rounded-xl font-bold hover:shadow-xl hover:shadow-[#064E3B]/30 hover:scale-[1.02] transition-all duration-300"
-                    >
-                      <Calendar className="h-5 w-5" />
-                      Book Appointment Now
-                    </Link>
-                    
-                    <Link
-                      href="/portfolio/contact"
-                      onClick={() => setShowContactSlider(false)}
-                      className="inline-flex items-center justify-center gap-2 w-full px-4 py-3.5 bg-white text-[#064E3B] rounded-xl font-bold border-2 border-[#064E3B] hover:bg-[#064E3B]/5 hover:border-[#0B6E5E] hover:text-[#0B6E5E] hover:shadow-lg transition-all duration-300"
-                    >
-                      <Phone className="h-5 w-5" />
-                      More Contact Options
-                    </Link>
-                  </motion.div>
                 </div>
               </motion.div>
             </motion.div>
@@ -794,7 +706,7 @@ export const Navbar: React.FC = () => {
                       <input
                         ref={searchInputRef}
                         type="text"
-                        placeholder="Search for Home, About, Contact, or Team..."
+                        placeholder="Search for Home, About, Services, Testimonials, Carrers, or Contact..."
                         value={searchQuery}
                         onChange={(e) => handleSearchInputChange(e.target.value)}
                         className="w-full pl-12 pr-12 py-4 bg-[#F5F5F5] rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#064E3B]/30 focus:border-[#064E3B] text-[#1E293B] placeholder-gray-500 text-base"
@@ -841,17 +753,17 @@ export const Navbar: React.FC = () => {
                               initial={{ opacity: 0, x: -10 }}
                               animate={{ opacity: 1, x: 0 }}
                               transition={{ delay: index * 0.05 }}
-                              onClick={() => handleSearchClick(result.url)}
+                              onClick={() => handleSearchClick(result.href)}
                               className="w-full text-left p-4 bg-[#F5F5F5] hover:bg-[#064E3B]/5 rounded-xl transition-all duration-200 group/result border border-transparent hover:border-[#064E3B]/20"
                             >
                               <div className="flex items-start gap-4">
                                 <div className="p-2 bg-white rounded-full group-hover/result:bg-[#064E3B]/10 transition-colors flex-shrink-0 shadow-sm">
-                                  <span className="text-xl">{result.icon}</span>
+                                  <span className="text-xl">{getEmojiForCategory(result.name)}</span>
                                 </div>
                                 <div className="flex-1">
                                   <div className="flex items-center justify-between">
                                     <h3 className="font-semibold text-[#064E3B] group-hover/result:text-[#1FB6A6] text-base">
-                                      {result.title}
+                                      {result.name}
                                     </h3>
                                     <ChevronRight className="h-4 w-4 text-gray-400 group-hover/result:text-[#064E3B] transform group-hover/result:translate-x-1 transition-transform" />
                                   </div>
@@ -877,6 +789,9 @@ export const Navbar: React.FC = () => {
                         <h3 className="font-medium text-[#064E3B] mb-2 text-base">
                           No results found for "{searchQuery}"
                         </h3>
+                        <p className="text-sm text-[#1E293B]">
+                          Try searching for: Home, About, Services, Testimonials, Carrers, or Contact
+                        </p>
                       </motion.div>
                     ) : null}
                   </AnimatePresence>
@@ -887,7 +802,7 @@ export const Navbar: React.FC = () => {
         )}
       </AnimatePresence>
 
-      {/* Desktop Menu - Slides from right, content from left */}
+      {/* Desktop Menu - Slides from right */}
       <AnimatePresence>
         {isMenuOpen && !isMobile && (
           <>
@@ -946,7 +861,7 @@ export const Navbar: React.FC = () => {
                 </div>
               </motion.div>
 
-              {/* Menu Content with staggered left entrance */}
+              {/* Menu Content */}
               <motion.div 
                 initial="hidden"
                 animate="visible"
@@ -1040,29 +955,13 @@ export const Navbar: React.FC = () => {
                     </div>
                   </div>
                 </motion.div>
-
-                {/* Book Appointment Button */}
-                <motion.div
-                  initial={{ x: -50, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ delay: 0.6, duration: 0.3 }}
-                >
-                  <Link
-                    href="/portfolio/contact"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center justify-center gap-2 w-full px-4 py-3.5 bg-gradient-to-r from-[#064E3B] to-[#064E3B]/90 text-white rounded-xl font-bold hover:shadow-xl hover:shadow-[#064E3B]/20 hover:bg-[#064E3B] transition-all duration-300"
-                  >
-                    <Calendar className="h-5 w-5" />
-                    Book Appointment
-                  </Link>
-                </motion.div>
               </motion.div>
             </motion.div>
           </>
         )}
       </AnimatePresence>
 
-      {/* Mobile Menu - Slides from right, content from left */}
+      {/* Mobile Menu - Full screen slide from right */}
       <AnimatePresence>
         {isMenuOpen && isMobile && (
           <>
@@ -1070,7 +969,6 @@ export const Navbar: React.FC = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setIsMenuOpen(false)}
               className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40"
             />
 
@@ -1084,7 +982,7 @@ export const Navbar: React.FC = () => {
                 duration: 0.3,
                 ease: "easeOut"
               }}
-              className="menu-container fixed top-0 right-0 h-full w-full max-w-sm z-40 bg-white shadow-2xl border-l border-gray-200 overflow-y-auto"
+              className="menu-container fixed top-0 right-0 h-full w-full z-40 bg-white shadow-2xl overflow-y-auto"
             >
               {/* Mobile Menu Header */}
               <motion.div 
@@ -1118,7 +1016,7 @@ export const Navbar: React.FC = () => {
                 </div>
               </motion.div>
 
-              {/* Mobile Menu Content with staggered left entrance */}
+              {/* Mobile Menu Content */}
               <motion.div 
                 initial="hidden"
                 animate="visible"
@@ -1193,24 +1091,6 @@ export const Navbar: React.FC = () => {
                       </div>
                     </div>
                   </div>
-
-                  {/* Mobile Book Appointment Button */}
-                  <motion.div
-                    initial={{ x: -40, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: 0.7, duration: 0.3 }}
-                  >
-                    <Link
-                      href="/portfolio/contact"
-                      onClick={() => setIsMenuOpen(false)}
-                      className="block w-full px-4 py-3.5 bg-gradient-to-r from-[#064E3B] to-[#064E3B]/90 text-white rounded-xl font-bold text-center hover:shadow-lg hover:shadow-[#064E3B]/20 transition-all duration-300"
-                    >
-                      <div className="flex items-center justify-center gap-2">
-                        <Calendar className="h-5 w-5" />
-                        Book Appointment
-                      </div>
-                    </Link>
-                  </motion.div>
                 </motion.div>
               </motion.div>
             </motion.div>
