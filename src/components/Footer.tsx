@@ -13,7 +13,7 @@ export const FooterSection: React.FC = () => {
     { name: "Home", href: "/" },
     { name: "About Us", href: "/portfolio/about" },
     { name: "Services", href: "/portfolio/services " },
-    { name: "Departments", href: "/portfolio/departments" },
+    { name: "Departments", href: "/portfolio/department" },
   
     { name: "Contact", href: "/portfolio/contact" }
   ];

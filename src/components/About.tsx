@@ -10,7 +10,17 @@ import {
   FaShieldAlt,
   FaHandsHelping,
   FaHandHoldingMedical,
-  FaLightbulb
+  FaLightbulb,
+  FaStethoscope,
+  FaUserMd,
+  FaUserInjured,
+  FaBaby,
+  FaHeart,
+  FaProcedures,
+  FaBone,
+  FaHandHoldingHeart,
+  FaAllergies,
+  FaVial
 } from "react-icons/fa";
 
 export const AboutSection: React.FC = () => {
@@ -105,6 +115,55 @@ export const AboutSection: React.FC = () => {
       }
     }
   };
+
+  // Services data with appropriate icons
+  const services = [
+    { 
+      icon: <FaStethoscope className="h-7 w-7" />, 
+      title: "Essential Healthcare", 
+      description: "Comprehensive primary care services with modern diagnostics" 
+    },
+    { 
+      icon: <FaProcedures className="h-7 w-7" />, 
+      title: "Surgery Services", 
+      description: "Advanced surgical procedures with cutting-edge technology" 
+    },
+    { 
+      icon: <FaBaby className="h-7 w-7" />, 
+      title: "Women's Well-being", 
+      description: "Complete maternity, gynecology & women's health services" 
+    },
+    { 
+      icon: <FaHeart className="h-7 w-7" />, 
+      title: "Cardiovascular Care", 
+      description: "Advanced cardiac diagnostics, treatment & rehabilitation" 
+    },
+    { 
+      icon: <FaUserInjured className="h-7 w-7" />, 
+      title: "Gastrointestinal Wellness", 
+      description: "Specialized care for digestive disorders & liver diseases" 
+    },
+    { 
+      icon: <FaBone className="h-7 w-7" />, 
+      title: "Spine & Ortho Care", 
+      description: "Expert orthopedic surgery and spinal treatment" 
+    },
+    { 
+      icon: <FaHandHoldingHeart className="h-7 w-7" />, 
+      title: "Physiotherapy", 
+      description: "Custom rehabilitation programs for recovery & mobility" 
+    },
+    { 
+      icon: <FaAllergies className="h-7 w-7" />, 
+      title: "Dermatology", 
+      description: "Advanced skin care, cosmetic & laser treatments" 
+    },
+    { 
+      icon: <FaVial className="h-7 w-7" />, 
+      title: "Laboratory Test & Additional Services at SHMC", 
+      description: "State-of-the-art diagnostic testing & comprehensive pathology services" 
+    }
+  ];
 
   return (
     <section ref={ref} className="relative py-20 md:py-32 bg-white overflow-hidden">
@@ -383,63 +442,125 @@ export const AboutSection: React.FC = () => {
           </motion.div>
         </div>
 
-        {/* Mission & Vision Cards - Sliding from opposite sides */}
-        <div className="grid lg:grid-cols-2 gap-8">
-          {/* Mission Card slides from left */}
+        {/* Services Section - Replaces Mission & Vision */}
+        <div className="mb-24">
+          {/* Services Header - Slides from left */}
           <motion.div
             data-section-item
             data-index="7"
             initial="hidden"
             animate={itemInView.includes(7) ? "visible" : "hidden"}
             variants={slideInLeft}
-            whileHover="hover"
-          
-            
-            className="relative p-8 bg-white rounded-2xl border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group"
+            className="text-center mb-16"
           >
-            {/* Background gradient */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#064E3B]/5 to-transparent rounded-bl-full" />
-            
-            <div className="flex items-center gap-5 mb-6">
-              <div className="p-4 bg-gradient-to-br from-[#064E3B] to-[#0B6E5E] rounded-xl group-hover:scale-110 transition-transform duration-300">
-                <FaHandHoldingMedical className="h-6 w-6 text-white" />
-              </div>
-              <h3 className="text-gray-900 font-bold text-xl">Our Mission</h3>
+            <div className="inline-flex items-center gap-3 mb-6">
+              <div className="h-px w-12 bg-gradient-to-r from-[#064E3B] to-[#1FB6A6]" />
+              <span className="text-[#064E3B] font-semibold text-sm uppercase tracking-wider">
+                Our Medical Services
+              </span>
+              <div className="h-px w-12 bg-gradient-to-l from-[#064E3B] to-[#1FB6A6]" />
             </div>
             
-            <p className="text-gray-600 leading-relaxed relative z-10">
-              To deliver accessible, innovative, and comprehensive medical care to our patients, 
-              aligned with international standards of excellence.
+            <h3 className="text-gray-900 text-3xl font-bold mb-6">
+              Comprehensive Healthcare Services
+            </h3>
+            
+            <p className="text-gray-600 text-lg max-w-3xl mx-auto">
+              Offering specialized medical care across multiple disciplines with state-of-the-art facilities
             </p>
           </motion.div>
 
-          {/* Vision Card slides from right */}
+          {/* Services Grid - Slides from right with staggered children */}
           <motion.div
             data-section-item
             data-index="8"
             initial="hidden"
             animate={itemInView.includes(8) ? "visible" : "hidden"}
             variants={slideInRight}
-            whileHover="hover"
-            
-            
-           
-            className="relative p-8 bg-white rounded-2xl border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group"
           >
-            {/* Background gradient */}
-            <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[#1FB6A6]/5 to-transparent rounded-br-full" />
-            
-            <div className="flex items-center gap-5 mb-6">
-              <div className="p-4 bg-gradient-to-br from-[#1FB6A6] to-[#0B6E5E] rounded-xl group-hover:scale-110 transition-transform duration-300">
-                <FaLightbulb className="h-6 w-6 text-white" />
-              </div>
-              <h3 className="text-gray-900 font-bold text-xl">Our Vision</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {services.map((service, index) => (
+                <motion.div
+                  key={index}
+                  variants={fadeInUp}
+                  whileHover="hover"
+                  initial="rest"
+                  animate="rest"
+                  
+                  className="group relative"
+                >
+                  <div className="aspect-square bg-white rounded-2xl border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden h-full flex flex-col">
+                    {/* Background gradient effect */}
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#064E3B]/5 to-transparent rounded-bl-full" />
+                    
+                    {/* Content */}
+                    <div className="p-8 flex flex-col items-center justify-center text-center h-full relative z-10">
+                      {/* Icon Container */}
+                      <div className="p-5 bg-gradient-to-br from-[#064E3B]/10 to-[#1FB6A6]/10 rounded-2xl mb-6 group-hover:scale-110 transition-transform duration-300">
+                        <div className="text-[#064E3B]">
+                          {service.icon}
+                        </div>
+                      </div>
+                      
+                      {/* Service Title */}
+                      <h4 className="text-gray-900 font-bold text-xl mb-4 group-hover:text-[#064E3B] transition-colors">
+                        {service.title}
+                      </h4>
+                      
+                      {/* Description */}
+                      <p className="text-gray-600 text-sm leading-relaxed mb-6">
+                        {service.description}
+                      </p>
+                      
+                      {/* Learn More Indicator */}
+                     <div
+  className="mt-auto pt-4 border-t border-gray-100 w-full cursor-pointer"
+  onClick={() => window.location.href = "/portfolio/services"}
+>
+  <div className="flex items-center justify-center text-[#064E3B] font-medium text-sm group">
+    <span>Learn more</span>
+    <svg
+      className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M14 5l7 7m0 0l-7 7m7-7H3"
+      />
+    </svg>
+  </div>
+</div>
+
+                    </div>
+                    
+                    {/* Hover bottom border */}
+                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#064E3B] to-[#1FB6A6] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
+                  </div>
+                </motion.div>
+              ))}
             </div>
-            
-            <p className="text-gray-600 leading-relaxed relative z-10">
-              To elevate SHMC to the pinnacle of healthcare delivery in Pakistan, advancing our technology 
-              and embodying compassion in serving our patients.
-            </p>
+          </motion.div>
+
+          {/* Bottom Decorative Line - Fade in */}
+          <motion.div
+            data-section-item
+            data-index="9"
+            initial="hidden"
+            animate={itemInView.includes(9) ? "visible" : "hidden"}
+            variants={fadeInUp}
+            className="mt-16 text-center"
+          >
+            <div className="inline-flex items-center justify-center gap-4">
+              <div className="h-px w-20 bg-gradient-to-r from-transparent to-[#064E3B]" />
+              <span className="text-[#064E3B] font-semibold text-sm uppercase tracking-wider">
+                24/7 Emergency Services Available
+              </span>
+              <div className="h-px w-20 bg-gradient-to-l from-transparent to-[#064E3B]" />
+            </div>
           </motion.div>
         </div>
       </div>

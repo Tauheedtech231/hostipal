@@ -6,26 +6,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaPhoneAlt, FaHeartbeat, FaUserMd, FaStethoscope, FaHospital } from "react-icons/fa";
 
-// Slide data moved outside component to prevent recreation on each render
-const SLIDES = [
-  { 
-    id: 1, 
-    image: "/hero.jpg",
-    alt: "SHMC Hospital Main Entrance",
-    title: "Siddiq Hospital & Maternity Complex"
-  },
-  { 
-    id: 2, 
-    image: "/hero_images/siddiqih2.jpg", 
-    alt: "Modern Hospital Interior",
-    title: "Advanced Medical Facilities"
-  },
-  { 
-    id: 3, 
-    image: "/hero_images/siddiqih3.jpg", 
-    alt: "Expert Medical Team",
-    title: "Compassionate Healthcare"
-  }
+// Background sliding images - high quality only
+const BACKGROUND_IMAGES = [
+  "/hero_images/high1.jpg",
+  "/hero_images/high2.jpg",
+  "/hero_images/high3.jpg",
+  "/hero_images/high4.jpg",
+  "/hero_images/high5.jpg",
+  "/hero_images/high6.jpg"
 ];
 
 // Stats configuration without circles
@@ -36,33 +24,136 @@ const STATS_CONFIG = [
   { value: 0, label: "Hospital Beds", icon: <FaHospital />, suffix: "", target: 100, color: "#1FB6A6" }
 ];
 
+// Enhanced Background Sliding Animation Component with one image moving upward while next appears behind
+const BackgroundSlidingAnimation = () => {
+  const [currentBgImageIndex, setCurrentBgImageIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [nextImageIndex, setNextImageIndex] = useState(1);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // Start transition
+      setIsTransitioning(true);
+      
+      // After transition completes, update indices
+      setTimeout(() => {
+        setCurrentBgImageIndex((prev) => (prev + 1) % BACKGROUND_IMAGES.length);
+        setNextImageIndex((prev) => (prev + 1) % BACKGROUND_IMAGES.length);
+        setIsTransitioning(false);
+      }, 2000); // 2 second transition duration
+    }, 4000); // Change every 4 seconds (2 seconds visible + 2 seconds transition)
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="absolute inset-0 overflow-hidden z-0">
+      {/* Current Image (Front Layer) */}
+      <motion.div
+        key={`current-${currentBgImageIndex}`}
+        initial={{ 
+          y: "0%",
+          opacity: 1,
+          scale: 1
+        }}
+        animate={isTransitioning ? {
+          y: "-100%",
+          opacity: 0,
+          scale: 0.95
+        } : {
+          y: "0%",
+          opacity: 1,
+          scale: 1
+        }}
+        transition={{ 
+          duration: 2,
+          ease: "easeInOut",
+          opacity: { duration: 1.5 }
+        }}
+        className="absolute inset-0 z-20"
+        style={{
+          filter: "brightness(1.05) contrast(1.05)"
+        }}
+      >
+        <Image
+          src={BACKGROUND_IMAGES[currentBgImageIndex]}
+          alt={`Medical Facility ${currentBgImageIndex + 1}`}
+          fill
+          className="object-cover"
+          sizes="100vw"
+          quality={100}
+          priority={true}
+        />
+      </motion.div>
+
+      {/* Next Image (Back Layer) */}
+      <motion.div
+        key={`next-${nextImageIndex}`}
+        initial={{ 
+          y: "100%",
+          opacity: 0.4,
+          scale: 0.9,
+          zIndex: 10
+        }}
+        animate={isTransitioning ? {
+          y: "0%",
+          opacity: 0.6,
+          scale: 1,
+          zIndex: 15
+        } : {
+          y: "100%",
+          opacity: 0.4,
+          scale: 0.9,
+          zIndex: 10
+        }}
+        transition={{ 
+          duration: 2,
+          ease: "easeInOut",
+          opacity: { duration: 1.5 }
+        }}
+        className="absolute inset-0"
+        style={{
+          filter: "brightness(0.9) contrast(1.1)"
+        }}
+      >
+        <Image
+          src={BACKGROUND_IMAGES[nextImageIndex]}
+          alt="Next medical facility"
+          fill
+          className="object-cover"
+          sizes="100vw"
+          quality={100}
+        />
+      </motion.div>
+
+      {/* Minimal overlay for text readability */}
+      <div className="absolute inset-0 z-30 pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/30" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/15 via-transparent to-black/15" />
+      </div>
+    </div>
+  );
+};
+
 // Floating Particles Component
 const FloatingParticles = () => (
-  <div className="absolute inset-0 overflow-hidden">
+  <div className="absolute inset-0 overflow-hidden z-40 pointer-events-none">
     {Array.from({ length: 20 }).map((_, i) => (
       <motion.div
         key={i}
-        className="absolute w-[1px] h-[1px] bg-white/20 rounded-full"
+        className="absolute w-[2px] h-[2px] bg-white/40 rounded-full"
         initial={{
           x: `${Math.random() * 100}vw`,
           y: `${Math.random() * 100}vh`,
           scale: 0
         }}
         animate={{
-          x: [
-            `${Math.random() * 100}vw`,
-            `${Math.random() * 100}vw`,
-            `${Math.random() * 100}vw`
-          ],
-          y: [
-            `${Math.random() * 100}vh`,
-            `${Math.random() * 100}vh`,
-            `${Math.random() * 100}vh`
-          ],
-          scale: [0, 1, 0]
+          x: `${Math.random() * 100}vw`,
+          y: `${Math.random() * 100}vh`,
+          scale: [0, Math.random() * 2 + 0.5, 0]
         }}
         transition={{
-          duration: Math.random() * 25 + 25,
+          duration: Math.random() * 20 + 20,
           repeat: Infinity,
           ease: "linear"
         }}
@@ -142,92 +233,6 @@ const AnimatedTagline = () => {
   );
 };
 
-// Slide Indicator Component
-const SlideIndicator = ({ 
-  slides, 
-  currentSlide, 
-  goToSlide 
-}: { 
-  slides: typeof SLIDES; 
-  currentSlide: number; 
-  goToSlide: (index: number) => void 
-}) => (
-  <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-20">
-    <div className="flex items-center gap-3">
-      {slides.map((_, index) => (
-        <button
-          key={index}
-          onClick={() => goToSlide(index)}
-          className="relative focus:outline-none group/indicator"
-        >
-          <motion.div
-            animate={{ width: index === currentSlide ? "32px" : "8px" }}
-            className={`h-1 rounded-full ${
-              index === currentSlide 
-                ? 'bg-gradient-to-r from-[#1FB6A6] to-[#064E3B]' 
-                : 'bg-white/50 group-hover/indicator:bg-white/70'
-            }`}
-            transition={{ duration: 0.3 }}
-          />
-          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-black/80 text-white text-xs rounded opacity-0 group-hover/indicator:opacity-100 transition-opacity whitespace-nowrap">
-            Slide {index + 1}
-          </div>
-        </button>
-      ))}
-    </div>
-  </div>
-);
-
-// Hero Slider Component with reduced height
-const HeroSlider = ({ 
-  currentSlide, 
-  goToSlide 
-}: { 
-  currentSlide: number; 
-  goToSlide: (index: number) => void 
-}) => (
-  <motion.div
-    initial={{ opacity: 0, scale: 0.95 }}
-    animate={{ opacity: 1, scale: 1 }}
-    transition={{ duration: 0.8, delay: 0.8 }}
-    className="relative"
-  >
-    <div className="relative h-[400px] md:h-[500px] lg:h-[550px] rounded-2xl overflow-hidden shadow-2xl">
-      <AnimatePresence mode="wait">
-        {SLIDES.map((slide, index) => (
-          index === currentSlide && (
-            <motion.div
-              key={slide.id}
-              initial={{ opacity: 0, scale: 1.05 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.7 }}
-              className="absolute inset-0"
-            >
-              <Image
-                src={slide.image}
-                alt={slide.alt}
-                fill
-                className="object-cover"
-                priority={index === 0}
-                sizes="(max-width: 768px) 100vw, 50vw"
-                quality={90}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-            </motion.div>
-          )
-        ))}
-      </AnimatePresence>
-
-      <SlideIndicator 
-        slides={SLIDES} 
-        currentSlide={currentSlide} 
-        goToSlide={goToSlide} 
-      />
-    </div>
-  </motion.div>
-);
-
 // Simple Stat Item Component without circles - Made more rounded
 const StatItem = ({ 
   stat, 
@@ -293,8 +298,6 @@ const StatItem = ({
 );
 
 export const HeroSection: React.FC = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const statsRef = useRef<HTMLDivElement>(null);
   const [hasAnimated, setHasAnimated] = useState(false);
   const [animatedStats, setAnimatedStats] = useState(STATS_CONFIG);
@@ -355,134 +358,112 @@ export const HeroSection: React.FC = () => {
     };
   }, [hasAnimated, animatedStats, animateCounter]);
 
-  // Auto slide for hero images
-  useEffect(() => {
-    if (!isAutoPlaying) return;
-
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % SLIDES.length);
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [isAutoPlaying]);
-
-  const goToSlide = useCallback((index: number) => {
-    setCurrentSlide(index);
-    setIsAutoPlaying(false);
-    setTimeout(() => setIsAutoPlaying(true), 8000);
-  }, []);
-
   return (
     <>
-      {/* Hero Section */}
-      <section className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#000000] via-[#0a1929] to-[#064E3B]">
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`,
-            backgroundSize: '40px 40px'
-          }} />
-        </div>
-
-        <div className="absolute inset-0 opacity-30">
-          <div className="absolute top-0 left-0 w-1/2 h-1/2 bg-gradient-to-br from-[#064E3B]/30 via-transparent to-transparent" />
-          <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-tl from-[#1FB6A6]/30 via-transparent to-transparent" />
-        </div>
-
+      {/* Hero Section with enhanced background sliding animation */}
+      <section className="relative min-h-screen overflow-hidden">
+        {/* Enhanced background sliding animation */}
+        <BackgroundSlidingAnimation />
+        
         <FloatingParticles />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-screen flex items-center">
-          <div className="w-full grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+        <div className="relative z-50 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 min-h-screen flex items-center">
+          <div className="w-full text-center lg:text-left">
             
-            {/* Left Column - Text Content */}
-            <div className="space-y-6">
-              <AnimatedTagline />
+            {/* Content Container */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1 }}
+              className="max-w-3xl mx-auto lg:mx-0"
+            >
+              <div className="space-y-8">
+                <AnimatedTagline />
 
-              <motion.h1
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1]"
-              >
-                <span className="bg-gradient-to-r from-white via-white/95 to-gray-200 bg-clip-text text-transparent">
-                  Trusted Medical
-                </span>
-                <br />
-                <motion.span 
-                  className="bg-gradient-to-r from-[#1FB6A6] via-white to-[#1FB6A6] bg-clip-text text-transparent"
-                  animate={{
-                    backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"]
-                  }}
-                  transition={{
-                    duration: 5,
-                    repeat: Infinity,
-                    ease: "linear"
-                  }}
-                  style={{
-                    backgroundSize: "200% 100%"
-                  }}
+                <motion.h1
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                  className="text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1]"
                 >
-                  Excellence
-                </motion.span>
-              </motion.h1>
-
-              <motion.p
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-                className="text-[#E5E7EB] text-base md:text-lg leading-relaxed max-w-2xl"
-              >
-                For over two decades, SHMC has been delivering vital and specialized 
-                healthcare services with compassion and advanced medical expertise.
-              </motion.p>
-
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
-                className="pt-4"
-              >
-                <Link
-                  href="/portfolio/contact"
-                  className="group relative inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-[#1FB6A6] to-[#0B6E5E] text-white rounded-xl font-semibold text-base hover:shadow-xl hover:shadow-[#1FB6A6]/40 transition-all duration-300 overflow-hidden"
-                >
-                  <motion.div
-                    whileHover={{ rotate: 360 }}
-                    transition={{ duration: 0.5 }}
-                    className="relative z-10"
+                  <span className="bg-gradient-to-r from-white via-white/95 to-white/80 bg-clip-text text-transparent">
+                    Siddiq Hospital
+                  </span>
+                  <br />
+                  <motion.span 
+                    className="bg-gradient-to-r from-[#1FB6A6] via-white to-[#1FB6A6] bg-clip-text text-transparent"
+                    animate={{
+                      backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"]
+                    }}
+                    transition={{
+                      duration: 5,
+                      repeat: Infinity,
+                      ease: "linear"
+                    }}
+                    style={{
+                      backgroundSize: "200% 100%"
+                    }}
                   >
-                    <FaPhoneAlt className="h-4 w-4" />
-                  </motion.div>
-                  <span className="relative z-10">Contact Now</span>
-                  
-                  <motion.div 
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"
-                    initial={{ x: "-100%" }}
-                    whileHover={{ x: "100%" }}
-                    transition={{ duration: 0.7 }}
-                  />
-                </Link>
-              </motion.div>
-            </div>
+                    & Maternity Complex
+                  </motion.span>
+                </motion.h1>
 
-            {/* Right Column - Image Slider */}
-            <HeroSlider currentSlide={currentSlide} goToSlide={goToSlide} />
+                <motion.p
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                  className="text-white text-lg md:text-xl leading-relaxed max-w-2xl mx-auto lg:mx-0 drop-shadow-lg"
+                >
+                  For over two decades, delivering vital and specialized healthcare services with compassion and advanced medical expertise. Trusted by thousands for exceptional medical care.
+                </motion.p>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.6 }}
+                  className="pt-8"
+                >
+                  <Link
+                    href="/portfolio/contact"
+                    className="group relative inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#1FB6A6] to-[#0B6E5E] text-white rounded-xl font-semibold text-lg hover:shadow-2xl hover:shadow-[#1FB6A6]/50 transition-all duration-300 overflow-hidden transform hover:-translate-y-1"
+                  >
+                    <motion.div
+                      whileHover={{ rotate: 360 }}
+                      transition={{ duration: 0.5 }}
+                      className="relative z-10"
+                    >
+                      <FaPhoneAlt className="h-5 w-5" />
+                    </motion.div>
+                    <span className="relative z-10">Emergency Contact Now</span>
+                    
+                    <motion.div 
+                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                      initial={{ x: "-100%" }}
+                      whileHover={{ x: "100%" }}
+                      transition={{ duration: 0.7 }}
+                    />
+                  </Link>
+                </motion.div>
+              </div>
+            </motion.div>
           </div>
         </div>
 
+        {/* Scroll Indicator */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.5 }}
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-50"
         >
           <div className="flex flex-col items-center gap-3">
-            <span className="text-white/60 text-xs tracking-[0.3em] uppercase">SCROLL</span>
+            <span className="text-white/90 text-xs tracking-[0.3em] uppercase drop-shadow-md">SCROLL TO EXPLORE</span>
             <motion.div
               animate={{ y: [0, 12, 0] }}
               transition={{ duration: 1.5, repeat: Infinity }}
               className="relative"
             >
-              <div className="w-px h-12 bg-gradient-to-b from-[#1FB6A6] via-white/50 to-transparent" />
+              <div className="w-px h-12 bg-gradient-to-b from-[#1FB6A6] via-white to-transparent" />
             </motion.div>
           </div>
         </motion.div>

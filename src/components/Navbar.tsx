@@ -3,8 +3,31 @@
 import React, { useState, useEffect, useRef, FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
-import { Search, Menu, X, ChevronRight, Mail, MapPin, Clock, Phone, User, Home, Stethoscope, Users, GalleryVertical, Calendar, ExternalLink, MessageCircle } from "lucide-react";
+import { 
+  Search, 
+  Menu, 
+  X, 
+  ChevronRight, 
+  ChevronDown,
+  Mail, 
+  MapPin, 
+  Clock, 
+  Phone, 
+  User, 
+  Home, 
+  Stethoscope, 
+  Users, 
+  GalleryVertical, 
+  Calendar, 
+  ExternalLink, 
+  MessageCircle,
+  Heart,
+  Activity,
+  Brain,
+  Eye,
+  Bone
+} from "lucide-react";
+import { GiScalpel } from "react-icons/gi";
 /* eslint-disable */
 
 export const Navbar: React.FC = () => {
@@ -17,6 +40,7 @@ export const Navbar: React.FC = () => {
   const [showContactSlider, setShowContactSlider] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [showTopContactBar, setShowTopContactBar] = useState(true);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const contactSliderRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -42,7 +66,52 @@ export const Navbar: React.FC = () => {
       href: "/portfolio/services",
       icon: <Stethoscope className="h-5 w-5" />,
       description: "Medical Services & Care",
-      keywords: ["services", "medical", "care", "treatment", "healthcare", "doctors"]
+      hasDropdown: true,
+      keywords: ["services", "medical", "care", "treatment", "healthcare", "doctors"],
+      subItems: [
+        {
+          name: "All Services Overview",
+          href: "/portfolio/services",
+          icon: <Stethoscope className="h-4 w-4" />,
+          description: "Browse all medical departments"
+        },
+        {
+          name: "Specialized Care",
+          href: "/portfolio/services",
+          icon: <Heart className="h-4 w-4" />,
+          description: "Cardiology, Orthopedics & more"
+        },
+        {
+          name: "Diagnostic Services",
+          href: "/portfolio/services",
+          icon: <Activity className="h-4 w-4" />,
+          description: "Lab tests & imaging"
+        },
+        {
+          name: "Surgical Departments",
+          href: "/portfolio/services",
+          icon: <GiScalpel className="h-4 w-4" />,
+          description: "Advanced surgical procedures"
+        },
+        {
+          name: "Neurology & Psychiatry",
+          href: "/portfolio/services",
+          icon: <Brain className="h-4 w-4" />,
+          description: "Brain & mental health care"
+        },
+        {
+          name: "Eye Care & ENT",
+          href: "/portfolio/services",
+          icon: <Eye className="h-4 w-4" />,
+          description: "Vision, ear, nose & throat"
+        },
+        {
+          name: "Orthopedics & Trauma",
+          href: "/portfolio/services",
+          icon: <Bone className="h-4 w-4" />,
+          description: "Bone & joint treatments"
+        }
+      ]
     },
     { 
       name: "Testimonials", 
@@ -134,6 +203,7 @@ export const Navbar: React.FC = () => {
       
       if (menu && !menu.contains(event.target as Node) && !menuButton?.contains(event.target as Node)) {
         setIsMenuOpen(false);
+        setOpenDropdown(null);
       }
       
       if (searchModal && !searchModal.contains(event.target as Node) && !searchButton?.contains(event.target as Node)) {
@@ -290,13 +360,13 @@ export const Navbar: React.FC = () => {
                 </div>
 
                 <div className="flex items-center">
-                  <Link
+                  <a
                     href="/portfolio/contact"
                     className="flex items-center gap-2 px-3 py-1.5 bg-white text-[#064E3B] hover:bg-[#F0F0F0] rounded-full text-xs font-bold transition-colors"
                   >
                     <Calendar className="h-3 w-3" />
                     <span>Book Now</span>
-                  </Link>
+                  </a>
                 </div>
               </div>
             </div>
@@ -319,20 +389,20 @@ export const Navbar: React.FC = () => {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
-            <Link 
+            <a 
               href="/" 
               className="flex items-center gap-3 group"
             >
               <div className="relative">
                 <Image
-                 src="https://siddiqhospital.com/wp-content/uploads/2023/12/logo-300x300.png"
+                  src="https://siddiqhospital.com/wp-content/uploads/2023/12/logo-300x300.png"
                   alt="SHMC Hospital Logo"
                   width={80}
                   height={80}
                   className="object-cover rounded-full"
                 />
               </div>
-            </Link>
+            </a>
 
             <div className="hidden lg:flex items-center gap-3">
               <motion.button
@@ -748,13 +818,18 @@ export const Navbar: React.FC = () => {
                         
                         <div className="space-y-3">
                           {searchResults.map((result, index) => (
-                            <motion.button
+                            <motion.a
                               key={index}
+                              href={result.href}
                               initial={{ opacity: 0, x: -10 }}
                               animate={{ opacity: 1, x: 0 }}
                               transition={{ delay: index * 0.05 }}
-                              onClick={() => handleSearchClick(result.href)}
-                              className="w-full text-left p-4 bg-[#F5F5F5] hover:bg-[#064E3B]/5 rounded-xl transition-all duration-200 group/result border border-transparent hover:border-[#064E3B]/20"
+                              onClick={() => {
+                                setShowSearchModal(false);
+                                setSearchQuery("");
+                                setSearchResults([]);
+                              }}
+                              className="block w-full text-left p-4 bg-[#F5F5F5] hover:bg-[#064E3B]/5 rounded-xl transition-all duration-200 group/result border border-transparent hover:border-[#064E3B]/20"
                             >
                               <div className="flex items-start gap-4">
                                 <div className="p-2 bg-white rounded-full group-hover/result:bg-[#064E3B]/10 transition-colors flex-shrink-0 shadow-sm">
@@ -772,7 +847,7 @@ export const Navbar: React.FC = () => {
                                   </p>
                                 </div>
                               </div>
-                            </motion.button>
+                            </motion.a>
                           ))}
                         </div>
                       </motion.div>
@@ -889,49 +964,126 @@ export const Navbar: React.FC = () => {
                   </motion.h3>
                   
                   <div className="space-y-2">
-                    {navItems.map((item, idx) => (
-                      <motion.div
-                        key={idx}
-                        initial={{ x: -50, opacity: 0 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        transition={{ delay: 0.15 + (idx * 0.05), duration: 0.3 }}
-                      >
-                        <Link
-                          href={item.href}
-                          onClick={() => setIsMenuOpen(false)}
-                          className={`flex items-center gap-3 p-3 rounded-xl transition-all duration-200 ${
-                            item.cta
-                              ? 'bg-gradient-to-r from-[#064E3B] to-[#064E3B]/90 hover:shadow-lg hover:shadow-[#064E3B]/20'
-                              : 'hover:bg-[#F5F5F5]'
-                          }`}
-                        >
-                          <div className={`p-2 rounded-lg ${
-                            item.cta
-                              ? 'bg-white/20'
-                              : 'bg-[#064E3B]/10'
-                          }`}>
-                            <div className={item.cta ? 'text-white' : 'text-[#064E3B]'}>
-                              {item.icon}
-                            </div>
-                          </div>
-                          <div className="flex-1">
-                            <h3 className={`font-semibold ${
-                              item.cta ? 'text-white' : 'text-[#064E3B]'
-                            }`}>
-                              {item.name}
-                            </h3>
-                            <p className={`text-xs ${
-                              item.cta ? 'text-white/80' : 'text-[#1E293B]'
-                            }`}>
-                              {item.description}
-                            </p>
-                          </div>
-                          <ChevronRight className={`h-4 w-4 ${
-                            item.cta ? 'text-white' : 'text-gray-400'
-                          }`} />
-                        </Link>
-                      </motion.div>
-                    ))}
+                    {navItems.map((item, idx) => {
+                      if (item.hasDropdown) {
+                        return (
+                          <motion.div
+                            key={idx}
+                            initial={{ x: -50, opacity: 0 }}
+                            animate={{ x: 0, opacity: 1 }}
+                            transition={{ delay: 0.15 + (idx * 0.05), duration: 0.3 }}
+                            className="relative"
+                            onMouseEnter={() => setOpenDropdown(item.name)}
+                            onMouseLeave={() => setOpenDropdown(null)}
+                          >
+                            <a 
+                              href={item.href}
+                              onClick={() => setIsMenuOpen(false)}
+                              className="flex items-center justify-between p-3 rounded-xl hover:bg-[#F5F5F5] transition-all duration-200 group cursor-pointer"
+                            >
+                              <div className="flex items-center gap-3 flex-1">
+                                <div className="p-2 bg-[#064E3B]/10 rounded-lg">
+                                  <div className="text-[#064E3B]">
+                                    {item.icon}
+                                  </div>
+                                </div>
+                                <div className="flex-1">
+                                  <h3 className="font-semibold text-[#064E3B]">
+                                    {item.name}
+                                  </h3>
+                                  <p className="text-xs text-[#1E293B]">
+                                    {item.description}
+                                  </p>
+                                </div>
+                              </div>
+                              <ChevronDown className={`h-4 w-4 text-gray-400 transition-transform ${openDropdown === item.name ? 'rotate-180' : ''}`} />
+                            </a>
+                            
+                            <AnimatePresence>
+                              {openDropdown === item.name && item.subItems && (
+                                <motion.div
+                                  initial={{ opacity: 0, y: -10, height: 0 }}
+                                  animate={{ opacity: 1, y: 0, height: 'auto' }}
+                                  exit={{ opacity: 0, y: -10, height: 0 }}
+                                  transition={{ duration: 0.2 }}
+                                  className="overflow-hidden"
+                                >
+                                  <div className="ml-8 mt-1 space-y-1 border-l-2 border-[#064E3B]/20 pl-4 py-2">
+                                    {item.subItems.map((subItem, subIdx) => (
+                                      <a
+                                        key={subIdx}
+                                        href={subItem.href}
+                                        onClick={() => setIsMenuOpen(false)}
+                                        className="flex items-center gap-3 p-2 rounded-lg hover:bg-[#F5F5F5] transition-colors"
+                                      >
+                                        <div className="p-1.5 bg-[#064E3B]/5 rounded-md">
+                                          <div className="text-[#064E3B] text-sm">
+                                            {subItem.icon}
+                                          </div>
+                                        </div>
+                                        <div className="flex-1">
+                                          <div className="text-sm font-medium text-[#064E3B]">
+                                            {subItem.name}
+                                          </div>
+                                          <div className="text-xs text-[#1E293B]">
+                                            {subItem.description}
+                                          </div>
+                                        </div>
+                                        <ChevronRight className="h-3 w-3 text-gray-400" />
+                                      </a>
+                                    ))}
+                                  </div>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </motion.div>
+                        );
+                      } else {
+                        return (
+                          <motion.div
+                            key={idx}
+                            initial={{ x: -50, opacity: 0 }}
+                            animate={{ x: 0, opacity: 1 }}
+                            transition={{ delay: 0.15 + (idx * 0.05), duration: 0.3 }}
+                          >
+                            <a
+                              href={item.href}
+                              onClick={() => setIsMenuOpen(false)}
+                              className={`flex items-center gap-3 p-3 rounded-xl transition-all duration-200 ${
+                                item.cta
+                                  ? 'bg-gradient-to-r from-[#064E3B] to-[#064E3B]/90 hover:shadow-lg hover:shadow-[#064E3B]/20'
+                                  : 'hover:bg-[#F5F5F5]'
+                              }`}
+                            >
+                              <div className={`p-2 rounded-lg ${
+                                item.cta
+                                  ? 'bg-white/20'
+                                  : 'bg-[#064E3B]/10'
+                              }`}>
+                                <div className={item.cta ? 'text-white' : 'text-[#064E3B]'}>
+                                  {item.icon}
+                                </div>
+                              </div>
+                              <div className="flex-1">
+                                <h3 className={`font-semibold ${
+                                  item.cta ? 'text-white' : 'text-[#064E3B]'
+                                }`}>
+                                  {item.name}
+                                </h3>
+                                <p className={`text-xs ${
+                                  item.cta ? 'text-white/80' : 'text-[#1E293B]'
+                                }`}>
+                                  {item.description}
+                                </p>
+                              </div>
+                              <ChevronRight className={`h-4 w-4 ${
+                                item.cta ? 'text-white' : 'text-gray-400'
+                              }`} />
+                            </a>
+                          </motion.div>
+                        );
+                      }
+                    })}
                   </div>
                 </div>
 
@@ -1033,42 +1185,110 @@ export const Navbar: React.FC = () => {
                 className="p-4"
               >
                 <nav className="space-y-2">
-                  {navItems.map((item, idx) => (
-                    <motion.div
-                      key={idx}
-                      initial={{ x: -40, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: 0.2 + (idx * 0.05), duration: 0.3 }}
-                    >
-                      <Link
-                        href={item.href}
-                        onClick={() => setIsMenuOpen(false)}
-                        className={`w-full flex items-center gap-3 p-3 rounded-xl transition-colors ${
-                          item.cta 
-                            ? 'bg-gradient-to-r from-[#064E3B] to-[#064E3B]/90'
-                            : 'hover:bg-[#F5F5F5]'
-                        }`}
-                      >
-                        <div className={`p-2 rounded-lg ${
-                          item.cta 
-                            ? 'bg-white/20' 
-                            : 'bg-[#064E3B]/10'
-                        }`}>
-                          <div className={item.cta ? 'text-white' : 'text-[#064E3B]'}>
-                            {item.icon}
+                  {navItems.map((item, idx) => {
+                    if (item.hasDropdown) {
+                      return (
+                        <motion.div
+                          key={idx}
+                          initial={{ x: -40, opacity: 0 }}
+                          animate={{ x: 0, opacity: 1 }}
+                          transition={{ delay: 0.2 + (idx * 0.05), duration: 0.3 }}
+                        >
+                          <div 
+                            onClick={() => setOpenDropdown(openDropdown === item.name ? null : item.name)}
+                            className={`w-full flex items-center gap-3 p-3 rounded-xl transition-colors ${
+                              openDropdown === item.name ? 'bg-[#F5F5F5]' : 'hover:bg-[#F5F5F5]'
+                            }`}
+                          >
+                            <div className="p-2 bg-[#064E3B]/10 rounded-lg">
+                              <div className="text-[#064E3B]">
+                                {item.icon}
+                              </div>
+                            </div>
+                            <div className="text-left flex-1">
+                              <div className="font-semibold text-[#064E3B]">{item.name}</div>
+                              <div className="text-xs text-[#1E293B]">{item.description}</div>
+                            </div>
+                            <ChevronDown className={`h-4 w-4 text-gray-400 transition-transform ${openDropdown === item.name ? 'rotate-180' : ''}`} />
                           </div>
-                        </div>
-                        <div className="text-left">
-                          <div className={`font-semibold ${
-                            item.cta ? 'text-white' : 'text-[#064E3B]'
-                          }`}>{item.name}</div>
-                          <div className={`text-xs ${
-                            item.cta ? 'text-white/80' : 'text-[#1E293B]'
-                          }`}>{item.description}</div>
-                        </div>
-                      </Link>
-                    </motion.div>
-                  ))}
+                          
+                          <AnimatePresence>
+                            {openDropdown === item.name && item.subItems && (
+                              <motion.div
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: 'auto' }}
+                                exit={{ opacity: 0, height: 0 }}
+                                transition={{ duration: 0.2 }}
+                                className="overflow-hidden"
+                              >
+                                <div className="ml-4 mt-1 space-y-1 border-l-2 border-[#064E3B]/20 pl-4 py-2">
+                                  {item.subItems.map((subItem, subIdx) => (
+                                    <a
+                                      key={subIdx}
+                                      href={subItem.href}
+                                      onClick={() => setIsMenuOpen(false)}
+                                      className="flex items-center gap-3 p-2 rounded-lg hover:bg-[#F5F5F5] transition-colors"
+                                    >
+                                      <div className="p-1.5 bg-[#064E3B]/5 rounded-md">
+                                        <div className="text-[#064E3B] text-sm">
+                                          <ChevronRight className="h-3 w-3" />
+                                        </div>
+                                      </div>
+                                      <div className="flex-1">
+                                        <div className="text-sm font-medium text-[#064E3B]">
+                                          {subItem.name}
+                                        </div>
+                                        <div className="text-xs text-[#1E293B]">
+                                          {subItem.description}
+                                        </div>
+                                      </div>
+                                    </a>
+                                  ))}
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </motion.div>
+                      );
+                    } else {
+                      return (
+                        <motion.div
+                          key={idx}
+                          initial={{ x: -40, opacity: 0 }}
+                          animate={{ x: 0, opacity: 1 }}
+                          transition={{ delay: 0.2 + (idx * 0.05), duration: 0.3 }}
+                        >
+                          <a
+                            href={item.href}
+                            onClick={() => setIsMenuOpen(false)}
+                            className={`w-full flex items-center gap-3 p-3 rounded-xl transition-colors ${
+                              item.cta 
+                                ? 'bg-gradient-to-r from-[#064E3B] to-[#064E3B]/90'
+                                : 'hover:bg-[#F5F5F5]'
+                            }`}
+                          >
+                            <div className={`p-2 rounded-lg ${
+                              item.cta 
+                                ? 'bg-white/20' 
+                                : 'bg-[#064E3B]/10'
+                            }`}>
+                              <div className={item.cta ? 'text-white' : 'text-[#064E3B]'}>
+                                {item.icon}
+                              </div>
+                            </div>
+                            <div className="text-left">
+                              <div className={`font-semibold ${
+                                item.cta ? 'text-white' : 'text-[#064E3B]'
+                              }`}>{item.name}</div>
+                              <div className={`text-xs ${
+                                item.cta ? 'text-white/80' : 'text-[#1E293B]'
+                              }`}>{item.description}</div>
+                            </div>
+                          </a>
+                        </motion.div>
+                      );
+                    }
+                  })}
                 </nav>
 
                 {/* Mobile Contact Info */}
