@@ -2,7 +2,6 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import Link from "next/link";
 import { 
   FaPhoneAlt, FaMapMarkerAlt, FaClock, FaFacebookF, 
   FaInstagram, FaHospital, FaArrowRight, FaHeartbeat 
@@ -12,16 +11,17 @@ export const FooterSection: React.FC = () => {
   const quickLinks = [
     { name: "Home", href: "/" },
     { name: "About Us", href: "/portfolio/about" },
-    { name: "Services", href: "/portfolio/services " },
+    { name: "Services", href: "/portfolio/services" },
     { name: "Departments", href: "/portfolio/department" },
-  
     { name: "Contact", href: "/portfolio/contact" }
   ];
 
   const contactInfo = {
     address: "81-A, Main Boulevard Sabzazar, Near Shah Farid Chowk Lahore",
     phone: "0303 6828260",
-    email: "info@siddiqhospital.com"
+    email: "info@siddiqhospital.com",
+    phoneHref: "tel:03036828260",
+    emailHref: "mailto:info@siddiqhospital.com"
   };
 
   const socialLinks = [
@@ -38,6 +38,11 @@ export const FooterSection: React.FC = () => {
       color: "hover:bg-gradient-to-br hover:from-[#405DE6] hover:via-[#E4405F] hover:to-[#FFDC80] hover:text-white"
     }
   ];
+
+  // Function to handle navigation with reload
+  const handleNavigation = (href: string) => {
+    window.location.href = href;
+  };
 
   return (
     <footer className="bg-gradient-to-b from-[#064E3B] to-[#04332A] text-white">
@@ -72,23 +77,27 @@ export const FooterSection: React.FC = () => {
             </div>
           </div>
 
-          {/* Quick Links - Enhanced */}
+          {/* Quick Links - Enhanced - Now using anchor tags */}
           <div className="space-y-6">
             <h3 className="text-xl font-semibold text-white border-l-4 border-[#1FB6A6] pl-4">
               Quick Links
             </h3>
             <div className="grid grid-cols-2 gap-3">
               {quickLinks.map((link) => (
-                <Link
+                <a
                   key={link.name}
                   href={link.href}
-                  className="group flex items-center gap-2 text-white/85 hover:text-[#1FB6A6] text-base transition-all duration-300 py-2 px-3 rounded-lg hover:bg-white/5"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleNavigation(link.href);
+                  }}
+                  className="group flex items-center gap-2 text-white/85 hover:text-[#1FB6A6] text-base transition-all duration-300 py-2 px-3 rounded-lg hover:bg-white/5 cursor-pointer"
                 >
                   <FaArrowRight className="text-[#1FB6A6] opacity-0 group-hover:opacity-100 transition-all duration-300" />
                   <span className="group-hover:translate-x-2 transition-transform duration-300">
                     {link.name}
                   </span>
-                </Link>
+                </a>
               ))}
             </div>
           </div>
@@ -110,16 +119,37 @@ export const FooterSection: React.FC = () => {
                 </p>
               </motion.div>
               
-              <motion.a
-                whileHover={{ x: 5 }}
-                href={`tel:${contactInfo.phone}`}
+              <a
+                href={contactInfo.phoneHref}
                 className="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition-all duration-300 group"
               >
                 <FaPhoneAlt className="text-[#1FB6A6] text-lg group-hover:scale-110 transition-transform duration-300" />
                 <span className="text-white/85 text-base font-medium group-hover:text-[#1FB6A6] transition-colors duration-300">
                   {contactInfo.phone}
                 </span>
-              </motion.a>
+              </a>
+              
+              <a
+                href={contactInfo.emailHref}
+                className="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition-all duration-300 group"
+              >
+                <svg
+                  className="text-[#1FB6A6] text-lg group-hover:scale-110 transition-transform duration-300 w-5 h-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                  />
+                </svg>
+                <span className="text-white/85 text-base font-medium group-hover:text-[#1FB6A6] transition-colors duration-300">
+                  {contactInfo.email}
+                </span>
+              </a>
               
               <div className="flex items-center gap-4 p-3 text-white/85 text-base">
                 <FaClock className="text-[#1FB6A6] text-lg" />
@@ -168,6 +198,41 @@ export const FooterSection: React.FC = () => {
           <p className="text-white/50 text-sm mt-2">
             Providing quality healthcare services to the community since 2005.
           </p>
+          {/* Additional Quick Links */}
+          <div className="flex flex-wrap justify-center gap-4 mt-4">
+            <a
+              href="/privacy-policy"
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavigation("/privacy-policy");
+              }}
+              className="text-white/60 hover:text-[#1FB6A6] text-sm transition-colors"
+            >
+              Privacy Policy
+            </a>
+            <span className="text-white/30">•</span>
+            <a
+              href="/terms-of-service"
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavigation("/terms-of-service");
+              }}
+              className="text-white/60 hover:text-[#1FB6A6] text-sm transition-colors"
+            >
+              Terms of Service
+            </a>
+            <span className="text-white/30">•</span>
+            <a
+              href="/sitemap"
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavigation("/sitemap");
+              }}
+              className="text-white/60 hover:text-[#1FB6A6] text-sm transition-colors"
+            >
+              Sitemap
+            </a>
+          </div>
         </div>
       </div>
     </footer>

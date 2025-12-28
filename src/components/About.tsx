@@ -28,8 +28,17 @@ export const AboutSection: React.FC = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [sectionInView, setSectionInView] = useState(false);
   const [itemInView, setItemInView] = useState<number[]>([]);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    // Check if mobile on mount and resize
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -43,46 +52,81 @@ export const AboutSection: React.FC = () => {
         });
       },
       {
-        threshold: 0.2,
-        rootMargin: "0px 0px -100px 0px"
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px"
       }
     );
 
-    // Observe each section item
     document.querySelectorAll('[data-section-item]').forEach((el, index) => {
       observer.observe(el);
     });
 
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', checkMobile);
+    };
   }, [itemInView]);
 
   // Slide animations
   const slideInLeft:Variants = {
-    hidden: { opacity: 0, x: -80 },
+    hidden: { opacity: 0, x: isMobile ? 0 : -80 },
     visible: { 
       opacity: 1, 
       x: 0,
       transition: {
-        duration: 0.8,
+        duration: isMobile ? 0.6 : 0.8,
         ease: [0.22, 1, 0.36, 1]
       }
     }
   };
 
   const slideInRight:Variants = {
-    hidden: { opacity: 0, x: 80 },
+    hidden: { opacity: 0, x: isMobile ? 0 : 80 },
     visible: { 
       opacity: 1, 
       x: 0,
       transition: {
-        duration: 0.8,
+        duration: isMobile ? 0.6 : 0.8,
         ease: [0.22, 1, 0.36, 1]
       }
     }
   };
 
+  // NEW: Special animation for services section on mobile
+  const servicesContainer: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: isMobile ? 0.08 : 0.15,
+        delayChildren: isMobile ? 0.1 : 0.2,
+        duration: 0.8
+      }
+    }
+  };
+
+  const serviceCardAnimation: Variants = {
+    hidden: { 
+      opacity: 0, 
+      y: isMobile ? 40 : 60,
+      scale: isMobile ? 0.95 : 0.98
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+        type: "spring",
+        stiffness: 100,
+        damping: 15
+      }
+    }
+  };
+
   const fadeInUp:Variants = {
-    hidden: { opacity: 0, y: 40 },
+    hidden: { opacity: 0, y: isMobile ? 20 : 40 },
     visible: { 
       opacity: 1, 
       y: 0,
@@ -98,8 +142,8 @@ export const AboutSection: React.FC = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.1
+        staggerChildren: isMobile ? 0.1 : 0.15,
+        delayChildren: isMobile ? 0.05 : 0.1
       }
     }
   };
@@ -107,8 +151,8 @@ export const AboutSection: React.FC = () => {
   const cardHover:Variants = {
     rest: { y: 0, scale: 1 },
     hover: { 
-      y: -6,
-      scale: 1.02,
+      y: isMobile ? -4 : -6,
+      scale: isMobile ? 1.01 : 1.02,
       transition: {
         duration: 0.3,
         ease: "easeOut"
@@ -116,7 +160,7 @@ export const AboutSection: React.FC = () => {
     }
   };
 
-  // Services data with appropriate icons
+  // Services data
   const services = [
     { 
       icon: <FaStethoscope className="h-7 w-7" />, 
@@ -174,7 +218,7 @@ export const AboutSection: React.FC = () => {
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header - Fade in */}
+        {/* Section Header */}
         <motion.div
           initial="hidden"
           animate={sectionInView ? "visible" : "hidden"}
@@ -205,9 +249,8 @@ export const AboutSection: React.FC = () => {
           </motion.p>
         </motion.div>
 
-        {/* First Section - Image slides from left, Text slides from right */}
+        {/* First Section */}
         <div className="grid lg:grid-cols-2 gap-12 items-center mb-24">
-          {/* Image slides from left */}
           <motion.div
             data-section-item
             data-index="1"
@@ -238,12 +281,10 @@ export const AboutSection: React.FC = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
               </div>
               
-              {/* Decorative border effect */}
               <div className="absolute inset-0 border-2 border-white/10 rounded-2xl pointer-events-none" />
             </div>
           </motion.div>
 
-          {/* Text content slides from right */}
           <motion.div
             data-section-item
             data-index="2"
@@ -272,9 +313,8 @@ export const AboutSection: React.FC = () => {
           </motion.div>
         </div>
 
-        {/* Second Section - Text slides from left, Image slides from right */}
+        {/* Second Section */}
         <div className="grid lg:grid-cols-2 gap-12 items-center mb-24">
-          {/* Text content slides from left */}
           <motion.div
             data-section-item
             data-index="3"
@@ -308,7 +348,6 @@ export const AboutSection: React.FC = () => {
             </div>
           </motion.div>
 
-          {/* Image slides from right */}
           <motion.div
             data-section-item
             data-index="4"
@@ -333,15 +372,13 @@ export const AboutSection: React.FC = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
               </div>
               
-              {/* Decorative border effect */}
               <div className="absolute inset-0 border-2 border-white/10 rounded-2xl pointer-events-none" />
             </div>
           </motion.div>
         </div>
 
-        {/* Third Section - Image slides from left, Text slides from right */}
+        {/* Third Section */}
         <div className="grid lg:grid-cols-2 gap-12 items-center mb-24">
-          {/* Image slides from left */}
           <motion.div
             data-section-item
             data-index="5"
@@ -366,12 +403,10 @@ export const AboutSection: React.FC = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
               </div>
               
-              {/* Decorative border effect */}
               <div className="absolute inset-0 border-2 border-white/10 rounded-2xl pointer-events-none" />
             </div>
           </motion.div>
 
-          {/* Text content slides from right */}
           <motion.div
             data-section-item
             data-index="6"
@@ -403,7 +438,6 @@ export const AboutSection: React.FC = () => {
               </p>
             </div>
 
-            {/* Core Values Cards - Staggered fade in */}
             <motion.div 
               initial="hidden"
               animate={itemInView.includes(6) ? "visible" : "hidden"}
@@ -442,15 +476,15 @@ export const AboutSection: React.FC = () => {
           </motion.div>
         </div>
 
-        {/* Services Section - Replaces Mission & Vision */}
+        {/* Services Section */}
         <div className="mb-24">
-          {/* Services Header - Slides from left */}
+          {/* Services Header */}
           <motion.div
             data-section-item
             data-index="7"
             initial="hidden"
             animate={itemInView.includes(7) ? "visible" : "hidden"}
-            variants={slideInLeft}
+            variants={isMobile ? fadeInUp : slideInLeft}
             className="text-center mb-16"
           >
             <div className="inline-flex items-center gap-3 mb-6">
@@ -470,82 +504,80 @@ export const AboutSection: React.FC = () => {
             </p>
           </motion.div>
 
-          {/* Services Grid - Slides from right with staggered children */}
+          {/* Services Grid - Updated animation */}
           <motion.div
             data-section-item
             data-index="8"
             initial="hidden"
             animate={itemInView.includes(8) ? "visible" : "hidden"}
-            variants={slideInRight}
+            variants={servicesContainer}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
           >
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {services.map((service, index) => (
-                <motion.div
-                  key={index}
-                  variants={fadeInUp}
-                  whileHover="hover"
-                  initial="rest"
-                  animate="rest"
+            {services.map((service, index) => (
+              <motion.div
+                key={index}
+                variants={serviceCardAnimation}
+                whileHover="hover"
+                initial="rest"
+                animate="rest"
+                
+                className="group relative"
+              >
+                <div className="aspect-square bg-white rounded-2xl border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden h-full flex flex-col">
+                  {/* Background gradient effect */}
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#064E3B]/5 to-transparent rounded-bl-full" />
                   
-                  className="group relative"
-                >
-                  <div className="aspect-square bg-white rounded-2xl border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden h-full flex flex-col">
-                    {/* Background gradient effect */}
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#064E3B]/5 to-transparent rounded-bl-full" />
-                    
-                    {/* Content */}
-                    <div className="p-8 flex flex-col items-center justify-center text-center h-full relative z-10">
-                      {/* Icon Container */}
-                      <div className="p-5 bg-gradient-to-br from-[#064E3B]/10 to-[#1FB6A6]/10 rounded-2xl mb-6 group-hover:scale-110 transition-transform duration-300">
-                        <div className="text-[#064E3B]">
-                          {service.icon}
-                        </div>
+                  {/* Content */}
+                  <div className="p-8 flex flex-col items-center justify-center text-center h-full relative z-10">
+                    {/* Icon Container */}
+                    <div className="p-5 bg-gradient-to-br from-[#064E3B]/10 to-[#1FB6A6]/10 rounded-2xl mb-6 group-hover:scale-110 transition-transform duration-300">
+                      <div className="text-[#064E3B]">
+                        {service.icon}
                       </div>
-                      
-                      {/* Service Title */}
-                      <h4 className="text-gray-900 font-bold text-xl mb-4 group-hover:text-[#064E3B] transition-colors">
-                        {service.title}
-                      </h4>
-                      
-                      {/* Description */}
-                      <p className="text-gray-600 text-sm leading-relaxed mb-6">
-                        {service.description}
-                      </p>
-                      
-                      {/* Learn More Indicator */}
-                     <div
-  className="mt-auto pt-4 border-t border-gray-100 w-full cursor-pointer"
-  onClick={() => window.location.href = "/portfolio/services"}
->
-  <div className="flex items-center justify-center text-[#064E3B] font-medium text-sm group">
-    <span>Learn more</span>
-    <svg
-      className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M14 5l7 7m0 0l-7 7m7-7H3"
-      />
-    </svg>
-  </div>
-</div>
-
                     </div>
                     
-                    {/* Hover bottom border */}
-                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#064E3B] to-[#1FB6A6] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
+                    {/* Service Title */}
+                    <h4 className="text-gray-900 font-bold text-xl mb-4 group-hover:text-[#064E3B] transition-colors">
+                      {service.title}
+                    </h4>
+                    
+                    {/* Description */}
+                    <p className="text-gray-600 text-sm leading-relaxed mb-6">
+                      {service.description}
+                    </p>
+                    
+                    {/* Learn More Indicator */}
+                    <div
+                      className="mt-auto pt-4 border-t border-gray-100 w-full cursor-pointer"
+                      onClick={() => window.location.href = "/portfolio/services"}
+                    >
+                      <div className="flex items-center justify-center text-[#064E3B] font-medium text-sm group">
+                        <span>Learn more</span>
+                        <svg
+                          className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M14 5l7 7m0 0l-7 7m7-7H3"
+                          />
+                        </svg>
+                      </div>
+                    </div>
                   </div>
-                </motion.div>
-              ))}
-            </div>
+                  
+                  {/* Hover bottom border */}
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#064E3B] to-[#1FB6A6] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
+                </div>
+              </motion.div>
+            ))}
           </motion.div>
 
-          {/* Bottom Decorative Line - Fade in */}
+          {/* Bottom Decorative Line */}
           <motion.div
             data-section-item
             data-index="9"
