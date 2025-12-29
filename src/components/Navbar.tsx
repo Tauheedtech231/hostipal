@@ -25,7 +25,8 @@ import {
   Activity,
   Brain,
   Eye,
-  Bone
+  Bone,
+  Magnet
 } from "lucide-react";
 import { GiScalpel } from "react-icons/gi";
 /* eslint-disable */
@@ -60,6 +61,13 @@ export const Navbar: React.FC = () => {
       icon: <User className="h-5 w-5" />,
       description: "Our Story & Mission",
       keywords: ["about", "story", "mission", "vision", "about us", "who we are"]
+    },
+     { 
+      name: "Team", 
+      href: "/portfolio/team",
+      icon: <Magnet className="h-5 w-5" />,
+      description: "Meet Our Medical Team",
+      keywords: ["team", "doctors", "staff", "medical team", "our team"]
     },
     {
       name: "Services",

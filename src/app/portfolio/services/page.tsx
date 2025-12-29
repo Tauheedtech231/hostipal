@@ -214,7 +214,7 @@ import {
         {/* Background Image */}
         <div className="absolute inset-0">
           <Image
-            src="/service.jpg"
+            src="https://plus.unsplash.com/premium_photo-1661627533816-4ac147903423?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fGhvc3BpdGFsJTIwc2VydmljZXN8ZW58MHx8MHx8fDA%3D"
             alt="Medical Services Background"
             fill
             className="object-cover"

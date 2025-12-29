@@ -6,7 +6,8 @@ const nextConfig: NextConfig = {
       "lh3.googleusercontent.com", // ✅ Google profile images
       "images.unsplash.com", 
       'cdn-icons-png.flaticon.com', 
-     'siddiqhospital.com',      // ✅ Unsplash images
+     'siddiqhospital.com', 
+     'plus.unsplash.com'     // ✅ Unsplash images
     ],
   },
   /* other config options here */
