@@ -477,124 +477,132 @@ export const AboutSection: React.FC = () => {
         </div>
 
         {/* Services Section */}
-        <div className="mb-24">
-          {/* Services Header */}
-          <motion.div
-            data-section-item
-            data-index="7"
-            initial="hidden"
-            animate={itemInView.includes(7) ? "visible" : "hidden"}
-            variants={isMobile ? fadeInUp : slideInLeft}
-            className="text-center mb-16"
-          >
-            <div className="inline-flex items-center gap-3 mb-6">
-              <div className="h-px w-12 bg-gradient-to-r from-[#064E3B] to-[#1FB6A6]" />
-              <span className="text-[#064E3B] font-semibold text-sm uppercase tracking-wider">
-                Our Medical Services
-              </span>
-              <div className="h-px w-12 bg-gradient-to-l from-[#064E3B] to-[#1FB6A6]" />
+    <div className="mb-24 px-4 sm:px-6 lg:px-8">
+  {/* ================= SERVICES HEADER ================= */}
+  <motion.div
+    data-section-item
+    data-index="7"
+    initial="hidden"
+    animate={itemInView.includes(7) ? "visible" : "hidden"}
+    variants={isMobile ? fadeInUp : slideInLeft}
+    className="w-full flex flex-col items-center justify-center text-center mb-12 sm:mb-16"
+  >
+    {/* Top Label */}
+    <div className="inline-flex items-center gap-3 mb-4">
+      <div className="h-px w-10 sm:w-12 bg-gradient-to-r from-[#064E3B] to-[#1FB6A6]" />
+      <span className="text-[#064E3B] font-semibold text-xs sm:text-sm uppercase tracking-wider">
+        Our Medical Services
+      </span>
+      <div className="h-px w-10 sm:w-12 bg-gradient-to-l from-[#064E3B] to-[#1FB6A6]" />
+    </div>
+
+    {/* Main Heading */}
+    <h3 className="text-gray-900 font-bold text-2xl sm:text-3xl lg:text-4xl mb-4 max-w-sm sm:max-w-4xl">
+      Comprehensive Healthcare Services
+    </h3>
+
+    {/* Description (Short on Mobile) */}
+    <p className="text-gray-600 text-sm sm:text-lg max-w-xs sm:max-w-3xl mx-auto">
+      <span className="block sm:hidden">
+        Specialized care with modern facilities
+      </span>
+      <span className="hidden sm:block">
+        Offering specialized medical care across multiple disciplines with state-of-the-art facilities
+      </span>
+    </p>
+  </motion.div>
+
+  {/* ================= SERVICES GRID ================= */}
+  <motion.div
+    data-section-item
+    data-index="8"
+    initial="hidden"
+    animate={itemInView.includes(8) ? "visible" : "hidden"}
+    variants={servicesContainer}
+    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-7xl mx-auto"
+  >
+    {services.map((service, index) => (
+      <motion.div
+        key={index}
+        variants={serviceCardAnimation}
+        whileHover="hover"
+        initial="rest"
+        animate="rest"
+        className="group relative"
+      >
+        <div className="aspect-square bg-white rounded-2xl border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden h-full flex flex-col">
+          {/* Decorative Gradient */}
+          <div className="absolute top-0 right-0 w-28 h-28 bg-gradient-to-br from-[#064E3B]/5 to-transparent rounded-bl-full" />
+
+          {/* Card Content */}
+          <div className="p-6 sm:p-8 flex flex-col items-center justify-center text-center h-full relative z-10">
+            {/* Icon */}
+            <div className="p-5 bg-gradient-to-br from-[#064E3B]/10 to-[#1FB6A6]/10 rounded-2xl mb-6 group-hover:scale-110 transition-transform duration-300">
+              <div className="text-[#064E3B]">
+                {service.icon}
+              </div>
             </div>
-            
-            <h3 className="text-gray-900 text-3xl font-bold mb-6">
-              Comprehensive Healthcare Services
-            </h3>
-            
-            <p className="text-gray-600 text-lg max-w-3xl mx-auto">
-              Offering specialized medical care across multiple disciplines with state-of-the-art facilities
+
+            {/* Title */}
+            <h4 className="text-gray-900 font-bold text-lg sm:text-xl mb-3 group-hover:text-[#064E3B] transition-colors">
+              {service.title}
+            </h4>
+
+            {/* Description */}
+            <p className="text-gray-600 text-sm leading-relaxed mb-6">
+              {service.description}
             </p>
-          </motion.div>
 
-          {/* Services Grid - Updated animation */}
-          <motion.div
-            data-section-item
-            data-index="8"
-            initial="hidden"
-            animate={itemInView.includes(8) ? "visible" : "hidden"}
-            variants={servicesContainer}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
-          >
-            {services.map((service, index) => (
-              <motion.div
-                key={index}
-                variants={serviceCardAnimation}
-                whileHover="hover"
-                initial="rest"
-                animate="rest"
-                
-                className="group relative"
-              >
-                <div className="aspect-square bg-white rounded-2xl border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden h-full flex flex-col">
-                  {/* Background gradient effect */}
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#064E3B]/5 to-transparent rounded-bl-full" />
-                  
-                  {/* Content */}
-                  <div className="p-8 flex flex-col items-center justify-center text-center h-full relative z-10">
-                    {/* Icon Container */}
-                    <div className="p-5 bg-gradient-to-br from-[#064E3B]/10 to-[#1FB6A6]/10 rounded-2xl mb-6 group-hover:scale-110 transition-transform duration-300">
-                      <div className="text-[#064E3B]">
-                        {service.icon}
-                      </div>
-                    </div>
-                    
-                    {/* Service Title */}
-                    <h4 className="text-gray-900 font-bold text-xl mb-4 group-hover:text-[#064E3B] transition-colors">
-                      {service.title}
-                    </h4>
-                    
-                    {/* Description */}
-                    <p className="text-gray-600 text-sm leading-relaxed mb-6">
-                      {service.description}
-                    </p>
-                    
-                    {/* Learn More Indicator */}
-                    <div
-                      className="mt-auto pt-4 border-t border-gray-100 w-full cursor-pointer"
-                      onClick={() => window.location.href = "/portfolio/services"}
-                    >
-                      <div className="flex items-center justify-center text-[#064E3B] font-medium text-sm group">
-                        <span>Learn more</span>
-                        <svg
-                          className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M14 5l7 7m0 0l-7 7m7-7H3"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Hover bottom border */}
-                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#064E3B] to-[#1FB6A6] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          {/* Bottom Decorative Line */}
-          <motion.div
-            data-section-item
-            data-index="9"
-            initial="hidden"
-            animate={itemInView.includes(9) ? "visible" : "hidden"}
-            variants={fadeInUp}
-            className="mt-16 text-center"
-          >
-            <div className="inline-flex items-center justify-center gap-4">
-              <div className="h-px w-20 bg-gradient-to-r from-transparent to-[#064E3B]" />
-              <span className="text-[#064E3B] font-semibold text-sm uppercase tracking-wider">
-                24/7 Emergency Services Available
-              </span>
-              <div className="h-px w-20 bg-gradient-to-l from-transparent to-[#064E3B]" />
+            {/* Learn More */}
+            <div
+              className="mt-auto pt-4 border-t border-gray-100 w-full cursor-pointer"
+              onClick={() => (window.location.href = "/portfolio/services")}
+            >
+              <div className="flex items-center justify-center text-[#064E3B] font-medium text-sm">
+                <span>Learn more</span>
+                <svg
+                  className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M14 5l7 7m0 0l-7 7m7-7H3"
+                  />
+                </svg>
+              </div>
             </div>
-          </motion.div>
+          </div>
+
+          {/* Hover Bottom Border */}
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#064E3B] to-[#1FB6A6] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
         </div>
+      </motion.div>
+    ))}
+  </motion.div>
+
+  {/* ================= BOTTOM LINE ================= */}
+  <motion.div
+    data-section-item
+    data-index="9"
+    initial="hidden"
+    animate={itemInView.includes(9) ? "visible" : "hidden"}
+    variants={fadeInUp}
+    className="mt-12 sm:mt-16 text-center"
+  >
+    <div className="inline-flex items-center justify-center gap-4">
+      <div className="h-px w-16 sm:w-20 bg-gradient-to-r from-transparent to-[#064E3B]" />
+      <span className="text-[#064E3B] font-semibold text-xs sm:text-sm uppercase tracking-wider">
+        24/7 Emergency Services Available
+      </span>
+      <div className="h-px w-16 sm:w-20 bg-gradient-to-l from-transparent to-[#064E3B]" />
+    </div>
+  </motion.div>
+</div>
+
       </div>
     </section>
   );

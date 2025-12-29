@@ -380,7 +380,7 @@ export const Navbar: React.FC = () => {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ type: "spring", stiffness: 100, damping: 20 }}
-        className={`fixed ${showTopContactBar ? 'top-8 md:top-10' : 'top-0'} left-0 right-0 z-50 transition-all duration-500 ${
+        className={`fixed ${showTopContactBar ? 'top-8 md:top-10' : 'top-0'} left-0 right-0 z-40 transition-all duration-500 ${
           isScrolled 
             ? "bg-white/95 backdrop-blur-xl shadow-lg py-3 border-b border-gray-200" 
             : "bg-white py-4 border-b border-gray-200"
@@ -489,7 +489,7 @@ export const Navbar: React.FC = () => {
       {/* Spacer for fixed navbar */}
       <div className={`transition-all duration-300 ${showTopContactBar ? 'h-28 md:h-32' : 'h-16 lg:h-20'} ${isScrolled ? 'lg:h-16' : ''}`} />
 
-      {/* Enhanced Contact Slider */}
+      {/* Enhanced Contact Slider - Fixed z-index */}
       <AnimatePresence>
         {showContactSlider && (
           <>
@@ -498,7 +498,7 @@ export const Navbar: React.FC = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowContactSlider(false)}
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9999]"
             />
 
             <motion.div
@@ -524,7 +524,7 @@ export const Navbar: React.FC = () => {
                 stiffness: 150,
                 mass: 0.8
               }}
-              className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-2xl px-4"
+              className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[9999] w-full max-w-2xl px-4"
             >
               <motion.div 
                 initial={{ rotateY: -15 }}
@@ -751,7 +751,7 @@ export const Navbar: React.FC = () => {
                 setSearchQuery("");
                 setSearchResults([]);
               }}
-              className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50"
+              className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[9999]"
             />
 
             <motion.div
@@ -763,7 +763,7 @@ export const Navbar: React.FC = () => {
                 damping: 25,
                 stiffness: 300
               }}
-              className="search-modal-container fixed top-20 left-1/2 transform -translate-x-1/2 w-full max-w-2xl z-50 px-4"
+              className="search-modal-container fixed top-20 left-1/2 transform -translate-x-1/2 w-full max-w-2xl z-[9999] px-4"
             >
               <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden">
                 {/* Search Input Only */}
@@ -886,7 +886,7 @@ export const Navbar: React.FC = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMenuOpen(false)}
-              className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50"
+              className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[9999]"
             />
 
             <motion.div
@@ -899,7 +899,7 @@ export const Navbar: React.FC = () => {
                 duration: 0.3,
                 ease: "easeOut"
               }}
-              className="menu-container fixed top-0 right-0 h-full w-96 z-50 bg-white shadow-2xl border-l border-gray-200 overflow-y-auto"
+              className="menu-container fixed top-0 right-0 h-full w-96 z-[9999] bg-white shadow-2xl border-l border-gray-200 overflow-y-auto"
             >
               {/* Menu Header */}
               <motion.div 
@@ -1121,7 +1121,7 @@ export const Navbar: React.FC = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40"
+              className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[9999]"
             />
 
             <motion.div
@@ -1134,7 +1134,7 @@ export const Navbar: React.FC = () => {
                 duration: 0.3,
                 ease: "easeOut"
               }}
-              className="menu-container fixed top-0 right-0 h-full w-full z-40 bg-white shadow-2xl overflow-y-auto"
+              className="menu-container fixed top-0 right-0 h-full w-full z-[9999] bg-white shadow-2xl overflow-y-auto"
             >
               {/* Mobile Menu Header */}
               <motion.div 

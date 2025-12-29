@@ -18,62 +18,51 @@ const BACKGROUND_IMAGES = [
 
 // Stats configuration without circles
 const STATS_CONFIG = [
-  { value: 0, label: "Patients Treated", icon: <FaHeartbeat />, suffix: "+", target: 150000, color: "#1FB6A6" },
-  { value: 0, label: "Surgeries", icon: <FaStethoscope />, suffix: "+", target: 20000, color: "#064E3B" },
-  { value: 0, label: "Bypasses", icon: <FaUserMd />, suffix: "+", target: 3000, color: "#0B6E5E" },
-  { value: 0, label: "Hospital Beds", icon: <FaHospital />, suffix: "", target: 100, color: "#1FB6A6" }
+  { value: 0, label: "Patients Treated", icon: <FaHeartbeat />, suffix: "+", target: 150000, color: "#000000" },
+  { value: 0, label: "Surgeries", icon: <FaStethoscope />, suffix: "+", target: 20000, color: "#000000" },
+  { value: 0, label: "Bypasses", icon: <FaUserMd />, suffix: "+", target: 3000, color: "#000000" },
+  { value: 0, label: "Hospital Beds", icon: <FaHospital />, suffix: "", target: 100, color: "#000000" }
 ];
 
-// Enhanced Background Sliding Animation Component with one image moving upward while next appears behind
+// Enhanced Background Sliding Animation Component with optimized rendering
 const BackgroundSlidingAnimation = () => {
   const [currentBgImageIndex, setCurrentBgImageIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [nextImageIndex, setNextImageIndex] = useState(1);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      // Start transition
       setIsTransitioning(true);
       
-      // After transition completes, update indices
       setTimeout(() => {
         setCurrentBgImageIndex((prev) => (prev + 1) % BACKGROUND_IMAGES.length);
-        setNextImageIndex((prev) => (prev + 1) % BACKGROUND_IMAGES.length);
         setIsTransitioning(false);
-      }, 2000); // 2 second transition duration
-    }, 4000); // Change every 4 seconds (2 seconds visible + 2 seconds transition)
+      }, 1000); // Reduced transition duration
+    }, 5000); // Change every 5 seconds
 
     return () => clearInterval(interval);
   }, []);
 
   return (
     <div className="absolute inset-0 overflow-hidden z-0">
-      {/* Current Image (Front Layer) */}
+      {/* Current Image with priority loading */}
       <motion.div
         key={`current-${currentBgImageIndex}`}
         initial={{ 
           y: "0%",
           opacity: 1,
-          scale: 1
         }}
         animate={isTransitioning ? {
           y: "-100%",
-          opacity: 0,
-          scale: 0.95
+          opacity: 0.7,
         } : {
           y: "0%",
           opacity: 1,
-          scale: 1
         }}
         transition={{ 
-          duration: 2,
+          duration: 1,
           ease: "easeInOut",
-          opacity: { duration: 1.5 }
         }}
         className="absolute inset-0 z-20"
-        style={{
-          filter: "brightness(1.05) contrast(1.05)"
-        }}
       >
         <Image
           src={BACKGROUND_IMAGES[currentBgImageIndex]}
@@ -81,56 +70,45 @@ const BackgroundSlidingAnimation = () => {
           fill
           className="object-cover"
           sizes="100vw"
-          quality={100}
-          priority={true}
+          quality={90}
+          priority
+          placeholder="blur"
+          blurDataURL="/hero_images/high1.jpg"
         />
       </motion.div>
 
-      {/* Next Image (Back Layer) */}
+      {/* Next Image (preloaded) */}
       <motion.div
-        key={`next-${nextImageIndex}`}
+        key={`next-${(currentBgImageIndex + 1) % BACKGROUND_IMAGES.length}`}
         initial={{ 
           y: "100%",
-          opacity: 0.4,
-          scale: 0.9,
-          zIndex: 10
+          opacity: 0,
         }}
         animate={isTransitioning ? {
           y: "0%",
-          opacity: 0.6,
-          scale: 1,
-          zIndex: 15
+          opacity: 1,
         } : {
           y: "100%",
-          opacity: 0.4,
-          scale: 0.9,
-          zIndex: 10
+          opacity: 0,
         }}
         transition={{ 
-          duration: 2,
+          duration: 1,
           ease: "easeInOut",
-          opacity: { duration: 1.5 }
         }}
-        className="absolute inset-0"
-        style={{
-          filter: "brightness(0.9) contrast(1.1)"
-        }}
+        className="absolute inset-0 z-10"
       >
         <Image
-          src={BACKGROUND_IMAGES[nextImageIndex]}
+          src={BACKGROUND_IMAGES[(currentBgImageIndex + 1) % BACKGROUND_IMAGES.length]}
           alt="Next medical facility"
           fill
           className="object-cover"
           sizes="100vw"
-          quality={100}
+          quality={90}
         />
       </motion.div>
 
-      {/* Minimal overlay for text readability */}
-      <div className="absolute inset-0 z-30 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/30" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/15 via-transparent to-black/15" />
-      </div>
+      {/* White overlay for better black text readability */}
+      <div className="absolute inset-0 z-30 pointer-events-none bg-gradient-to-b from-white/30 via-white/10 to-white/20" />
     </div>
   );
 };
@@ -138,22 +116,21 @@ const BackgroundSlidingAnimation = () => {
 // Floating Particles Component
 const FloatingParticles = () => (
   <div className="absolute inset-0 overflow-hidden z-40 pointer-events-none">
-    {Array.from({ length: 20 }).map((_, i) => (
+    {Array.from({ length: 15 }).map((_, i) => (
       <motion.div
         key={i}
-        className="absolute w-[2px] h-[2px] bg-white/40 rounded-full"
+        className="absolute w-[1px] h-[1px] bg-black/30 rounded-full"
         initial={{
           x: `${Math.random() * 100}vw`,
           y: `${Math.random() * 100}vh`,
-          scale: 0
         }}
         animate={{
           x: `${Math.random() * 100}vw`,
           y: `${Math.random() * 100}vh`,
-          scale: [0, Math.random() * 2 + 0.5, 0]
+          opacity: [0, 0.5, 0]
         }}
         transition={{
-          duration: Math.random() * 20 + 20,
+          duration: Math.random() * 15 + 10,
           repeat: Infinity,
           ease: "linear"
         }}
@@ -198,7 +175,7 @@ const AnimatedTagline = () => {
           repeat: Infinity,
           ease: "easeInOut"
         }}
-        className="h-px w-12 bg-gradient-to-r from-[#1FB6A6] to-transparent"
+        className="h-px w-12 bg-gradient-to-r from-black to-transparent"
       />
       
       <div className="relative h-6 overflow-hidden">
@@ -209,7 +186,7 @@ const AnimatedTagline = () => {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -20, opacity: 0 }}
             transition={{ duration: 0.5 }}
-            className="absolute left-0 right-0 text-[#1FB6A6] text-xs font-semibold tracking-[0.2em] uppercase whitespace-nowrap"
+            className="absolute left-0 right-0 text-black text-xs font-semibold tracking-[0.2em] uppercase whitespace-nowrap"
           >
             {taglines[currentTagline]}
           </motion.span>
@@ -227,13 +204,13 @@ const AnimatedTagline = () => {
           ease: "easeInOut",
           delay: 0.5
         }}
-        className="h-px w-12 bg-gradient-to-l from-[#1FB6A6] to-transparent"
+        className="h-px w-12 bg-gradient-to-l from-black to-transparent"
       />
     </motion.div>
   );
 };
 
-// Simple Stat Item Component without circles - Made more rounded
+// Simple Stat Item Component without circles
 const StatItem = ({ 
   stat, 
   index, 
@@ -244,7 +221,7 @@ const StatItem = ({
   hasAnimated: boolean 
 }) => (
   <motion.div
-    initial={{ opacity: 0, scale: 0.8 }}
+    initial={{ opacity: 0, scale: 0.9 }}
     whileInView={{ opacity: 1, scale: 1 }}
     viewport={{ once: true }}
     transition={{ 
@@ -256,29 +233,29 @@ const StatItem = ({
     whileHover={{ scale: 1.02 }}
     className="relative group"
   >
-    <div className="relative mx-auto flex flex-col items-center justify-center text-center p-6 bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 h-full border border-gray-100">
+    <div className="relative mx-auto flex flex-col items-center justify-center text-center p-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 h-full border border-gray-100">
       {/* Icon */}
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: hasAnimated ? 1 : 0 }}
         transition={{ delay: index * 0.3 + 0.5 }}
-        className="w-14 h-14 mb-4 rounded-2xl bg-gradient-to-br from-gray-50 to-white flex items-center justify-center shadow-md"
+        className="w-12 h-12 mb-4 rounded-xl bg-gradient-to-br from-gray-50 to-white flex items-center justify-center shadow-sm"
       >
-        <div className="text-xl" style={{ color: stat.color }}>
+        <div className="text-lg text-black">
           {stat.icon}
         </div>
       </motion.div>
       
-      {/* Counter Value with padding */}
+      {/* Counter Value */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: index * 0.3 + 0.8 }}
-        className="mb-3 px-4 py-3 rounded-2xl bg-gradient-to-r from-gray-50 to-white w-full"
+        className="mb-2"
       >
-        <div className="text-3xl md:text-4xl font-bold" style={{ color: stat.color }}>
+        <div className="text-2xl md:text-3xl font-bold text-black">
           {stat.value.toLocaleString()}
-          <span className="text-[#064E3B] ml-1">{stat.suffix}</span>
+          <span className="text-black ml-1">{stat.suffix}</span>
         </div>
       </motion.div>
       
@@ -287,9 +264,8 @@ const StatItem = ({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: index * 0.3 + 1 }}
-        className="px-3"
       >
-        <div className="text-base font-semibold text-[#1E293B] leading-tight">
+        <div className="text-sm font-semibold text-black">
           {stat.label}
         </div>
       </motion.div>
@@ -360,9 +336,9 @@ export const HeroSection: React.FC = () => {
 
   return (
     <>
-      {/* Hero Section with enhanced background sliding animation */}
+      {/* Hero Section with optimized background */}
       <section className="relative min-h-screen overflow-hidden">
-        {/* Enhanced background sliding animation */}
+        {/* Optimized background sliding animation */}
         <BackgroundSlidingAnimation />
         
         <FloatingParticles />
@@ -384,35 +360,22 @@ export const HeroSection: React.FC = () => {
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.2 }}
-                  className="text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1]"
+                  className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1]"
                 >
-                  <span className="bg-gradient-to-r from-white via-white/95 to-white/80 bg-clip-text text-transparent">
+                  <span className="text-black drop-shadow-lg">
                     Siddiq Hospital
                   </span>
                   <br />
-                  <motion.span 
-                    className="bg-gradient-to-r from-[#1FB6A6] via-white to-[#1FB6A6] bg-clip-text text-transparent"
-                    animate={{
-                      backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"]
-                    }}
-                    transition={{
-                      duration: 5,
-                      repeat: Infinity,
-                      ease: "linear"
-                    }}
-                    style={{
-                      backgroundSize: "200% 100%"
-                    }}
-                  >
+                  <span className="text-black drop-shadow-lg">
                     & Maternity Complex
-                  </motion.span>
+                  </span>
                 </motion.h1>
 
                 <motion.p
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.4 }}
-                  className="text-white text-lg md:text-xl leading-relaxed max-w-2xl mx-auto lg:mx-0 drop-shadow-lg"
+                  className="text-black text-lg md:text-xl leading-relaxed max-w-2xl mx-auto lg:mx-0 drop-shadow-lg font-medium"
                 >
                   For over two decades, delivering vital and specialized healthcare services with compassion and advanced medical expertise. Trusted by thousands for exceptional medical care.
                 </motion.p>
@@ -425,7 +388,7 @@ export const HeroSection: React.FC = () => {
                 >
                   <Link
                     href="/portfolio/contact"
-                    className="group relative inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#1FB6A6] to-[#0B6E5E] text-white rounded-xl font-semibold text-lg hover:shadow-2xl hover:shadow-[#1FB6A6]/50 transition-all duration-300 overflow-hidden transform hover:-translate-y-1"
+                    className="group relative inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-black to-gray-800 text-white rounded-xl font-semibold text-lg hover:shadow-2xl hover:shadow-black/50 transition-all duration-300 overflow-hidden transform hover:-translate-y-1"
                   >
                     <motion.div
                       whileHover={{ rotate: 360 }}
@@ -449,23 +412,21 @@ export const HeroSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Scroll Indicator */}
+        {/* Scroll Indicator - Desktop Only */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.5 }}
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-50"
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-50 hidden lg:flex flex-col items-center gap-3"
         >
-          <div className="flex flex-col items-center gap-3">
-            <span className="text-white/90 text-xs tracking-[0.3em] uppercase drop-shadow-md">SCROLL TO EXPLORE</span>
-            <motion.div
-              animate={{ y: [0, 12, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-              className="relative"
-            >
-              <div className="w-px h-12 bg-gradient-to-b from-[#1FB6A6] via-white to-transparent" />
-            </motion.div>
-          </div>
+          <span className="text-black text-xs tracking-[0.3em] uppercase drop-shadow-md">SCROLL TO EXPLORE</span>
+          <motion.div
+            animate={{ y: [0, 12, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+            className="relative"
+          >
+            <div className="w-px h-12 bg-gradient-to-b from-black via-gray-700 to-transparent" />
+          </motion.div>
         </motion.div>
       </section>
 
@@ -486,17 +447,17 @@ export const HeroSection: React.FC = () => {
               transition={{ type: "spring", stiffness: 200 }}
               className="inline-flex items-center justify-center gap-4 mb-8"
             >
-              <div className="h-px w-12 bg-gradient-to-r from-transparent to-[#064E3B]/30" />
-              <div className="p-4 bg-gradient-to-br from-[#064E3B]/10 to-[#1FB6A6]/10 rounded-2xl shadow-lg">
-                <FaHospital className="h-8 w-8 text-[#064E3B]" />
+              <div className="h-px w-12 bg-gradient-to-r from-transparent to-black/30" />
+              <div className="p-4 bg-gradient-to-br from-gray-100 to-white rounded-2xl shadow-lg">
+                <FaHospital className="h-8 w-8 text-black" />
               </div>
-              <div className="h-px w-12 bg-gradient-to-l from-transparent to-[#064E3B]/30" />
+              <div className="h-px w-12 bg-gradient-to-l from-transparent to-black/30" />
             </motion.div>
             
-            <h2 className="text-[#064E3B] text-2xl md:text-3xl lg:text-4xl font-bold mb-6 text-center">
+            <h2 className="text-black text-2xl md:text-3xl lg:text-4xl font-bold mb-6 text-center">
               Two Decades of Healthcare Excellence
             </h2>
-            <p className="text-[#1E293B] text-base md:text-lg max-w-2xl mx-auto text-center">
+            <p className="text-black text-base md:text-lg max-w-2xl mx-auto text-center">
               Trusted by thousands for compassionate, advanced medical care
             </p>
           </motion.div>
