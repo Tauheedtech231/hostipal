@@ -284,12 +284,7 @@ export const AboutSection: React.FC = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-[#064E3B]/80 via-[#064E3B]/60 to-transparent" />
               <div className="absolute inset-0 flex items-center">
                 <div className="max-w-3xl px-6 md:px-10 py-8">
-                  <div className="inline-flex items-center gap-2 mb-3">
-                    <div className="h-1 w-6 bg-white" />
-                    <span className="text-white/90 text-xs font-semibold uppercase tracking-wider">
-                      Premier Healthcare
-                    </span>
-                  </div>
+                  
                   <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-3">
                     100-Bed Tertiary Care Excellence
                   </h3>
