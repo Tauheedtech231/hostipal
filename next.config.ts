@@ -7,7 +7,8 @@ const nextConfig: NextConfig = {
       "images.unsplash.com", 
       'cdn-icons-png.flaticon.com', 
      'siddiqhospital.com', 
-     'plus.unsplash.com'     // ✅ Unsplash images
+     'plus.unsplash.com',
+     'media.istockphoto.com'     // ✅ Unsplash images
     ],
   },
   /* other config options here */
