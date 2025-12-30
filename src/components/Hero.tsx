@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaPhoneAlt, FaHeartbeat, FaUserMd, FaStethoscope, FaHospital } from "react-icons/fa";
 
-// Background sliding images - high quality only
+// Background sliding images
 const BACKGROUND_IMAGES = [
   "/hero_images/high1.jpg",
   "/hero_images/high2.jpg",
@@ -16,15 +16,15 @@ const BACKGROUND_IMAGES = [
   "/hero_images/high6.jpg"
 ];
 
-// Stats configuration without circles
+// Stats configuration
 const STATS_CONFIG = [
-  { value: 0, label: "Patients Treated", icon: <FaHeartbeat />, suffix: "+", target: 150000, color: "#000000" },
-  { value: 0, label: "Surgeries", icon: <FaStethoscope />, suffix: "+", target: 20000, color: "#000000" },
-  { value: 0, label: "Bypasses", icon: <FaUserMd />, suffix: "+", target: 3000, color: "#000000" },
-  { value: 0, label: "Hospital Beds", icon: <FaHospital />, suffix: "", target: 100, color: "#000000" }
+  { value: 0, label: "Patients Treated", icon: <FaHeartbeat />, suffix: "+", target: 150000, color: "#FFFFFF" },
+  { value: 0, label: "Surgeries", icon: <FaStethoscope />, suffix: "+", target: 20000, color: "#FFFFFF" },
+  { value: 0, label: "Bypasses", icon: <FaUserMd />, suffix: "+", target: 3000, color: "#FFFFFF" },
+  { value: 0, label: "Hospital Beds", icon: <FaHospital />, suffix: "", target: 100, color: "#FFFFFF" }
 ];
 
-// Enhanced Background Sliding Animation Component with optimized rendering
+// Background Sliding Animation Component - REMOVED OVERLAY
 const BackgroundSlidingAnimation = () => {
   const [currentBgImageIndex, setCurrentBgImageIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -36,15 +36,15 @@ const BackgroundSlidingAnimation = () => {
       setTimeout(() => {
         setCurrentBgImageIndex((prev) => (prev + 1) % BACKGROUND_IMAGES.length);
         setIsTransitioning(false);
-      }, 1000); // Reduced transition duration
-    }, 5000); // Change every 5 seconds
+      }, 1000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);
 
   return (
     <div className="absolute inset-0 overflow-hidden z-0">
-      {/* Current Image with priority loading */}
+      {/* Current Image */}
       <motion.div
         key={`current-${currentBgImageIndex}`}
         initial={{ 
@@ -70,14 +70,12 @@ const BackgroundSlidingAnimation = () => {
           fill
           className="object-cover"
           sizes="100vw"
-          quality={90}
+          quality={100}
           priority
-          placeholder="blur"
-          blurDataURL="/hero_images/high1.jpg"
         />
       </motion.div>
 
-      {/* Next Image (preloaded) */}
+      {/* Next Image */}
       <motion.div
         key={`next-${(currentBgImageIndex + 1) % BACKGROUND_IMAGES.length}`}
         initial={{ 
@@ -103,23 +101,22 @@ const BackgroundSlidingAnimation = () => {
           fill
           className="object-cover"
           sizes="100vw"
-          quality={90}
+          quality={100}
         />
       </motion.div>
 
-      {/* White overlay for better black text readability */}
-      <div className="absolute inset-0 z-30 pointer-events-none bg-gradient-to-b from-white/30 via-white/10 to-white/20" />
+      {/* REMOVED GRADIENT OVERLAY - Images will appear sharp and clear */}
     </div>
   );
 };
 
-// Floating Particles Component
+// Floating Particles Component - Updated for better visibility on images
 const FloatingParticles = () => (
   <div className="absolute inset-0 overflow-hidden z-40 pointer-events-none">
     {Array.from({ length: 15 }).map((_, i) => (
       <motion.div
         key={i}
-        className="absolute w-[1px] h-[1px] bg-black/30 rounded-full"
+        className="absolute w-[1px] h-[1px] bg-white/20 rounded-full"
         initial={{
           x: `${Math.random() * 100}vw`,
           y: `${Math.random() * 100}vh`,
@@ -127,7 +124,7 @@ const FloatingParticles = () => (
         animate={{
           x: `${Math.random() * 100}vw`,
           y: `${Math.random() * 100}vh`,
-          opacity: [0, 0.5, 0]
+          opacity: [0, 0.3, 0]
         }}
         transition={{
           duration: Math.random() * 15 + 10,
@@ -139,7 +136,7 @@ const FloatingParticles = () => (
   </div>
 );
 
-// Animated Tagline Component with smooth enter/exit
+// Animated Tagline Component
 const AnimatedTagline = () => {
   const taglines = useMemo(() => [
     "EXCELLENCE IN HEALTHCARE",
@@ -175,7 +172,7 @@ const AnimatedTagline = () => {
           repeat: Infinity,
           ease: "easeInOut"
         }}
-        className="h-px w-12 bg-gradient-to-r from-black to-transparent"
+        className="h-px w-8 md:w-12 bg-gradient-to-r from-white to-transparent"
       />
       
       <div className="relative h-6 overflow-hidden">
@@ -186,7 +183,7 @@ const AnimatedTagline = () => {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -20, opacity: 0 }}
             transition={{ duration: 0.5 }}
-            className="absolute left-0 right-0 text-black text-xs font-semibold tracking-[0.2em] uppercase whitespace-nowrap"
+            className="absolute left-0 right-0 text-white text-xs font-semibold tracking-[0.2em] uppercase whitespace-nowrap drop-shadow-lg"
           >
             {taglines[currentTagline]}
           </motion.span>
@@ -204,13 +201,13 @@ const AnimatedTagline = () => {
           ease: "easeInOut",
           delay: 0.5
         }}
-        className="h-px w-12 bg-gradient-to-l from-black to-transparent"
+        className="h-px w-8 md:w-12 bg-gradient-to-l from-white to-transparent"
       />
     </motion.div>
   );
 };
 
-// Simple Stat Item Component without circles
+// Stat Item Component
 const StatItem = ({ 
   stat, 
   index, 
@@ -233,39 +230,36 @@ const StatItem = ({
     whileHover={{ scale: 1.02 }}
     className="relative group"
   >
-    <div className="relative mx-auto flex flex-col items-center justify-center text-center p-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 h-full border border-gray-100">
-      {/* Icon */}
+    <div className="relative mx-auto flex flex-col items-center justify-center text-center p-4 md:p-6 bg-white/95 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 h-full border border-white/20">
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: hasAnimated ? 1 : 0 }}
         transition={{ delay: index * 0.3 + 0.5 }}
-        className="w-12 h-12 mb-4 rounded-xl bg-gradient-to-br from-gray-50 to-white flex items-center justify-center shadow-sm"
+        className="w-10 h-10 md:w-12 md:h-12 mb-3 md:mb-4 rounded-xl bg-gradient-to-br from-[#064E3B]/10 to-white flex items-center justify-center shadow-sm"
       >
-        <div className="text-lg text-black">
+        <div className="text-base md:text-lg text-[#064E3B]">
           {stat.icon}
         </div>
       </motion.div>
       
-      {/* Counter Value */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: index * 0.3 + 0.8 }}
-        className="mb-2"
+        className="mb-1 md:mb-2"
       >
-        <div className="text-2xl md:text-3xl font-bold text-black">
+        <div className="text-xl md:text-2xl lg:text-3xl font-bold text-[#064E3B]">
           {stat.value.toLocaleString()}
-          <span className="text-black ml-1">{stat.suffix}</span>
+          <span className="text-[#064E3B] ml-1">{stat.suffix}</span>
         </div>
       </motion.div>
       
-      {/* Label */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: index * 0.3 + 1 }}
       >
-        <div className="text-sm font-semibold text-black">
+        <div className="text-xs md:text-sm font-semibold text-gray-700 px-1">
           {stat.label}
         </div>
       </motion.div>
@@ -278,7 +272,6 @@ export const HeroSection: React.FC = () => {
   const [hasAnimated, setHasAnimated] = useState(false);
   const [animatedStats, setAnimatedStats] = useState(STATS_CONFIG);
 
-  // Memoized animation function
   const animateCounter = useCallback((index: number, start: number, end: number, duration: number) => {
     const startTime = performance.now();
     
@@ -304,7 +297,6 @@ export const HeroSection: React.FC = () => {
     requestAnimationFrame(updateCounter);
   }, []);
 
-  // Intersection Observer for stats animation
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -336,46 +328,40 @@ export const HeroSection: React.FC = () => {
 
   return (
     <>
-      {/* Hero Section with optimized background */}
-      <section className="relative min-h-screen overflow-hidden">
-        {/* Optimized background sliding animation */}
+      {/* Hero Section - Only Background Images, No Overlay */}
+      <section className="relative min-h-[85vh] md:min-h-screen pt-24 md:pt-28 overflow-hidden">
+        {/* Clear Background Images Only - No Overlay */}
         <BackgroundSlidingAnimation />
         
         <FloatingParticles />
 
-        <div className="relative z-50 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 min-h-screen flex items-center">
-          <div className="w-full text-center lg:text-left">
-            
-            {/* Content Container */}
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
+          <div className="w-full text-center lg:text-left py-8 md:py-0">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1 }}
               className="max-w-3xl mx-auto lg:mx-0"
             >
-              <div className="space-y-8">
+              <div className="space-y-6 md:space-y-8">
                 <AnimatedTagline />
 
                 <motion.h1
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.2 }}
-                  className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1]"
+                  className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-[1.1] text-white drop-shadow-2xl"
                 >
-                  <span className="text-black drop-shadow-lg">
-                    Siddiq Hospital
-                  </span>
+                  Siddiq Hospital
                   <br />
-                  <span className="text-black drop-shadow-lg">
-                    & Maternity Complex
-                  </span>
+                  <span className="text-white/95 drop-shadow-2xl">& Maternity Complex</span>
                 </motion.h1>
 
                 <motion.p
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.4 }}
-                  className="text-black text-lg md:text-xl leading-relaxed max-w-2xl mx-auto lg:mx-0 drop-shadow-lg font-medium"
+                  className="text-white text-base md:text-lg lg:text-xl leading-relaxed max-w-2xl mx-auto lg:mx-0 drop-shadow-lg font-medium backdrop-blur-sm bg-black/10 px-4 py-2 rounded-lg"
                 >
                   For over two decades, delivering vital and specialized healthcare services with compassion and advanced medical expertise. Trusted by thousands for exceptional medical care.
                 </motion.p>
@@ -384,11 +370,11 @@ export const HeroSection: React.FC = () => {
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.6 }}
-                  className="pt-8"
+                  className="pt-6 md:pt-8 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
                 >
                   <Link
                     href="/portfolio/contact"
-                    className="group relative inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-black to-gray-800 text-white rounded-xl font-semibold text-lg hover:shadow-2xl hover:shadow-black/50 transition-all duration-300 overflow-hidden transform hover:-translate-y-1"
+                    className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-[#064E3B] to-[#0A3A2E] text-white rounded-xl font-semibold text-lg hover:shadow-2xl hover:shadow-[#064E3B]/50 transition-all duration-300 overflow-hidden transform hover:-translate-y-1"
                   >
                     <motion.div
                       whileHover={{ rotate: 360 }}
@@ -401,6 +387,29 @@ export const HeroSection: React.FC = () => {
                     
                     <motion.div 
                       className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                      initial={{ x: "-100%" }}
+                      whileHover={{ x: "100%" }}
+                      transition={{ duration: 0.7 }}
+                    />
+                  </Link>
+                  
+                  <Link
+                    href="/portfolio/services"
+                    className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 bg-white/95 backdrop-blur-sm text-[#064E3B] border-2 border-white/50 hover:border-[#064E3B] rounded-xl font-semibold text-lg hover:shadow-2xl hover:shadow-white/30 transition-all duration-300 overflow-hidden transform hover:-translate-y-1"
+                  >
+                    <span className="relative z-10">Our Services</span>
+                    <motion.div
+                      whileHover={{ x: 5 }}
+                      transition={{ duration: 0.3 }}
+                      className="relative z-10"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </motion.div>
+                    
+                    <motion.div 
+                      className="absolute inset-0 bg-gradient-to-r from-transparent via-[#064E3B]/10 to-transparent"
                       initial={{ x: "-100%" }}
                       whileHover={{ x: "100%" }}
                       transition={{ duration: 0.7 }}
@@ -419,51 +428,51 @@ export const HeroSection: React.FC = () => {
           transition={{ delay: 1.5 }}
           className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-50 hidden lg:flex flex-col items-center gap-3"
         >
-          <span className="text-black text-xs tracking-[0.3em] uppercase drop-shadow-md">SCROLL TO EXPLORE</span>
+          
           <motion.div
             animate={{ y: [0, 12, 0] }}
             transition={{ duration: 1.5, repeat: Infinity }}
             className="relative"
           >
-            <div className="w-px h-12 bg-gradient-to-b from-black via-gray-700 to-transparent" />
+            <div className="w-px h-12 bg-gradient-to-b from-white via-white/70 to-transparent" />
           </motion.div>
         </motion.div>
       </section>
 
       {/* Stats Section */}
-      <section ref={statsRef} className="bg-gradient-to-b from-white via-gray-50 to-white py-16 lg:py-20">
+      <section ref={statsRef} className="bg-gradient-to-b from-white via-gray-50 to-white py-12 md:py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Section Header - Centered on mobile */}
+          {/* Section Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-12 md:mb-16"
           >
             <motion.div
               initial={{ scale: 0 }}
               whileInView={{ scale: 1 }}
               viewport={{ once: true }}
               transition={{ type: "spring", stiffness: 200 }}
-              className="inline-flex items-center justify-center gap-4 mb-8"
+              className="inline-flex items-center justify-center gap-4 mb-6 md:mb-8"
             >
-              <div className="h-px w-12 bg-gradient-to-r from-transparent to-black/30" />
-              <div className="p-4 bg-gradient-to-br from-gray-100 to-white rounded-2xl shadow-lg">
-                <FaHospital className="h-8 w-8 text-black" />
+              <div className="h-px w-8 md:w-12 bg-gradient-to-r from-transparent to-[#064E3B]/50" />
+              <div className="p-3 md:p-4 bg-gradient-to-br from-[#064E3B] to-[#0A3A2E] rounded-2xl shadow-lg">
+                <FaHospital className="h-6 w-6 md:h-8 md:w-8 text-white" />
               </div>
-              <div className="h-px w-12 bg-gradient-to-l from-transparent to-black/30" />
+              <div className="h-px w-8 md:w-12 bg-gradient-to-l from-transparent to-[#064E3B]/50" />
             </motion.div>
             
-            <h2 className="text-black text-2xl md:text-3xl lg:text-4xl font-bold mb-6 text-center">
+            <h2 className="text-[#064E3B] text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold mb-4 md:mb-6 text-center px-2">
               Two Decades of Healthcare Excellence
             </h2>
-            <p className="text-black text-base md:text-lg max-w-2xl mx-auto text-center">
+            <p className="text-gray-600 text-sm md:text-base lg:text-lg max-w-2xl mx-auto text-center px-4">
               Trusted by thousands for compassionate, advanced medical care
             </p>
           </motion.div>
 
           {/* Stats Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {animatedStats.map((stat, index) => (
               <StatItem 
                 key={index} 
@@ -473,6 +482,8 @@ export const HeroSection: React.FC = () => {
               />
             ))}
           </div>
+
+        
         </div>
       </section>
     </>
