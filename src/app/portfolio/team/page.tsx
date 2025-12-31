@@ -3,8 +3,10 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { FaUserMd, FaStethoscope, FaGraduationCap, FaBuilding, FaPhoneAlt, FaClock } from "react-icons/fa";
-import { GiStethoscope } from "react-icons/gi";
+import { FaUserMd, FaStethoscope, FaGraduationCap, FaBuilding, FaPhoneAlt, FaClock, FaHandsHelping } from "react-icons/fa";
+import { GiStethoscope, GiMuscleUp } from "react-icons/gi";
+import { Md10K } from "react-icons/md";
+
 
 // Define types for doctor data
 interface DoctorData {
@@ -129,12 +131,57 @@ const DOCTORS_DATA: DoctorData[] = [
     availability: "Mon-Sat: 11AM-7PM",
     phone: "+92-300-4567890",
     image: "/doctors/dr-nabeeia.jpg"
+  },
+  {
+    id: 5,
+    name: {
+      en: "Dr. Chandni Mahmood",
+      ur: "ڈاکٹر چاندنی محمود"
+    },
+    designation: {
+      en: "Physiotherapist",
+      ur: "فزیوتھراپسٹ"
+    },
+    qualifications: {
+      en: "M.P.P.E (Punjab), D.P.T (Punjab)",
+      ur: "ایم۔پی۔پی۔ای (پنجاب), ڈی۔پی۔ٹی (پنجاب)"
+    },
+    specialty: "Physiotherapy & Rehabilitation",
+    experience: "", // Leaving empty as no experience data provided
+    availability: "", // Leaving empty as no availability data provided
+    phone: "", // Leaving empty as no phone data provided
+    image: "/doctors/dr-chandni-mahmood.jpg"
   }
 ];
 
 // Doctor Card Component
 const DoctorCard = ({ doctor, index }: { doctor: DoctorData; index: number }) => {
   const [isHovered, setIsHovered] = useState(false);
+
+  // Get appropriate icon based on specialty
+  const getSpecialtyIcon = () => {
+    if (doctor.specialty.includes("Physiotherapy")) {
+      return <Md10K className="h-3 w-3 mr-2" />;
+    } else if (doctor.specialty.includes("Cardiology")) {
+      return <GiStethoscope className="h-3 w-3 mr-2" />;
+    } else if (doctor.specialty.includes("Orthopaedic")) {
+      return <GiMuscleUp className="h-3 w-3 mr-2" />;
+    } else {
+      return <GiStethoscope className="h-3 w-3 mr-2" />;
+    }
+  };
+
+  const getSpecialtyIconUrdu = () => {
+    if (doctor.specialty.includes("Physiotherapy")) {
+      return <Md10K className="h-3 w-3 ml-2" />;
+    } else if (doctor.specialty.includes("Cardiology")) {
+      return <GiStethoscope className="h-3 w-3 ml-2" />;
+    } else if (doctor.specialty.includes("Orthopaedic")) {
+      return <GiMuscleUp className="h-3 w-3 ml-2" />;
+    } else {
+      return <GiStethoscope className="h-3 w-3 ml-2" />;
+    }
+  };
 
   return (
     <motion.div
@@ -158,7 +205,11 @@ const DoctorCard = ({ doctor, index }: { doctor: DoctorData; index: number }) =>
               transition={{ duration: 0.3 }}
               className="relative w-20 h-20 rounded-xl bg-gradient-to-br from-[#F9FAF7] to-[#E8F4F1] flex items-center justify-center shadow-md"
             >
-              <FaUserMd className="h-10 w-10 text-[#064E3B]" />
+              {doctor.specialty.includes("Physiotherapy") ? (
+                <Md10K className="h-10 w-10 text-[#064E3B]" />
+              ) : (
+                <FaUserMd className="h-10 w-10 text-[#064E3B]" />
+              )}
               <motion.div
                 animate={{ opacity: isHovered ? 1 : 0 }}
                 className="absolute inset-0 bg-gradient-to-br from-[#1FB6A6]/10 to-transparent rounded-xl"
@@ -169,13 +220,17 @@ const DoctorCard = ({ doctor, index }: { doctor: DoctorData; index: number }) =>
             <div className="flex-1">
               <h3 className="text-2xl font-bold text-[#064E3B] mb-2">{doctor.name.en}</h3>
               <div className="flex items-center gap-2 mb-3">
-                <FaStethoscope className="h-4 w-4 text-[#1FB6A6]" />
+                {doctor.specialty.includes("Physiotherapy") ? (
+                  <Md10K className="h-4 w-4 text-[#1FB6A6]" />
+                ) : (
+                  <FaStethoscope className="h-4 w-4 text-[#1FB6A6]" />
+                )}
                 <p className="text-gray-600 font-medium">{doctor.designation.en}</p>
               </div>
               
               {/* Specialty Badge */}
               <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-[#1FB6A6] text-white text-sm font-semibold">
-                <GiStethoscope className="h-3 w-3 mr-2" />
+                {getSpecialtyIcon()}
                 {doctor.specialty}
               </span>
             </div>
@@ -223,40 +278,46 @@ const DoctorCard = ({ doctor, index }: { doctor: DoctorData; index: number }) =>
                 </div>
                 <div>
                   <p className="text-sm text-gray-500 mb-1">Additional Role</p>
-                  <p className="text-gray-800 font-medium">{doctor.additionalRole.en}</p>
+                  <p className="text-gray800 font-medium">{doctor.additionalRole.en}</p>
                 </div>
               </motion.div>
             )}
           </div>
 
-          {/* Contact Info */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            className="mt-8 pt-6 border-t border-gray-100"
-          >
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#1FB6A6]/10 to-transparent flex items-center justify-center">
-                  <FaClock className="h-4 w-4 text-[#064E3B]" />
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500">Availability</p>
-                  <p className="text-sm font-semibold text-gray-800">{doctor.availability}</p>
-                </div>
+          {/* Contact Info - Only show if data exists */}
+          {(doctor.availability || doctor.phone) && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="mt-8 pt-6 border-t border-gray-100"
+            >
+              <div className="grid grid-cols-2 gap-4">
+                {doctor.availability && (
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#1FB6A6]/10 to-transparent flex items-center justify-center">
+                      <FaClock className="h-4 w-4 text-[#064E3B]" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500">Availability</p>
+                      <p className="text-sm font-semibold text-gray-800">{doctor.availability}</p>
+                    </div>
+                  </div>
+                )}
+                {doctor.phone && (
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#1FB6A6]/10 to-transparent flex items-center justify-center">
+                      <FaPhoneAlt className="h-4 w-4 text-[#064E3B]" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500">Contact</p>
+                      <p className="text-sm font-semibold text-gray-800">{doctor.phone}</p>
+                    </div>
+                  </div>
+                )}
               </div>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#1FB6A6]/10 to-transparent flex items-center justify-center">
-                  <FaPhoneAlt className="h-4 w-4 text-[#064E3B]" />
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500">Contact</p>
-                  <p className="text-sm font-semibold text-gray-800">{doctor.phone}</p>
-                </div>
-              </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          )}
         </div>
 
         {/* Urdu Section (Right) */}
@@ -270,14 +331,18 @@ const DoctorCard = ({ doctor, index }: { doctor: DoctorData; index: number }) =>
               <p className="text-gray-600 font-medium text-right" dir="rtl">
                 {doctor.designation.ur}
               </p>
-              <FaStethoscope className="h-4 w-4 text-[#1FB6A6]" />
+              {doctor.specialty.includes("Physiotherapy") ? (
+                <Md10K className="h-4 w-4 text-[#1FB6A6]" />
+              ) : (
+                <FaStethoscope className="h-4 w-4 text-[#1FB6A6]" />
+              )}
             </div>
             
             {/* Specialty Badge - Urdu */}
             <div className="flex justify-end">
               <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-[#1FB6A6] text-white text-sm font-semibold">
                 {doctor.specialty}
-                <GiStethoscope className="h-3 w-3 ml-2" />
+                {getSpecialtyIconUrdu()}
               </span>
             </div>
           </div>
@@ -330,18 +395,20 @@ const DoctorCard = ({ doctor, index }: { doctor: DoctorData; index: number }) =>
             )}
           </div>
 
-          {/* Experience - Urdu */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            className="mt-8 pt-6 border-t border-gray-100 text-right"
-          >
-            <div className="inline-flex items-center gap-3 px-4 py-2 bg-gradient-to-l from-[#064E3B]/5 to-transparent rounded-xl">
-              <span className="text-sm text-gray-500">تجربہ:</span>
-              <span className="text-[#064E3B] font-bold">{doctor.experience}</span>
-            </div>
-          </motion.div>
+          {/* Experience - Urdu - Only show if data exists */}
+          {doctor.experience && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="mt-8 pt-6 border-t border-gray-100 text-right"
+            >
+              <div className="inline-flex items-center gap-3 px-4 py-2 bg-gradient-to-l from-[#064E3B]/5 to-transparent rounded-xl">
+                <span className="text-sm text-gray-500">تجربہ:</span>
+                <span className="text-[#064E3B] font-bold">{doctor.experience}</span>
+              </div>
+            </motion.div>
+          )}
         </div>
       </div>
 
@@ -356,7 +423,7 @@ const DoctorCard = ({ doctor, index }: { doctor: DoctorData; index: number }) =>
 
 // Specialties Filter Component
 const SpecialtiesFilter = ({ activeFilter, setActiveFilter }: { activeFilter: string; setActiveFilter: (filter: string) => void }) => {
-  const filters = ["All", "Cardiology", "Orthopaedic Surgery", "Gynecology & Obstetrics", "Pediatrics"];
+  const filters = ["All", "Cardiology", "Orthopaedic Surgery", "Gynecology & Obstetrics", "Pediatrics", "Physiotherapy & Rehabilitation"];
 
   return (
     <div className="flex flex-wrap gap-3 justify-center">
@@ -388,6 +455,7 @@ export default function DoctorsPage() {
     if (activeFilter === "Orthopaedic Surgery") return doctor.specialty.includes("Orthopaedic");
     if (activeFilter === "Gynecology & Obstetrics") return doctor.specialty.includes("Gynecology") || doctor.specialty.includes("Obstetrics");
     if (activeFilter === "Pediatrics") return doctor.specialty.includes("Pediatrics");
+    if (activeFilter === "Physiotherapy & Rehabilitation") return doctor.specialty.includes("Physiotherapy");
     return true;
   });
 
@@ -457,7 +525,7 @@ export default function DoctorsPage() {
             >
               {[
                 { value: "15+", label: "Years Experience" },
-                { value: "4", label: "Specialties" },
+                { value: "5", label: "Specialties" },
                 { value: "100%", label: "Patient Satisfaction" },
                 { value: "24/7", label: "Emergency Support" },
               ].map((stat, index) => (
@@ -533,15 +601,15 @@ export default function DoctorsPage() {
               <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
                 Our team is ready to help you find the right specialist for your healthcare needs.
               </p>
-             <motion.button
-  whileHover={{ scale: 1.05 }}
-  whileTap={{ scale: 0.95 }}
-  onClick={() => (window.location.href = "/portfolio/contact")}
-  className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#064E3B] to-[#1FB6A6] text-white rounded-xl font-semibold text-lg hover:shadow-2xl transition-all duration-300"
->
-  <FaPhoneAlt className="h-5 w-5" />
-  Book Appointment Now
-</motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => (window.location.href = "/portfolio/contact")}
+                className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#064E3B] to-[#1FB6A6] text-white rounded-xl font-semibold text-lg hover:shadow-2xl transition-all duration-300"
+              >
+                <FaPhoneAlt className="h-5 w-5" />
+                Book Appointment Now
+              </motion.button>
             </div>
           </motion.div>
         </div>

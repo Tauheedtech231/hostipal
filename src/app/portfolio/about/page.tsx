@@ -174,7 +174,7 @@ const AboutSection: React.FC = () => {
             variants={fadeInUp}
             className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 leading-tight"
           >
-            Siddiq Hospital & Maternity Complex
+            Siddiq Hospital & Medical Complex
           </motion.h2>
 
           <motion.p 

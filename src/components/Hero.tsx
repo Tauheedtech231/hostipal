@@ -354,7 +354,7 @@ export const HeroSection: React.FC = () => {
                 >
                   Siddiq Hospital
                   <br />
-                  <span className="text-white/95 drop-shadow-2xl">& Maternity Complex</span>
+                  <span className="text-white/95 drop-shadow-2xl"> & Medical Complex</span>
                 </motion.h1>
 
                 <motion.p

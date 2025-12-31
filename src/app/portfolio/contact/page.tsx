@@ -47,7 +47,7 @@ const ContactSection = () => {
     cards: [
       {
         title: "Main Hospital",
-        email: "romanasher@hotmail.com",
+        email: "Info@siddiqhospital.com",
         phone: "0303 6828260",
         department: "General Inquiries & Appointments"
       }
@@ -238,7 +238,7 @@ const ContactSection = () => {
 
           {/* Title */}
           <h1 className="hero-title text-5xl md:text-7xl font-bold text-white mb-8 leading-tight">
-            Siddiq Hospital & Maternity Complex
+            Siddiq Hospital & Medical Complex
           </h1>
 
           {/* Subtitle */}

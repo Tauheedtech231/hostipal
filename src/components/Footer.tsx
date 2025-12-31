@@ -17,7 +17,7 @@ export const FooterSection: React.FC = () => {
   ];
 
   const contactInfo = {
-    address: "81-A, Main Boulevard Sabzazar, Near Shah Farid Chowk Lahore",
+    address: "Sohawa Stop, Circular Road, Daska, Pakistan",
     phone: "0303 6828260",
     email: "info@siddiqhospital.com",
     phoneHref: "tel:03036828260",
@@ -64,7 +64,7 @@ export const FooterSection: React.FC = () => {
               </motion.div>
               <div>
                 <h2 className="text-2xl font-bold text-white">Siddiq Hospital</h2>
-                <p className="text-[#1FB6A6] text-base font-semibold mt-1">Maternity Complex</p>
+                <p className="text-[#1FB6A6] text-base font-semibold mt-1">Medical Complex</p>
               </div>
             </div>
             <p className="text-white/85 text-base leading-relaxed max-w-sm">
@@ -191,49 +191,12 @@ export const FooterSection: React.FC = () => {
         </div>
 
         {/* Copyright - Enhanced */}
-        <div className="text-center pt-4">
-          <p className="text-white/70 text-base">
-            © {new Date().getFullYear()} Siddiq Hospital & Maternity Complex. All rights reserved.
-          </p>
-          <p className="text-white/50 text-sm mt-2">
-            Providing quality healthcare services to the community since 2005.
-          </p>
-          {/* Additional Quick Links */}
-          <div className="flex flex-wrap justify-center gap-4 mt-4">
-            <a
-              href="/privacy-policy"
-              onClick={(e) => {
-                e.preventDefault();
-                handleNavigation("/privacy-policy");
-              }}
-              className="text-white/60 hover:text-[#1FB6A6] text-sm transition-colors"
-            >
-              Privacy Policy
-            </a>
-            <span className="text-white/30">•</span>
-            <a
-              href="/terms-of-service"
-              onClick={(e) => {
-                e.preventDefault();
-                handleNavigation("/terms-of-service");
-              }}
-              className="text-white/60 hover:text-[#1FB6A6] text-sm transition-colors"
-            >
-              Terms of Service
-            </a>
-            <span className="text-white/30">•</span>
-            <a
-              href="/sitemap"
-              onClick={(e) => {
-                e.preventDefault();
-                handleNavigation("/sitemap");
-              }}
-              className="text-white/60 hover:text-[#1FB6A6] text-sm transition-colors"
-            >
-              Sitemap
-            </a>
-          </div>
-        </div>
+       <div className="text-center pt-4">
+  <p className="text-white/70 text-sm">
+    © {new Date().getFullYear()} Siddiq Hospital & Medical Complex. All rights reserved.
+  </p>
+</div>
+
       </div>
     </footer>
   );

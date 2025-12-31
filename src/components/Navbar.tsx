@@ -129,7 +129,7 @@ export const Navbar: React.FC = () => {
       keywords: ["testimonials", "reviews", "patients", "feedback", "stories", "experience"]
     },
     { 
-      name: "Carrers", 
+      name: "Careers", 
       href: "/portfolio/careers",
       icon: <GalleryVertical className="h-5 w-5" />,
       description: "Join Our Team",
