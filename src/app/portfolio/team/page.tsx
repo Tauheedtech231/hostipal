@@ -5,8 +5,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { FaUserMd, FaStethoscope, FaGraduationCap, FaBuilding, FaPhoneAlt, FaClock, FaHandsHelping } from "react-icons/fa";
 import { GiStethoscope, GiMuscleUp } from "react-icons/gi";
-import { Md10K } from "react-icons/md";
-
+import {  MdLocalHospital } from "react-icons/md";
 
 // Define types for doctor data
 interface DoctorData {
@@ -34,7 +33,6 @@ interface DoctorData {
   specialty: string;
   experience: string;
   availability: string;
-  phone: string;
   image: string;
 }
 
@@ -65,7 +63,6 @@ const DOCTORS_DATA: DoctorData[] = [
     specialty: "Orthopaedic Surgery",
     experience: "15+ Years",
     availability: "Mon-Fri: 9AM-5PM",
-    phone: "+92-300-1234567",
     image: "/doctors/dr-farrakh.jpg"
   },
   {
@@ -85,7 +82,6 @@ const DOCTORS_DATA: DoctorData[] = [
     specialty: "Clinical & Interventional Cardiology",
     experience: "12+ Years",
     availability: "Mon-Sat: 10AM-6PM",
-    phone: "+92-300-2345678",
     image: "/doctors/dr-roman.jpg"
   },
   {
@@ -109,7 +105,6 @@ const DOCTORS_DATA: DoctorData[] = [
     specialty: "Gynecology & Obstetrics",
     experience: "10+ Years",
     availability: "Mon-Fri: 9AM-4PM",
-    phone: "+92-300-3456789",
     image: "/doctors/dr-shazia.jpg"
   },
   {
@@ -129,7 +124,6 @@ const DOCTORS_DATA: DoctorData[] = [
     specialty: "Pediatrics",
     experience: "8+ Years",
     availability: "Mon-Sat: 11AM-7PM",
-    phone: "+92-300-4567890",
     image: "/doctors/dr-nabeeia.jpg"
   },
   {
@@ -147,9 +141,8 @@ const DOCTORS_DATA: DoctorData[] = [
       ur: "ایم۔پی۔پی۔ای (پنجاب), ڈی۔پی۔ٹی (پنجاب)"
     },
     specialty: "Physiotherapy & Rehabilitation",
-    experience: "", // Leaving empty as no experience data provided
-    availability: "", // Leaving empty as no availability data provided
-    phone: "", // Leaving empty as no phone data provided
+    experience: "2+ Years",
+    availability: "Mon-Fri: 10AM-6PM",
     image: "/doctors/dr-chandni-mahmood.jpg"
   }
 ];
@@ -161,25 +154,25 @@ const DoctorCard = ({ doctor, index }: { doctor: DoctorData; index: number }) =>
   // Get appropriate icon based on specialty
   const getSpecialtyIcon = () => {
     if (doctor.specialty.includes("Physiotherapy")) {
-      return <Md10K className="h-3 w-3 mr-2" />;
+      return <FaStethoscope className="h-3 w-3 mr-2" />;
     } else if (doctor.specialty.includes("Cardiology")) {
       return <GiStethoscope className="h-3 w-3 mr-2" />;
     } else if (doctor.specialty.includes("Orthopaedic")) {
       return <GiMuscleUp className="h-3 w-3 mr-2" />;
     } else {
-      return <GiStethoscope className="h-3 w-3 mr-2" />;
+      return <FaStethoscope className="h-3 w-3 mr-2" />;
     }
   };
 
   const getSpecialtyIconUrdu = () => {
     if (doctor.specialty.includes("Physiotherapy")) {
-      return <Md10K className="h-3 w-3 ml-2" />;
+      return <FaStethoscope className="h-3 w-3 ml-2" />;
     } else if (doctor.specialty.includes("Cardiology")) {
       return <GiStethoscope className="h-3 w-3 ml-2" />;
     } else if (doctor.specialty.includes("Orthopaedic")) {
       return <GiMuscleUp className="h-3 w-3 ml-2" />;
     } else {
-      return <GiStethoscope className="h-3 w-3 ml-2" />;
+      return <FaStethoscope className="h-3 w-3 ml-2" />;
     }
   };
 
@@ -205,11 +198,7 @@ const DoctorCard = ({ doctor, index }: { doctor: DoctorData; index: number }) =>
               transition={{ duration: 0.3 }}
               className="relative w-20 h-20 rounded-xl bg-gradient-to-br from-[#F9FAF7] to-[#E8F4F1] flex items-center justify-center shadow-md"
             >
-              {doctor.specialty.includes("Physiotherapy") ? (
-                <Md10K className="h-10 w-10 text-[#064E3B]" />
-              ) : (
-                <FaUserMd className="h-10 w-10 text-[#064E3B]" />
-              )}
+              <FaUserMd className="h-10 w-10 text-[#064E3B]" />
               <motion.div
                 animate={{ opacity: isHovered ? 1 : 0 }}
                 className="absolute inset-0 bg-gradient-to-br from-[#1FB6A6]/10 to-transparent rounded-xl"
@@ -220,11 +209,7 @@ const DoctorCard = ({ doctor, index }: { doctor: DoctorData; index: number }) =>
             <div className="flex-1">
               <h3 className="text-2xl font-bold text-[#064E3B] mb-2">{doctor.name.en}</h3>
               <div className="flex items-center gap-2 mb-3">
-                {doctor.specialty.includes("Physiotherapy") ? (
-                  <Md10K className="h-4 w-4 text-[#1FB6A6]" />
-                ) : (
-                  <FaStethoscope className="h-4 w-4 text-[#1FB6A6]" />
-                )}
+                <FaStethoscope className="h-4 w-4 text-[#1FB6A6]" />
                 <p className="text-gray-600 font-medium">{doctor.designation.en}</p>
               </div>
               
@@ -284,40 +269,37 @@ const DoctorCard = ({ doctor, index }: { doctor: DoctorData; index: number }) =>
             )}
           </div>
 
-          {/* Contact Info - Only show if data exists */}
-          {(doctor.availability || doctor.phone) && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="mt-8 pt-6 border-t border-gray-100"
-            >
-              <div className="grid grid-cols-2 gap-4">
-                {doctor.availability && (
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#1FB6A6]/10 to-transparent flex items-center justify-center">
-                      <FaClock className="h-4 w-4 text-[#064E3B]" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-500">Availability</p>
-                      <p className="text-sm font-semibold text-gray-800">{doctor.availability}</p>
-                    </div>
-                  </div>
-                )}
-                {doctor.phone && (
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#1FB6A6]/10 to-transparent flex items-center justify-center">
-                      <FaPhoneAlt className="h-4 w-4 text-[#064E3B]" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-500">Contact</p>
-                      <p className="text-sm font-semibold text-gray-800">{doctor.phone}</p>
-                    </div>
-                  </div>
-                )}
+          {/* Availability and Experience Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="mt-8 pt-6 border-t border-gray-100"
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Availability */}
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#1FB6A6]/10 to-transparent flex items-center justify-center">
+                  <FaClock className="h-4 w-4 text-[#064E3B]" />
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500">Availability</p>
+                  <p className="text-sm font-semibold text-gray-800">{doctor.availability}</p>
+                </div>
               </div>
-            </motion.div>
-          )}
+              
+              {/* Experience */}
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#064E3B]/10 to-transparent flex items-center justify-center">
+                  <div className="text-[#064E3B] font-bold text-sm">Exp</div>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500">Experience</p>
+                  <p className="text-sm font-semibold text-gray-800">{doctor.experience}</p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
 
         {/* Urdu Section (Right) */}
@@ -331,11 +313,7 @@ const DoctorCard = ({ doctor, index }: { doctor: DoctorData; index: number }) =>
               <p className="text-gray-600 font-medium text-right" dir="rtl">
                 {doctor.designation.ur}
               </p>
-              {doctor.specialty.includes("Physiotherapy") ? (
-                <Md10K className="h-4 w-4 text-[#1FB6A6]" />
-              ) : (
-                <FaStethoscope className="h-4 w-4 text-[#1FB6A6]" />
-              )}
+              <FaStethoscope className="h-4 w-4 text-[#1FB6A6]" />
             </div>
             
             {/* Specialty Badge - Urdu */}
@@ -395,20 +373,37 @@ const DoctorCard = ({ doctor, index }: { doctor: DoctorData; index: number }) =>
             )}
           </div>
 
-          {/* Experience - Urdu - Only show if data exists */}
-          {doctor.experience && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="mt-8 pt-6 border-t border-gray-100 text-right"
-            >
-              <div className="inline-flex items-center gap-3 px-4 py-2 bg-gradient-to-l from-[#064E3B]/5 to-transparent rounded-xl">
-                <span className="text-sm text-gray-500">تجربہ:</span>
-                <span className="text-[#064E3B] font-bold">{doctor.experience}</span>
+          {/* Availability & Experience - Urdu */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="mt-8 pt-6 border-t border-gray-100 text-right"
+          >
+            <div className="space-y-4">
+              {/* Availability - Urdu */}
+              <div className="flex items-center justify-end gap-3">
+                <div>
+                  <p className="text-xs text-gray-500 mb-1" dir="rtl">دستیابی</p>
+                  <p className="text-sm font-semibold text-gray-800" dir="rtl">{doctor.availability}</p>
+                </div>
+                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#1FB6A6]/10 to-transparent flex items-center justify-center">
+                  <FaClock className="h-4 w-4 text-[#064E3B]" />
+                </div>
               </div>
-            </motion.div>
-          )}
+              
+              {/* Experience - Urdu */}
+              <div className="flex items-center justify-end gap-3">
+                <div>
+                  <p className="text-xs text-gray-500 mb-1" dir="rtl">تجربہ</p>
+                  <p className="text-sm font-semibold text-gray-800" dir="rtl">{doctor.experience}</p>
+                </div>
+                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#064E3B]/10 to-transparent flex items-center justify-center">
+                  <div className="text-[#064E3B] font-bold text-sm">E</div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </div>
 

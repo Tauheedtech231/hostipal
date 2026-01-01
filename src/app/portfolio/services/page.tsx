@@ -371,9 +371,15 @@ import {
                 for your healthcare needs.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="px-8 py-3.5 bg-gradient-to-r from-[#1FB6A6] to-[#0B6E5E] text-white font-semibold rounded-lg hover:shadow-xl hover:shadow-[#1FB6A6]/20 transition-all duration-300">
-                  Book Consultation
-                </button>
+                <button
+  onClick={() => {
+    window.location.href = "/portfolio/contact";
+  }}
+  className="px-8 py-3.5 bg-gradient-to-r from-[#1FB6A6] to-[#0B6E5E] text-white font-semibold rounded-lg hover:shadow-xl hover:shadow-[#1FB6A6]/20 transition-all duration-300"
+>
+  Book Consultation
+</button>
+
                 <button className="px-8 py-3.5 bg-white text-[#064E3B] font-semibold rounded-lg border-2 border-[#064E3B] hover:bg-[#064E3B] hover:text-white transition-all duration-300">
                   Call 0303 6828260
                 </button>
