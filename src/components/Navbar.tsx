@@ -26,10 +26,11 @@ import {
   Brain,
   Eye,
   Bone,
-  Magnet
+ 
 } from "lucide-react";
-import { GiScalpel } from "react-icons/gi";
+import { GiScalpel, GiTeamIdea } from "react-icons/gi";
 /* eslint-disable */
+
 
 export const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -65,7 +66,7 @@ export const Navbar: React.FC = () => {
      { 
       name: "Team", 
       href: "/portfolio/team",
-      icon: <Magnet className="h-5 w-5" />,
+      icon: <GiTeamIdea className="h-5 w-5" />,
       description: "Meet Our Medical Team",
       keywords: ["team", "doctors", "staff", "medical team", "our team"]
     },
