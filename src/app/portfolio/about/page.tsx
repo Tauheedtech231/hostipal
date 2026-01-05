@@ -48,8 +48,8 @@ const AboutSection: React.FC = () => {
     return () => observer.disconnect();
   }, [itemInView]);
 
-  // Animations
-  const fadeInUp: Variants = {
+  // Animations - Remove explicit Variants type annotation
+  const fadeInUp:Variants = {
     hidden: { opacity: 0, y: 30 },
     visible: { 
       opacity: 1, 
@@ -61,7 +61,7 @@ const AboutSection: React.FC = () => {
     }
   };
 
-  const scaleIn: Variants = {
+  const scaleIn:Variants = {
     hidden: { opacity: 0, scale: 0.9 },
     visible: { 
       opacity: 1, 
@@ -73,7 +73,7 @@ const AboutSection: React.FC = () => {
     }
   };
 
-  const slideInFromRight: Variants = {
+  const slideInFromRight:Variants = {
     hidden: { opacity: 0, x: 100 },
     visible: { 
       opacity: 1, 
@@ -85,7 +85,7 @@ const AboutSection: React.FC = () => {
     }
   };
 
-  const slideInFromLeft: Variants = {
+  const slideInFromLeft:Variants = {
     hidden: { opacity: 0, x: -100 },
     visible: { 
       opacity: 1, 
@@ -97,7 +97,7 @@ const AboutSection: React.FC = () => {
     }
   };
 
-  const staggerContainer: Variants = {
+  const staggerContainer = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -108,7 +108,7 @@ const AboutSection: React.FC = () => {
     }
   };
 
-  const cardHover: Variants = {
+  const cardHover = {
     rest: { y: 0, scale: 1 },
     hover: { 
       y: -8,
@@ -155,35 +155,36 @@ const AboutSection: React.FC = () => {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Header */}
-        <motion.div
-          initial="hidden"
-          animate={sectionInView ? "visible" : "hidden"}
-          variants={staggerContainer}
-          className="text-center mb-16"
-        >
-          <motion.div variants={fadeInUp} className="inline-block mb-4">
-            <div className="inline-flex items-center gap-3 px-5 py-2.5 bg-gradient-to-r from-[#064E3B]/10 to-[#1FB6A6]/10 rounded-full border border-[#064E3B]/20">
-              <div className="w-2 h-2 bg-[#064E3B] rounded-full animate-pulse" />
-              <span className="text-[#064E3B] text-xs font-semibold tracking-wider uppercase">
-                About Our Hospital
-              </span>
-            </div>
+        <div className="text-center mb-16">
+          <motion.div
+            initial="hidden"
+            animate={sectionInView ? "visible" : "hidden"}
+            variants={staggerContainer}
+          >
+            <motion.div variants={fadeInUp} className="inline-block mb-4">
+              <div className="inline-flex items-center gap-3 px-5 py-2.5 bg-gradient-to-r from-[#064E3B]/10 to-[#1FB6A6]/10 rounded-full border border-[#064E3B]/20">
+                <div className="w-2 h-2 bg-[#064E3B] rounded-full animate-pulse" />
+                <span className="text-[#064E3B] text-xs font-semibold tracking-wider uppercase">
+                  About Our Hospital
+                </span>
+              </div>
+            </motion.div>
+
+            <motion.h2 
+              variants={fadeInUp}
+              className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 leading-tight"
+            >
+              Siddiq Hospital & Medical Complex
+            </motion.h2>
+
+            <motion.p 
+              variants={fadeInUp}
+              className="text-gray-600 text-base md:text-lg max-w-4xl mx-auto leading-relaxed"
+            >
+              Premier Healthcare Provider in Pakistan
+            </motion.p>
           </motion.div>
-
-          <motion.h2 
-            variants={fadeInUp}
-            className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 leading-tight"
-          >
-            Siddiq Hospital & Medical Complex
-          </motion.h2>
-
-          <motion.p 
-            variants={fadeInUp}
-            className="text-gray-600 text-base md:text-lg max-w-4xl mx-auto leading-relaxed"
-          >
-            Premier Healthcare Provider in Pakistan
-          </motion.p>
-        </motion.div>
+        </div>
 
         {/* Main Content Grid */}
         <div className="grid lg:grid-cols-2 gap-8 mb-16">
