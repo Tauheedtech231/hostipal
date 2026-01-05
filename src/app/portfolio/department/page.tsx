@@ -1,7 +1,6 @@
 "use client";
 
-import React from "react";
-import { motion, Variants } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react";
 import { 
   FaAmbulance, 
   FaStethoscope, 
@@ -20,29 +19,25 @@ import {
 } from "react-icons/fa";
 
 const DepartmentsSection: React.FC = () => {
-  // Animation variants
-  const fadeInUp: Variants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut"
-      }
-    }
-  };
+  const sectionRef = useRef<HTMLElement>(null);
+  const [inView, setInView] = useState(false);
 
-  const staggerContainer: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.1
-      }
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
     }
-  };
+
+    return () => observer.disconnect();
+  }, []);
 
   const departments = [
     { 
@@ -100,7 +95,7 @@ const DepartmentsSection: React.FC = () => {
   ];
 
   return (
-    <section className="relative py-20 md:py-32 bg-white overflow-hidden">
+    <section ref={sectionRef} className="relative py-20 md:py-32 bg-white overflow-hidden">
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-0 w-64 h-64 bg-gradient-to-br from-[#064E3B]/5 to-transparent rounded-full blur-3xl" />
@@ -109,78 +104,62 @@ const DepartmentsSection: React.FC = () => {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={staggerContainer}
-          className="text-center mb-16"
-        >
-          <motion.div variants={fadeInUp} className="inline-block mb-6">
+        <div className="text-center mb-16">
+          <div 
+            className={`inline-block mb-6 transition-all duration-700 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+          >
             <div className="inline-flex items-center gap-3 px-5 py-2.5 bg-gradient-to-r from-[#064E3B]/10 to-[#1FB6A6]/10 rounded-full">
               <div className="w-2 h-2 bg-[#064E3B] rounded-full animate-pulse" />
               <span className="text-[#064E3B] text-sm font-semibold tracking-wider uppercase">
                 Our Specialized Departments
               </span>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.h2 
-            variants={fadeInUp}
-            className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#064E3B] mb-6"
+          <h2 
+            className={`text-4xl md:text-5xl lg:text-6xl font-bold text-[#064E3B] mb-6 transition-all duration-700 delay-100 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
           >
             Comprehensive Medical Services
-          </motion.h2>
+          </h2>
 
-          <motion.p 
-            variants={fadeInUp}
-            className="text-[#1E293B] text-lg md:text-xl max-w-3xl mx-auto"
+          <p 
+            className={`text-[#1E293B] text-lg md:text-xl max-w-3xl mx-auto transition-all duration-700 delay-200 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
           >
             Providing exceptional healthcare across specialized departments with advanced technology and compassionate care.
-          </motion.p>
-        </motion.div>
+          </p>
+        </div>
 
         {/* Key Features - Top Section */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={staggerContainer}
-          className="mb-16"
-        >
+        <div className="mb-16">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {keyFeatures.map((feature, index) => (
-              <motion.div
+              <div
                 key={index}
-                variants={fadeInUp}
-                whileHover={{ y: -5 }}
-                className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow duration-300 h-full text-center flex flex-col items-center"
+                className={`bg-white rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 h-full text-center flex flex-col items-center transform transition-all duration-700 ${
+                  inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+                }`}
+                style={{ transitionDelay: `${300 + index * 100}ms` }}
               >
                 <div className="p-4 bg-gradient-to-br from-[#064E3B]/10 to-[#1FB6A6]/10 rounded-2xl mb-4 text-2xl text-[#064E3B]">
                   {feature.icon}
                 </div>
                 <h3 className="text-lg font-bold text-[#064E3B] mb-2">{feature.title}</h3>
                 <p className="text-sm text-[#1E293B]">{feature.description}</p>
-              </motion.div>
+              </div>
             ))}
           </div>
-        </motion.div>
+        </div>
 
         {/* Departments Grid */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={staggerContainer}
-          className="mb-16"
-        >
+        <div className="mb-16">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {departments.map((dept, index) => (
-              <motion.div
+              <div
                 key={index}
-                variants={fadeInUp}
-                whileHover={{ y: -8 }}
-                className="group relative bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden h-full flex flex-col"
+                className={`group relative bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden h-full flex flex-col transform ${
+                  inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+                } hover:-translate-y-2`}
+                style={{ transitionDelay: `${500 + index * 100}ms` }}
               >
                 <div className="p-8 pb-4">
                   <div className="p-5 w-fit mx-auto bg-gradient-to-br from-[#064E3B]/10 to-[#1FB6A6]/10 rounded-2xl group-hover:scale-110 transition-transform duration-300 text-[#064E3B]">
@@ -192,40 +171,99 @@ const DepartmentsSection: React.FC = () => {
                   <p className="text-[#1E293B] text-sm leading-relaxed">{dept.description}</p>
                 </div>
                 <div className="h-1.5 w-full bg-gradient-to-r from-[#064E3B] to-[#1FB6A6] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </motion.div>
+              </div>
             ))}
           </div>
-        </motion.div>
+        </div>
 
         {/* Bottom CTA Section */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={fadeInUp}
-          className="mt-20"
-        >
+        <div className={`mt-20 transition-all duration-700 delay-1000 ${inView ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
           <div className="bg-gradient-to-r from-[#064E3B] to-[#0B6E5E] rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
+            <div className="absolute inset-0 bg-black/10" />
             <div className="relative z-10 max-w-4xl mx-auto text-center">
               <h3 className="text-3xl md:text-4xl font-bold text-white mb-6">Need Emergency Assistance?</h3>
               <p className="text-white/90 text-lg mb-8">Our Emergency Department is staffed 24/7 with experienced medical professionals.</p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button 
                   onClick={() => window.location.href = "tel:+924235110072"}
-                  className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-white text-[#064E3B] rounded-xl font-bold hover:bg-gray-100 transition-colors"
+                  className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-white text-[#064E3B] rounded-xl font-bold hover:bg-gray-100 transition-all duration-300 hover:scale-105 shadow-lg"
                 >
-                  <FaAmbulance /> Emergency: +92 423 5110072
+                  <FaAmbulance className="animate-pulse" /> Emergency: +92 423 5110072
                 </button>
                 <button 
-                  className="inline-flex items-center justify-center gap-3 px-8 py-4 border-2 border-white text-white rounded-xl font-bold hover:bg-white hover:text-[#064E3B] transition-colors"
+                  onClick={() => window.location.href = "/portfolio/contact"}
+                  className="inline-flex items-center justify-center gap-3 px-8 py-4 border-2 border-white text-white rounded-xl font-bold hover:bg-white hover:text-[#064E3B] transition-all duration-300 hover:scale-105 shadow-lg"
                 >
-                  <FaHandHoldingHeart /> Book Appointment
+                  <FaHandHoldingHeart className="animate-pulse" /> Book Appointment
                 </button>
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
+
+      {/* Add custom CSS animations */}
+      <style jsx>{`
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes slideInLeft {
+          from {
+            opacity: 0;
+            transform: translateX(-50px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        @keyframes slideInRight {
+          from {
+            opacity: 0;
+            transform: translateX(50px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        @keyframes scaleIn {
+          from {
+            opacity: 0;
+            transform: scale(0.9);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+
+        .animate-fade-in-up {
+          animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .animate-slide-in-left {
+          animation: slideInLeft 0.6s ease-out forwards;
+        }
+
+        .animate-slide-in-right {
+          animation: slideInRight 0.6s ease-out forwards;
+        }
+
+        .animate-scale-in {
+          animation: scaleIn 0.6s ease-out forwards;
+        }
+      `}</style>
     </section>
   );
 };
