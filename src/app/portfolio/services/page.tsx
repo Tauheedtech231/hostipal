@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
-import { motion, Variants } from "framer-motion";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import {
   FaStethoscope,
@@ -25,8 +24,21 @@ import {
   FaUserInjured
 } from "react-icons/fa";
 
- const ServicesSection = () => {
+const ServicesSection = () => {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const [isVisible, setIsVisible] = useState({
+    hero: false,
+    header: false,
+    grid: false,
+    stats: false,
+    cta: false
+  });
+
+  const heroRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const statsRef = useRef<HTMLDivElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
 
   // Services data
   const services = [
@@ -170,45 +182,148 @@ import {
     }
   ];
 
-  // Animation variants
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.05,
-        delayChildren: 0.1
-      }
-    }
-  };
+  // Intersection Observer for scroll animations
+  useEffect(() => {
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: "0px 0px -100px 0px"
+    };
 
-  const itemVariants: Variants = {
-    hidden: { y: 30, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 100,
-        damping: 12
-      }
-    }
-  };
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const targetId = entry.target.id;
+          setIsVisible(prev => ({ ...prev, [targetId]: true }));
+        }
+      });
+    };
 
-  const fadeInUp: Variants = {
-    hidden: { y: 50, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.7,
-        ease: [0.25, 0.1, 0.25, 1]
-      }
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+    // Observe all sections
+    if (heroRef.current) {
+      heroRef.current.id = "hero";
+      observer.observe(heroRef.current);
     }
-  };
+    if (headerRef.current) {
+      headerRef.current.id = "header";
+      observer.observe(headerRef.current);
+    }
+    if (gridRef.current) {
+      gridRef.current.id = "grid";
+      observer.observe(gridRef.current);
+    }
+    if (statsRef.current) {
+      statsRef.current.id = "stats";
+      observer.observe(statsRef.current);
+    }
+    if (ctaRef.current) {
+      ctaRef.current.id = "cta";
+      observer.observe(ctaRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div className="min-h-screen bg-white">
+      <style jsx>{`
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
+        @keyframes scaleIn {
+          from {
+            opacity: 0;
+            transform: scale(0.95);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+
+        @keyframes slideInUp {
+          from {
+            opacity: 0;
+            transform: translateY(40px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .animate-fade-in-up {
+          animation: fadeInUp 0.7s ease-out forwards;
+        }
+
+        .animate-fade-in {
+          animation: fadeIn 0.7s ease-out forwards;
+        }
+
+        .animate-scale-in {
+          animation: scaleIn 0.5s ease-out forwards;
+        }
+
+        .animate-slide-in-up {
+          animation: slideInUp 0.6s ease-out forwards;
+        }
+
+        .stagger-delay-1 { animation-delay: 0.05s; opacity: 0; }
+        .stagger-delay-2 { animation-delay: 0.1s; opacity: 0; }
+        .stagger-delay-3 { animation-delay: 0.15s; opacity: 0; }
+        .stagger-delay-4 { animation-delay: 0.2s; opacity: 0; }
+        .stagger-delay-5 { animation-delay: 0.25s; opacity: 0; }
+        .stagger-delay-6 { animation-delay: 0.3s; opacity: 0; }
+        .stagger-delay-7 { animation-delay: 0.35s; opacity: 0; }
+        .stagger-delay-8 { animation-delay: 0.4s; opacity: 0; }
+        .stagger-delay-9 { animation-delay: 0.45s; opacity: 0; }
+        .stagger-delay-10 { animation-delay: 0.5s; opacity: 0; }
+        .stagger-delay-11 { animation-delay: 0.55s; opacity: 0; }
+        .stagger-delay-12 { animation-delay: 0.6s; opacity: 0; }
+        .stagger-delay-13 { animation-delay: 0.65s; opacity: 0; }
+        .stagger-delay-14 { animation-delay: 0.7s; opacity: 0; }
+        .stagger-delay-15 { animation-delay: 0.75s; opacity: 0; }
+        .stagger-delay-16 { animation-delay: 0.8s; opacity: 0; }
+        .stagger-delay-17 { animation-delay: 0.85s; opacity: 0; }
+        .stagger-delay-18 { animation-delay: 0.9s; opacity: 0; }
+        .stagger-delay-19 { animation-delay: 0.95s; opacity: 0; }
+        .stagger-delay-20 { animation-delay: 1s; opacity: 0; }
+        .stagger-delay-21 { animation-delay: 1.05s; opacity: 0; }
+        .stagger-delay-22 { animation-delay: 1.1s; opacity: 0; }
+        .stagger-delay-23 { animation-delay: 1.15s; opacity: 0; }
+
+        .card-hover-effect {
+          transition: all 0.3s ease;
+        }
+
+        .card-hover-effect:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .opacity-0 {
+          opacity: 0;
+        }
+      `}</style>
+
       {/* Hero Section with Background Image */}
       <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
         {/* Background Image */}
@@ -224,13 +339,13 @@ import {
         </div>
 
         {/* Hero Content */}
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-20">
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={fadeInUp}
-            className="space-y-8"
-          >
+        <div 
+          ref={heroRef}
+          className={`relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-20 transition-all duration-700 ${
+            isVisible.hero ? 'animate-fade-in-up' : 'opacity-0'
+          }`}
+        >
+          <div className="space-y-8">
             {/* Badge */}
             <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 backdrop-blur-sm rounded-full border border-white/20">
               <div className="w-2 h-2 bg-[#1FB6A6] rounded-full animate-pulse" />
@@ -249,7 +364,7 @@ import {
               Comprehensive healthcare services across multiple specialties, 
               delivering expert medical care with compassion and cutting-edge technology.
             </p>
-          </motion.div>
+          </div>
         </div>
       </section>
 
@@ -257,12 +372,11 @@ import {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeInUp}
-            className="text-center mb-16"
+          <div 
+            ref={headerRef}
+            className={`text-center mb-16 transition-all duration-700 ${
+              isVisible.header ? 'animate-fade-in-up' : 'opacity-0'
+            }`}
           >
             <h2 className="text-4xl md:text-5xl font-bold text-[#064E3B] mb-6">
               Specialized Medical Services
@@ -271,66 +385,58 @@ import {
               Explore our comprehensive range of medical specialties, each dedicated to 
               providing exceptional patient care and treatment outcomes.
             </p>
-          </motion.div>
+          </div>
 
           {/* Services Grid */}
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={containerVariants}
+          <div 
+            ref={gridRef}
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
           >
-            {services.map((service) => (
-              <motion.div
+            {services.map((service, index) => (
+              <div
                 key={service.id}
-                variants={itemVariants}
-                whileHover={{ y: -8 }}
+                className={`card-hover-effect h-full p-6 bg-white border border-gray-300 rounded-xl shadow-sm hover:shadow-xl hover:border-[#1FB6A6] transition-all duration-300 cursor-pointer ${
+                  isVisible.grid ? `animate-fade-in-up stagger-delay-${index + 1}` : 'opacity-0'
+                }`}
                 onMouseEnter={() => setHoveredCard(service.id)}
                 onMouseLeave={() => setHoveredCard(null)}
-                className="group"
               >
-                <div className="h-full p-6 bg-white border border-gray-300 rounded-xl shadow-sm hover:shadow-xl hover:border-[#1FB6A6] transition-all duration-300 cursor-pointer">
-                  {/* Icon Container */}
-                  <div className="mb-5">
-                    <div className={`w-14 h-14 rounded-xl flex items-center justify-center transition-all duration-300 ${
+                {/* Icon Container */}
+                <div className="mb-5">
+                  <div className={`w-14 h-14 rounded-xl flex items-center justify-center transition-all duration-300 ${
+                    hoveredCard === service.id
+                      ? 'bg-gradient-to-br from-[#1FB6A6] to-[#0B6E5E]'
+                      : 'bg-[#F5F5F5]'
+                  }`}>
+                    <div className={`transition-all duration-300 ${
                       hoveredCard === service.id
-                        ? 'bg-gradient-to-br from-[#1FB6A6] to-[#0B6E5E]'
-                        : 'bg-[#F5F5F5]'
+                        ? 'text-white'
+                        : 'text-[#1FB6A6]'
                     }`}>
-                      <div className={`transition-all duration-300 ${
-                        hoveredCard === service.id
-                          ? 'text-white'
-                          : 'text-[#1FB6A6]'
-                      }`}>
-                        {service.icon}
-                      </div>
+                      {service.icon}
                     </div>
                   </div>
-
-                  {/* Title */}
-                  <h3 className="text-xl font-bold text-[#064E3B] mb-3 group-hover:text-[#1FB6A6] transition-colors duration-300">
-                    {service.title}
-                  </h3>
-
-                  {/* Description */}
-                  <p className="text-[#1E293B] text-sm leading-relaxed">
-                    {service.description}
-                  </p>
-
-                
                 </div>
-              </motion.div>
+
+                {/* Title */}
+                <h3 className="text-xl font-bold text-[#064E3B] mb-3 group-hover:text-[#1FB6A6] transition-colors duration-300">
+                  {service.title}
+                </h3>
+
+                {/* Description */}
+                <p className="text-[#1E293B] text-sm leading-relaxed">
+                  {service.description}
+                </p>
+              </div>
             ))}
-          </motion.div>
+          </div>
 
           {/* Stats Banner */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="mt-20"
+          <div 
+            ref={statsRef}
+            className={`mt-20 transition-all duration-700 ${
+              isVisible.stats ? 'animate-slide-in-up' : 'opacity-0'
+            }`}
           >
             <div className="bg-gradient-to-r from-[#064E3B] to-[#0B6E5E] rounded-xl p-8 shadow-xl">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
@@ -352,15 +458,14 @@ import {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
 
           {/* CTA Section */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
-            className="mt-20 text-center"
+          <div 
+            ref={ctaRef}
+            className={`mt-20 text-center transition-all duration-700 ${
+              isVisible.cta ? 'animate-scale-in' : 'opacity-0'
+            }`}
           >
             <div className="inline-block max-w-2xl bg-white p-8 rounded-xl border border-gray-200 shadow-lg">
               <h3 className="text-2xl font-bold text-[#064E3B] mb-4">
@@ -372,13 +477,13 @@ import {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button
-  onClick={() => {
-    window.location.href = "/portfolio/contact";
-  }}
-  className="px-8 py-3.5 bg-gradient-to-r from-[#1FB6A6] to-[#0B6E5E] text-white font-semibold rounded-lg hover:shadow-xl hover:shadow-[#1FB6A6]/20 transition-all duration-300"
->
-  Book Consultation
-</button>
+                  onClick={() => {
+                    window.location.href = "/portfolio/contact";
+                  }}
+                  className="px-8 py-3.5 bg-gradient-to-r from-[#1FB6A6] to-[#0B6E5E] text-white font-semibold rounded-lg hover:shadow-xl hover:shadow-[#1FB6A6]/20 transition-all duration-300"
+                >
+                  Book Consultation
+                </button>
 
                 <button className="px-8 py-3.5 bg-white text-[#064E3B] font-semibold rounded-lg border-2 border-[#064E3B] hover:bg-[#064E3B] hover:text-white transition-all duration-300">
                   Call 0303 6828260
@@ -388,10 +493,11 @@ import {
                 24/7 emergency services available • Walk-in appointments welcome
               </p>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
     </div>
   );
 };
+
 export default ServicesSection;
