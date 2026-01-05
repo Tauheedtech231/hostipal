@@ -84,50 +84,28 @@ const AboutSection: React.FC = () => {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Header */}
         <div className="text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={sectionInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.6 }}
-            className="inline-block mb-4"
-          >
+          <div className="inline-block mb-4">
             <div className="inline-flex items-center gap-3 px-5 py-2.5 bg-gradient-to-r from-[#064E3B]/10 to-[#1FB6A6]/10 rounded-full border border-[#064E3B]/20">
               <div className="w-2 h-2 bg-[#064E3B] rounded-full animate-pulse" />
               <span className="text-[#064E3B] text-xs font-semibold tracking-wider uppercase">
                 About Our Hospital
               </span>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            animate={sectionInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 leading-tight"
-          >
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 leading-tight">
             Siddiq Hospital & Medical Complex
-          </motion.h2>
+          </h2>
 
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={sectionInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-gray-600 text-base md:text-lg max-w-4xl mx-auto leading-relaxed"
-          >
+          <p className="text-gray-600 text-base md:text-lg max-w-4xl mx-auto leading-relaxed">
             Premier Healthcare Provider in Pakistan
-          </motion.p>
+          </p>
         </div>
 
         {/* Main Content Grid */}
         <div className="grid lg:grid-cols-2 gap-8 mb-16">
           {/* Left Column - Main Story */}
-          <motion.div
-            data-section-item
-            data-index="1"
-            initial={{ opacity: 0, x: -50 }}
-            animate={itemInView.includes(1) ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
-            transition={{ duration: 0.8 }}
-            className="space-y-6"
-          >
+          <div className="space-y-6">
             <div className="inline-flex items-center gap-2 mb-3">
               <div className="h-1 w-8 bg-gradient-to-r from-[#064E3B] to-[#1FB6A6]" />
               <span className="text-[#064E3B] font-semibold text-xs uppercase tracking-wider">
@@ -154,12 +132,7 @@ const AboutSection: React.FC = () => {
             </div>
 
             {/* Quick Stats */}
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={itemInView.includes(1) ? { opacity: 1 } : { opacity: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="grid grid-cols-2 gap-4 pt-6"
-            >
+            <div className="grid grid-cols-2 gap-4 pt-6">
               <div className="bg-gradient-to-br from-[#064E3B]/5 to-[#1FB6A6]/5 rounded-xl p-4">
                 <div className="text-2xl font-bold text-[#064E3B]">100+</div>
                 <div className="text-gray-600 text-sm">Hospital Beds</div>
@@ -168,18 +141,11 @@ const AboutSection: React.FC = () => {
                 <div className="text-2xl font-bold text-[#064E3B]">20+</div>
                 <div className="text-gray-600 text-sm">Years Experience</div>
               </div>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
 
           {/* Right Column - Main Image */}
-          <motion.div
-            data-section-item
-            data-index="2"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={itemInView.includes(2) ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
-            transition={{ duration: 0.7 }}
-            className="relative"
-          >
+          <div className="relative">
             <div className="relative rounded-xl overflow-hidden shadow-xl group">
               <div className="aspect-[4/3] relative bg-gray-100">
                 <Image
@@ -196,20 +162,13 @@ const AboutSection: React.FC = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* Services & Technology Section */}
         <div className="grid lg:grid-cols-2 gap-8 mb-16">
           {/* Left Column - Technology Image */}
-          <motion.div
-            data-section-item
-            data-index="3"
-            initial={{ opacity: 0, x: -50 }}
-            animate={itemInView.includes(3) ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
-            transition={{ duration: 0.8 }}
-            className="relative"
-          >
+          <div className="relative">
             <div className="relative rounded-xl overflow-hidden shadow-xl group">
               <div className="aspect-[4/3] relative bg-gray-100">
                 <Image
@@ -226,17 +185,10 @@ const AboutSection: React.FC = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
               </div>
             </div>
-          </motion.div>
+          </div>
 
           {/* Right Column - Services Content */}
-          <motion.div
-            data-section-item
-            data-index="4"
-            initial={{ opacity: 0, x: 50 }}
-            animate={itemInView.includes(4) ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
-            transition={{ duration: 0.8 }}
-            className="space-y-6"
-          >
+          <div className="space-y-6">
             <div className="inline-flex items-center gap-2 mb-3">
               <div className="h-1 w-8 bg-gradient-to-r from-[#1FB6A6] to-[#064E3B]" />
               <span className="text-[#064E3B] font-semibold text-xs uppercase tracking-wider">
@@ -260,18 +212,11 @@ const AboutSection: React.FC = () => {
                 staff training.
               </p>
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* Core Values Section */}
-        <motion.div
-          data-section-item
-          data-index="5"
-          initial={{ opacity: 0 }}
-          animate={itemInView.includes(5) ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-16"
-        >
+        <div className="mb-16">
           <div className="bg-gradient-to-r from-[#064E3B]/5 to-[#1FB6A6]/5 rounded-2xl border border-[#064E3B]/10 p-6 md:p-8">
             <div className="text-center mb-8">
               <div className="inline-flex items-center gap-3 mb-3">
@@ -292,12 +237,8 @@ const AboutSection: React.FC = () => {
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {coreValues.map((value, index) => (
-                <motion.div
+                <div
                   key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={itemInView.includes(5) ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  whileHover={{ y: -5, scale: 1.02 }}
                   className="group"
                 >
                   <div className="h-full bg-white rounded-xl border border-gray-200 shadow-sm p-5 transition-all duration-300 group-hover:shadow-md group-hover:border-[#064E3B]/30">
@@ -313,22 +254,15 @@ const AboutSection: React.FC = () => {
                       {value.description}
                     </p>
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Mission & Vision Section */}
         <div className="grid md:grid-cols-2 gap-6 mb-16">
-          <motion.div
-            data-section-item
-            data-index="6"
-            initial={{ opacity: 0, x: -50 }}
-            animate={itemInView.includes(6) ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
-            transition={{ duration: 0.8 }}
-            className="relative"
-          >
+          <div className="relative">
             <div className="h-full bg-gradient-to-br from-white to-gray-50 rounded-xl border border-gray-200 shadow-lg p-6">
               <div className="flex items-center gap-3 mb-4">
                 <div className="p-3 bg-gradient-to-br from-[#064E3B]/10 to-[#1FB6A6]/10 rounded-lg">
@@ -341,16 +275,9 @@ const AboutSection: React.FC = () => {
                 aligned with international standards of excellence.
               </p>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            data-section-item
-            data-index="7"
-            initial={{ opacity: 0, x: 50 }}
-            animate={itemInView.includes(7) ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
-            transition={{ duration: 0.8 }}
-            className="relative"
-          >
+          <div className="relative">
             <div className="h-full bg-gradient-to-br from-white to-gray-50 rounded-xl border border-gray-200 shadow-lg p-6">
               <div className="flex items-center gap-3 mb-4">
                 <div className="p-3 bg-gradient-to-br from-[#1FB6A6]/10 to-[#064E3B]/10 rounded-lg">
@@ -363,18 +290,11 @@ const AboutSection: React.FC = () => {
                 and embodying compassion in serving our patients.
               </p>
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* CTA Section */}
-        <motion.div
-          data-section-item
-          data-index="8"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={itemInView.includes(8) ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
-          transition={{ duration: 0.7 }}
-          className="text-center"
-        >
+        <div className="text-center">
           <div className="bg-gradient-to-r from-[#064E3B] to-[#0B6E5E] rounded-2xl p-6 md:p-8 shadow-xl">
             <h3 className="text-xl md:text-2xl font-bold text-white mb-3">
               Experience Healthcare Excellence
@@ -397,7 +317,7 @@ const AboutSection: React.FC = () => {
               </button>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
