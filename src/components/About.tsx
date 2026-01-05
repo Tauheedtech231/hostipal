@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useRef, useEffect, useState } from "react";
-import { motion, Variants } from "framer-motion";
+import { motion } from "framer-motion";
+import type { Variants } from "framer-motion";
 import Image from "next/image";
 import { 
   FaHospital, 
@@ -284,7 +285,6 @@ export const AboutSection: React.FC = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-[#064E3B]/80 via-[#064E3B]/60 to-transparent" />
               <div className="absolute inset-0 flex items-center">
                 <div className="max-w-3xl px-6 md:px-10 py-8">
-                  
                   <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-3">
                     100-Bed Tertiary Care Excellence
                   </h3>

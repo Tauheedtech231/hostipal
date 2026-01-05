@@ -1,17 +1,19 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  output: "export", // ✅ STATIC EXPORT ENABLE
+
   images: {
+    unoptimized: true, // ✅ REQUIRED for static hosting
     domains: [
-      "lh3.googleusercontent.com", // ✅ Google profile images
-      "images.unsplash.com", 
-      'cdn-icons-png.flaticon.com', 
-     'siddiqhospital.com', 
-     'plus.unsplash.com',
-     'media.istockphoto.com'     // ✅ Unsplash images
+      "lh3.googleusercontent.com",
+      "images.unsplash.com",
+      "cdn-icons-png.flaticon.com",
+      "siddiqhospital.com",
+      "plus.unsplash.com",
+      "media.istockphoto.com",
     ],
   },
-  /* other config options here */
 };
 
 export default nextConfig;

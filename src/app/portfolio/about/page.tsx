@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useRef, useEffect, useState } from "react";
-import { motion, Variants } from "framer-motion";
+import { motion } from "framer-motion";
+import type { Variants } from "framer-motion";
 import Image from "next/image";
 import { 
   FaHospital, 
