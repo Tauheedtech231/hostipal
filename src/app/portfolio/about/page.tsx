@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect, useState } from "react";
-import { motion, Variants } from "framer-motion";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import { 
   FaHospital, 
@@ -48,78 +48,6 @@ const AboutSection: React.FC = () => {
     return () => observer.disconnect();
   }, [itemInView]);
 
-  // Animations - Remove explicit Variants type annotation
-  const fadeInUp:Variants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut"
-      }
-    }
-  };
-
-  const scaleIn:Variants = {
-    hidden: { opacity: 0, scale: 0.9 },
-    visible: { 
-      opacity: 1, 
-      scale: 1,
-      transition: {
-        duration: 0.7,
-        ease: "easeOut"
-      }
-    }
-  };
-
-  const slideInFromRight:Variants = {
-    hidden: { opacity: 0, x: 100 },
-    visible: { 
-      opacity: 1, 
-      x: 0,
-      transition: {
-        duration: 0.8,
-        ease: "easeOut"
-      }
-    }
-  };
-
-  const slideInFromLeft:Variants = {
-    hidden: { opacity: 0, x: -100 },
-    visible: { 
-      opacity: 1, 
-      x: 0,
-      transition: {
-        duration: 0.8,
-        ease: "easeOut"
-      }
-    }
-  };
-
-  const staggerContainer = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.1
-      }
-    }
-  };
-
-  const cardHover = {
-    rest: { y: 0, scale: 1 },
-    hover: { 
-      y: -8,
-      scale: 1.02,
-      transition: {
-        duration: 0.3,
-        ease: "easeOut"
-      }
-    }
-  };
-
   // Core values
   const coreValues = [
     { 
@@ -157,33 +85,36 @@ const AboutSection: React.FC = () => {
         {/* Hero Header */}
         <div className="text-center mb-16">
           <motion.div
-            initial="hidden"
-            animate={sectionInView ? "visible" : "hidden"}
-            variants={staggerContainer}
+            initial={{ opacity: 0, y: 20 }}
+            animate={sectionInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.6 }}
+            className="inline-block mb-4"
           >
-            <motion.div variants={fadeInUp} className="inline-block mb-4">
-              <div className="inline-flex items-center gap-3 px-5 py-2.5 bg-gradient-to-r from-[#064E3B]/10 to-[#1FB6A6]/10 rounded-full border border-[#064E3B]/20">
-                <div className="w-2 h-2 bg-[#064E3B] rounded-full animate-pulse" />
-                <span className="text-[#064E3B] text-xs font-semibold tracking-wider uppercase">
-                  About Our Hospital
-                </span>
-              </div>
-            </motion.div>
-
-            <motion.h2 
-              variants={fadeInUp}
-              className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 leading-tight"
-            >
-              Siddiq Hospital & Medical Complex
-            </motion.h2>
-
-            <motion.p 
-              variants={fadeInUp}
-              className="text-gray-600 text-base md:text-lg max-w-4xl mx-auto leading-relaxed"
-            >
-              Premier Healthcare Provider in Pakistan
-            </motion.p>
+            <div className="inline-flex items-center gap-3 px-5 py-2.5 bg-gradient-to-r from-[#064E3B]/10 to-[#1FB6A6]/10 rounded-full border border-[#064E3B]/20">
+              <div className="w-2 h-2 bg-[#064E3B] rounded-full animate-pulse" />
+              <span className="text-[#064E3B] text-xs font-semibold tracking-wider uppercase">
+                About Our Hospital
+              </span>
+            </div>
           </motion.div>
+
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            animate={sectionInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 leading-tight"
+          >
+            Siddiq Hospital & Medical Complex
+          </motion.h2>
+
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={sectionInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-gray-600 text-base md:text-lg max-w-4xl mx-auto leading-relaxed"
+          >
+            Premier Healthcare Provider in Pakistan
+          </motion.p>
         </div>
 
         {/* Main Content Grid */}
@@ -192,9 +123,9 @@ const AboutSection: React.FC = () => {
           <motion.div
             data-section-item
             data-index="1"
-            initial="hidden"
-            animate={itemInView.includes(1) ? "visible" : "hidden"}
-            variants={slideInFromLeft}
+            initial={{ opacity: 0, x: -50 }}
+            animate={itemInView.includes(1) ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
+            transition={{ duration: 0.8 }}
             className="space-y-6"
           >
             <div className="inline-flex items-center gap-2 mb-3">
@@ -224,9 +155,9 @@ const AboutSection: React.FC = () => {
 
             {/* Quick Stats */}
             <motion.div 
-              initial="hidden"
-              animate={itemInView.includes(1) ? "visible" : "hidden"}
-              variants={staggerContainer}
+              initial={{ opacity: 0 }}
+              animate={itemInView.includes(1) ? { opacity: 1 } : { opacity: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
               className="grid grid-cols-2 gap-4 pt-6"
             >
               <div className="bg-gradient-to-br from-[#064E3B]/5 to-[#1FB6A6]/5 rounded-xl p-4">
@@ -244,9 +175,9 @@ const AboutSection: React.FC = () => {
           <motion.div
             data-section-item
             data-index="2"
-            initial="hidden"
-            animate={itemInView.includes(2) ? "visible" : "hidden"}
-            variants={scaleIn}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={itemInView.includes(2) ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.7 }}
             className="relative"
           >
             <div className="relative rounded-xl overflow-hidden shadow-xl group">
@@ -274,9 +205,9 @@ const AboutSection: React.FC = () => {
           <motion.div
             data-section-item
             data-index="3"
-            initial="hidden"
-            animate={itemInView.includes(3) ? "visible" : "hidden"}
-            variants={slideInFromLeft}
+            initial={{ opacity: 0, x: -50 }}
+            animate={itemInView.includes(3) ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
+            transition={{ duration: 0.8 }}
             className="relative"
           >
             <div className="relative rounded-xl overflow-hidden shadow-xl group">
@@ -301,9 +232,9 @@ const AboutSection: React.FC = () => {
           <motion.div
             data-section-item
             data-index="4"
-            initial="hidden"
-            animate={itemInView.includes(4) ? "visible" : "hidden"}
-            variants={slideInFromRight}
+            initial={{ opacity: 0, x: 50 }}
+            animate={itemInView.includes(4) ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
+            transition={{ duration: 0.8 }}
             className="space-y-6"
           >
             <div className="inline-flex items-center gap-2 mb-3">
@@ -336,9 +267,9 @@ const AboutSection: React.FC = () => {
         <motion.div
           data-section-item
           data-index="5"
-          initial="hidden"
-          animate={itemInView.includes(5) ? "visible" : "hidden"}
-          variants={staggerContainer}
+          initial={{ opacity: 0 }}
+          animate={itemInView.includes(5) ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 0.6 }}
           className="mb-16"
         >
           <div className="bg-gradient-to-r from-[#064E3B]/5 to-[#1FB6A6]/5 rounded-2xl border border-[#064E3B]/10 p-6 md:p-8">
@@ -363,10 +294,10 @@ const AboutSection: React.FC = () => {
               {coreValues.map((value, index) => (
                 <motion.div
                   key={index}
-                  variants={fadeInUp}
-                  whileHover="hover"
-                  initial="rest"
-                  animate="rest"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={itemInView.includes(5) ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  whileHover={{ y: -5, scale: 1.02 }}
                   className="group"
                 >
                   <div className="h-full bg-white rounded-xl border border-gray-200 shadow-sm p-5 transition-all duration-300 group-hover:shadow-md group-hover:border-[#064E3B]/30">
@@ -393,9 +324,9 @@ const AboutSection: React.FC = () => {
           <motion.div
             data-section-item
             data-index="6"
-            initial="hidden"
-            animate={itemInView.includes(6) ? "visible" : "hidden"}
-            variants={slideInFromLeft}
+            initial={{ opacity: 0, x: -50 }}
+            animate={itemInView.includes(6) ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
+            transition={{ duration: 0.8 }}
             className="relative"
           >
             <div className="h-full bg-gradient-to-br from-white to-gray-50 rounded-xl border border-gray-200 shadow-lg p-6">
@@ -415,9 +346,9 @@ const AboutSection: React.FC = () => {
           <motion.div
             data-section-item
             data-index="7"
-            initial="hidden"
-            animate={itemInView.includes(7) ? "visible" : "hidden"}
-            variants={slideInFromRight}
+            initial={{ opacity: 0, x: 50 }}
+            animate={itemInView.includes(7) ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
+            transition={{ duration: 0.8 }}
             className="relative"
           >
             <div className="h-full bg-gradient-to-br from-white to-gray-50 rounded-xl border border-gray-200 shadow-lg p-6">
@@ -439,9 +370,9 @@ const AboutSection: React.FC = () => {
         <motion.div
           data-section-item
           data-index="8"
-          initial="hidden"
-          animate={itemInView.includes(8) ? "visible" : "hidden"}
-          variants={scaleIn}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={itemInView.includes(8) ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
+          transition={{ duration: 0.7 }}
           className="text-center"
         >
           <div className="bg-gradient-to-r from-[#064E3B] to-[#0B6E5E] rounded-2xl p-6 md:p-8 shadow-xl">
