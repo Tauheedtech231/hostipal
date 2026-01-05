@@ -1,10 +1,8 @@
-import type { NextConfig } from "next";
+import { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: "export", // ✅ STATIC EXPORT ENABLE
-
   images: {
-    unoptimized: true, // ✅ REQUIRED for static hosting
+    unoptimized: true,
     domains: [
       "lh3.googleusercontent.com",
       "images.unsplash.com",
@@ -15,5 +13,3 @@ const nextConfig: NextConfig = {
     ],
   },
 };
-
-export default nextConfig;
