@@ -8,13 +8,13 @@ import { FaPhoneAlt, FaHeartbeat, FaUserMd, FaStethoscope, FaHospital } from "re
 
 // Background sliding images
 const BACKGROUND_IMAGES = [
-"https://images.unsplash.com/photo-1587351021355-a479a299d2f9?q=80&w=1172&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  "https://plus.unsplash.com/premium_photo-1681995244531-1db59c892c8c?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-
-  "https://plus.unsplash.com/premium_photo-1681843126728-04eab730febe?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  "https://plus.unsplash.com/premium_photo-1675686363477-c28d5bf65adb?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  "https://media.istockphoto.com/id/2217159786/photo/doctor-checking-the-blood-pressure-on-a-woman-in-a-consultation.jpg?s=1024x1024&w=is&k=20&c=Q-0BWiD5wQWUgpjY88fcnzsP4bpULu0yUfjnkqz4Iwo="
+  "/hero_images/h1.jpg",
+  "/hero_images/h2.jpg",
+  "/hero_images/h3.jpg",
+  "/hero_images/h4.jpg",
+  "/hero_images/h5.jpg"
 ];
+
 
 // Stats configuration
 const STATS_CONFIG = [
