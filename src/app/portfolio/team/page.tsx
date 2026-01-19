@@ -462,7 +462,7 @@ export default function DoctorsPage() {
         <div className="absolute inset-0 z-0">
           <div className="relative w-full h-full">
             <Image
-              src="https://cdn.pixabay.com/photo/2016/11/08/05/29/surgery-1807541_1280.jpg"
+              src="/doctors/team.jpg"
               fill
               alt="medical team"
               className="object-cover"

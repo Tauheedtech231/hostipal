@@ -63,7 +63,7 @@ export const FooterSection: React.FC = () => {
                 <FaHospital className="text-xl text-white" />
               </motion.div>
               <div>
-                <h2 className="text-2xl font-bold text-white">Siddiq Hospital</h2>
+                <h2 className="text-2xl font-bold text-white">Siddiq Heart</h2>
                 <p className="text-[#1FB6A6] text-base font-semibold mt-1">Medical Complex</p>
               </div>
             </div>
@@ -193,7 +193,7 @@ export const FooterSection: React.FC = () => {
         {/* Copyright - Enhanced */}
        <div className="text-center pt-4">
   <p className="text-white/70 text-sm">
-    © {new Date().getFullYear()} Siddiq Hospital & Medical Complex. All rights reserved.
+    © {new Date().getFullYear()} Siddiq Heart & Medical Complex. All rights reserved.
   </p>
 </div>
 

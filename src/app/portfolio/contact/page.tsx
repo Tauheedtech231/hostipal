@@ -238,7 +238,7 @@ const ContactSection = () => {
 
           {/* Title */}
           <h1 className="hero-title text-5xl md:text-7xl font-bold text-white mb-8 leading-tight">
-            Siddiq Hospital & Medical Complex
+            Siddiq Heart & Medical Complex
           </h1>
 
           {/* Subtitle */}

@@ -43,7 +43,7 @@ const CareersPage: React.FC = () => {
             </h1>
 
             <p className="text-xl text-white/90 mb-8 max-w-3xl mx-auto">
-              Join Siddiq Hospital & Maternity Complex — Where Your Medical Career Thrives
+              Join Siddiq Heart & Medical Complex — Where Your Medical Career Thrives
             </p>
           </div>
         </div>
@@ -72,12 +72,12 @@ const CareersPage: React.FC = () => {
               </div>
               
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                Why Join Siddiq Hospital & Maternity Complex?
+                Why Join Siddiq Heart & Medical Complex?
               </h2>
 
               <div className="space-y-6 text-gray-700 text-lg leading-relaxed">
                 <p>
-                  Siddiq Hospital and Maternity Complex (SHMC) is committed to providing training 
+                  Siddiq Heart and Medical Complex (SHMC) is committed to providing training 
                   and opportunities for medical professionals to enhance their skills and expand 
                   their expertise.
                 </p>
@@ -110,7 +110,7 @@ const CareersPage: React.FC = () => {
 
               <div className="space-y-6 text-white/90 text-lg leading-relaxed">
                 <p>
-                  Siddiq Hospital and Maternity Complex is committed to providing equal opportunities 
+                  Siddiq Heart and Medical Complex is committed to providing equal opportunities 
                   in all employment practices for qualified employees and applicants, irrespective of 
                   race, religion, gender, nationality, origin, age, disability, marital status, and 
                   military status.
@@ -167,7 +167,7 @@ const CareersPage: React.FC = () => {
 
               <div className="space-y-6 text-gray-700 text-lg leading-relaxed">
                 <p>
-                  Employees at Siddiq Hospital and Maternity Complex enjoy a comprehensive range 
+                  Employees at Siddiq Heart and Medical Complex enjoy a comprehensive range 
                   of benefits. Several programs, including Social Security, Employee Old-Age Benefits 
                   Institution (EOBI), and mandatory health insurance coverage, are provided to all 
                   employees in accordance with regulations and laws.
@@ -186,7 +186,7 @@ const CareersPage: React.FC = () => {
               Ready to Join Our Medical Team?
             </h2>
             <p className="text-gray-600 text-lg mb-10 max-w-2xl mx-auto">
-              Take the next step in your medical career with Siddiq Hospital & Maternity Complex. 
+              Take the next step in your medical career with Siddiq Heart & Medical Complex. 
               We are looking for passionate professionals who share our commitment to excellence in healthcare.
             </p>
             <div className="flex flex-col sm:flex-row gap-5 justify-center">

@@ -352,7 +352,7 @@ export const HeroSection: React.FC = () => {
                   transition={{ duration: 0.8, delay: 0.2 }}
                   className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-[1.1] text-white drop-shadow-2xl"
                 >
-                  Siddiq Hospital
+                  Siddiq Heart
                   <br />
                   <span className="text-white/95 drop-shadow-2xl"> & Medical Complex</span>
                 </motion.h1>

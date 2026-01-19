@@ -404,7 +404,7 @@ export const Navbar: React.FC = () => {
             >
               <div className="relative">
                 <Image
-                  src="/hero_images/logo.jpg"
+                  src="/doctors/clogo.jpg"
                   alt="SHMC Hospital Logo"
                   width={80}
                   height={80}
@@ -921,7 +921,7 @@ export const Navbar: React.FC = () => {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <Image
-                        src="/hero_images/logo.jpg"
+                        src="/doctors/clogo.jpg"
                         alt="SHMC Logo"
                         width={50}
                         height={50}
@@ -1155,7 +1155,7 @@ export const Navbar: React.FC = () => {
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <Image
-                      src="/hero_images/logo.jpg"
+                      src="/doctors/clogo.jpg"
                       alt="SHMC Logo"
                       width={40}
                       height={40}

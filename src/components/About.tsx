@@ -256,7 +256,7 @@ export const AboutSection: React.FC = () => {
             variants={fadeInUp}
             className="text-gray-600 text-base md:text-lg max-w-4xl mx-auto leading-relaxed"
           >
-            Siddiq Hospital & Maternity Complex - Where advanced medical technology meets compassionate care
+           Siddiq Heart & Medical Complex - Where advanced medical technology meets compassionate care
           </motion.p>
         </motion.div>
 
@@ -315,7 +315,7 @@ export const AboutSection: React.FC = () => {
                 <h3 className="text-xl font-bold text-gray-900">Our Vision</h3>
               </div>
               <p className="text-gray-600 leading-relaxed text-base">
-                To establish Siddiq Hospital & Maternity Complex as the most trusted and advanced healthcare institution in Pakistan, 
+                To establish Siddiq Heart & Medical Complex as the most trusted and advanced healthcare institution in Pakistan, 
                 setting new benchmarks in medical excellence, patient care, and innovative treatment methodologies.
               </p>
             </div>

@@ -94,7 +94,7 @@ const AboutSection: React.FC = () => {
           </div>
 
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 leading-tight">
-            Siddiq Hospital & Medical Complex
+            Siddiq Heart & Medical Complex
           </h2>
 
           <p className="text-gray-600 text-base md:text-lg max-w-4xl mx-auto leading-relaxed">
@@ -119,7 +119,7 @@ const AboutSection: React.FC = () => {
             
             <div className="space-y-4">
               <p className="text-gray-600 leading-relaxed text-base">
-                Siddiq Hospital & Maternity Complex stands as a 100-bed tertiary care multi-specialty hospital. 
+                Siddiq Heart & Medical Complex stands as a 100-bed tertiary care multi-specialty hospital. 
                 This modern facility features sub-specialized departments in Medical, Surgical, Obstetrics & Gynecology, 
                 and Pediatrics, complemented by state-of-the-art anesthesia, radiology, and laboratory services.
               </p>
@@ -150,7 +150,7 @@ const AboutSection: React.FC = () => {
               <div className="aspect-[4/3] relative bg-gray-100">
                 <Image
                   src="/about/about1.jpg"
-                  alt="Siddiq Hospital & Maternity Complex"
+                  alt="Siddiq Heart & Medical Complex Building"
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-700"
                   sizes="(max-width: 768px) 100vw, 50vw"
@@ -230,7 +230,7 @@ const AboutSection: React.FC = () => {
                 Patient-Centered Excellence
               </h3>
               <p className="text-gray-600 text-sm max-w-3xl mx-auto">
-                At Siddiq Hospital & Maternity Complex, we provide comprehensive medical care with exceptional service 
+                At Siddiq Heart & Medical Complex, we provide comprehensive medical care with exceptional service 
                 at every stage of the patient journey.
               </p>
             </div>

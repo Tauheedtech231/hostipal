@@ -184,7 +184,7 @@ export const WhyChooseUsSection = () => {
             variants={itemVariants}
             className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4 leading-tight"
           >
-            Why Choose Siddiq Hospital?
+            Why Choose?
           </motion.h2>
 
           <motion.p 
@@ -250,9 +250,7 @@ export const WhyChooseUsSection = () => {
             <h3 className="text-xl md:text-2xl font-bold text-white mb-3">
               Key Reasons to Choose Us
             </h3>
-            <p className="text-[#E5E7EB] text-sm max-w-2xl mx-auto">
-              Discover what makes Siddiq Hospital the preferred choice for healthcare
-            </p>
+           
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
@@ -312,7 +310,7 @@ export const WhyChooseUsSection = () => {
               Our Core Values
             </h3>
             <p className="text-[#E5E7EB] text-sm max-w-2xl mx-auto">
-              These values reflect why patients trust Siddiq Hospital
+              These values reflect why patients trust 
             </p>
           </motion.div>
 
