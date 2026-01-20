@@ -8,7 +8,7 @@ import { FaPhoneAlt, FaHeartbeat, FaUserMd, FaStethoscope, FaHospital } from "re
 
 // Background sliding images
 const BACKGROUND_IMAGES = [
-  "/hero_images/h1.jpg",
+  "/doctors/team.jpg",
   "/hero_images/h2.jpg",
   "/hero_images/h3.jpg",
   "/hero_images/h4.jpg",
